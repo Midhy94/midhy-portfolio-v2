@@ -1,0 +1,102 @@
+// Typography Styles: Editorial Serif + Clean Grotesque Sans (Handcrafted Editorial Direction)
+
+:is(h1, h2, h3, h4, h5, h6):not([class*="eyebrow"], [class*="label"], [class*="badge"], [class*="chapter"]) {
+  text-wrap: balance;
+  font-family: var(--font-serif);
+}
+
+:is(h1, h2):not([class*="eyebrow"], [class*="label"], [class*="chapter"]) {
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 400;
+  color: var(--color-text-primary);
+}
+
+h1,
+.display-title {
+  font-size: clamp(2.5rem, 5vw, 4.25rem);
+}
+
+h2 {
+  font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+  letter-spacing: -0.03em;
+}
+
+h3 {
+  font-family: var(--font-sans);
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+}
+
+h4 {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+body,
+p {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.lead-text {
+  font-family: var(--font-sans);
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  max-width: 680px;
+}
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.greeting-accent {
+  color: var(--color-accent-terracotta);
+}
+
+// Bespoke Editorial Chapter Marker (Replaces robotic repetitive eyebrows)
+.chapter-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+
+  &__num {
+    color: var(--color-accent-terracotta);
+    font-weight: 600;
+  }
+
+  &__rule {
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.35;
+  }
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  color: var(--color-text-muted, #7a7977);
+}

@@ -1,0 +1,1226 @@
+MASTER BUILD PROMPT — MIDHUN M PORTFOLIO PLATFORM
+
+ROLE
+
+Act as a Principal Product Designer, Senior Vue.js Engineer, UX
+Strategist, Motion Designer, Accessibility Specialist, and Full-Stack
+Architect.
+
+Your task is to build a premium, production-ready personal portfolio
+website and content management system for Midhun M, a Senior UI/UX &
+Product Designer specializing in product design, design systems, digital
+experiences, and AI-assisted design and website development.
+
+This is an existing project. Inspect and extend the current
+implementation rather than starting over unnecessarily.
+
+The objective is to build a distinctive, fully functional portfolio
+platform that serves recruiters, hiring managers, and freelance clients.
+
+The result must be a real application with functional interactions,
+persistent content, secure administration, and a refined visual
+identity—not merely a static design or frontend mockup.
+
+------------------------------------------------------------------------
+
+1. CRITICAL: READ THE TWO EXISTING PROJECT FILES FIRST
+
+Both DESIGN.md and Midhun_M_Resume.pdf have already been uploaded to the
+project folder. You must locate and read both files before making design
+decisions, writing professional content, or implementing the interface.
+
+Do not ask me to upload these files again. Do not recreate them. Do not
+replace them with generated alternatives.
+
+File A: DESIGN.md
+
+Location: The existing project folder, expected at the project root.
+
+Purpose: This file contains the extracted design specifications from the
+reference website, https://www.faizur.com/.
+
+You must:
+
+-   Read the complete file.
+-   Identify its colors, typography, spacing, radii, borders, layout
+    characteristics, transitions, and interaction patterns.
+-   Understand the visual hierarchy and design principles described in
+    the document.
+-   Translate the specifications into reusable SCSS variables or CSS
+    custom properties.
+-   Use its design direction to guide reusable components, page layouts,
+    and motion.
+-   Preserve the intended visual character while correcting
+    contradictory, incomplete, or inaccessible specifications where
+    necessary.
+-   Create an original portfolio rather than copying the reference
+    website.
+
+File B: Midhun_M_Resume.pdf
+
+Location: The existing project folder, expected at the project root.
+
+Purpose: This is the authoritative source for my professional identity
+and career information.
+
+You must read the actual PDF and extract:
+
+-   My name and professional headline.
+-   My professional summary.
+-   Employment history, job titles, and dates.
+-   Professional responsibilities.
+-   Verified achievements and measurable outcomes.
+-   Core skills and design capabilities.
+-   Design tools, technologies, and AI tools.
+-   Education.
+-   Certifications and their current status.
+-   Language proficiency.
+-   Professional contact details and any available profile links.
+
+Use the resume’s actual wording and facts as the basis for the initial
+professional content. You may edit the wording for clarity, readability,
+and web presentation without changing its meaning.
+
+Mandatory rules for both files
+
+1.  Inspect the current repository structure before modifying files.
+2.  Locate and read both files, not just their filenames.
+3.  Do not assume the files have been read merely because they exist.
+4.  Do not invent personal details, employers, project names, results,
+    testimonials, or qualifications.
+5.  Do not silently replace the resume’s information with information
+    from older drafts or previous conversations.
+6.  Do not fabricate URLs for LinkedIn, Behance, or Dribbble.
+7.  Do not expose my private contact information unnecessarily.
+8.  Do not publish the resume PDF as a public asset until the owner has
+    explicitly approved it for download.
+9.  If either file cannot be found or read, inspect the workspace and
+    report the specific issue. Do not pretend to have read it or
+    silently proceed using assumptions.
+10. Keep DESIGN.md and Midhun_M_Resume.pdf intact.
+
+Before implementation
+
+Provide a concise audit containing:
+
+-   Confirmation that DESIGN.md was located and read.
+-   Confirmation that Midhun_M_Resume.pdf was located and read.
+-   A summary of the extracted design direction.
+-   A summary of the resume-derived professional content.
+-   The current application architecture and reusable components
+    discovered.
+-   The existing dependencies and features that should be preserved.
+-   Any missing information that needs my approval.
+
+After the audit, proceed with implementation. Do not stop at producing
+an audit or a plan unless a genuine blocker prevents progress.
+
+------------------------------------------------------------------------
+
+2. PROFESSIONAL IDENTITY — DERIVE FROM THE RESUME
+
+Use the latest resume as the single source of truth for professional
+information.
+
+The initial professional content must reflect the following
+resume-derived details.
+
+Identity
+
+Name: Midhun M
+
+Professional headline:
+
+Senior UI/UX & Product Designer | AI-Assisted Design, Vibe Coding &
+Digital Experiences
+
+Location: Alappuzha, Kerala, India
+
+Experience: 10+ years of professional experience, as stated in the
+resume.
+
+Professional email: mnairmidhun@gmail.com
+
+Reconfirm these details against the PDF before populating the
+application.
+
+Professional positioning
+
+Position me as a multidisciplinary Senior UI/UX & Product Designer with
+experience in user-centered digital products, responsive web platforms,
+and interactive experiences across fintech, SaaS, and hospitality.
+
+Emphasize my ability to work across the product design lifecycle:
+
+-   User research and discovery.
+-   User interviews and usability testing.
+-   User personas, journeys, and flows.
+-   Information architecture.
+-   Wireframing and high-fidelity UI design.
+-   Interactive prototyping.
+-   Design systems and component libraries.
+-   Accessibility and responsive design.
+-   Developer collaboration and design handoff.
+-   AI-assisted design and website development.
+-   Vibe coding and design-to-code workflows.
+
+Communicate the combination of design expertise and hands-on AI-assisted
+development without implying that AI replaces design judgment or
+user-centered thinking.
+
+Use a confident, thoughtful, human tone. Avoid exaggerated marketing
+claims, generic buzzwords, and unsupported statements.
+
+Verified achievements
+
+Use the following resume-documented achievements as potential
+highlights, after confirming them against the PDF:
+
+1.  500K+ users across Europe: Designed an online payment platform,
+    conceptualizing its UI/UX architecture from the initial wireframe
+    stage.
+
+2.  40% reduction in customer drop-offs: Improved a hospitality
+    platform’s ordering flow through UX improvements and a redesign of
+    its online menu experience.
+
+3.  25% reduction in frontend development time: Developed and scaled a
+    design system and reusable component library.
+
+4.  European client recognition: Received formal recognition for
+    conceptualizing and designing the UI/UX of an online payment
+    application.
+
+5.  Hospitality platform recognition: Received special recognition from
+    a hotel CEO for developing an innovative online menu platform.
+
+Use these metrics accurately and in their documented context.
+
+Do not combine them into one case study unless the underlying project
+information confirms the relationship.
+
+Do not invent additional performance metrics, revenue, conversion
+improvements, research statistics, project durations, or user counts.
+
+Employment history
+
+Use the resume’s exact employers, titles, and dates:
+
+-   Techgentsia Software Technologies — UI, UX, Product Designer —
+    2020–Present.
+-   SASP — Web Designer — 2019–2020.
+-   Opesmount Technologies — UI / UX Designer — 2016–2019.
+-   Rendeztech — Junior Webdesigner — 2012–2015.
+
+Populate the initial career timeline with the documented
+responsibilities from the PDF.
+
+Do not alter employment dates or job titles without my approval.
+
+Skills and tools
+
+Use the skills and tools listed in the PDF, organized into clear
+categories.
+
+Design and UX: Figma, Sketch, InVision, Adobe Photoshop, Adobe
+Illustrator, Adobe InDesign, user research, usability testing,
+information architecture, prototyping, UX strategy, responsive design,
+accessibility, design systems, and component libraries.
+
+Web: HTML5, CSS3, JavaScript, responsive web design, cross-browser
+compatibility, performance optimization, SEO-aware design, and developer
+handoff.
+
+Primary AI tools: Antigravity, Claude, Cursor, ChatGPT, Google Flow, and
+Google Stitch.
+
+Additional tools and ecosystem exposure: Figma Make, v0, Lovable,
+Framer, Relume, Uizard, Adobe Firefly, Midjourney, Recraft, and Anima.
+
+Use the resume for the complete skills taxonomy. Keep primary tools
+separate from additional ecosystem exposure. Do not invent proficiency
+ratings.
+
+Education, certifications, and languages
+
+Populate these sections using the PDF:
+
+-   Bachelor of Commerce (B.Com) — M.G University — 2016.
+-   Diploma in Web Designing — G-Tech — 2013.
+-   Higher Secondary Education — Technical Higher Secondary School,
+    Cherthala — 2012.
+
+Certifications: - Foundations of UX Design by Google — Google UX Design
+Professional Certificate — Completed. - Principles of UX/UI Design —
+Meta — Processing, according to the resume. - Developing Innovative
+Ideas for Product Leaders — Processing, according to the resume.
+
+Languages: - English — Upper Intermediate (B2). - Hindi — Intermediate
+(B1). - Tamil — Beginner (A1).
+
+Preserve the documented certification statuses and language levels.
+
+All professional information must be editable through the CMS.
+
+------------------------------------------------------------------------
+
+3. PRODUCT VISION
+
+Create a professional portfolio platform with two primary audiences:
+
+Recruiters and hiring managers: They should quickly understand my design
+capabilities, experience, work quality, professional development, and
+measurable impact.
+
+Freelance clients: They should understand what I can deliver, how I
+approach design problems, how I work with development teams, and how to
+contact me.
+
+The first screen should communicate:
+
+-   Who I am.
+-   What I specialize in.
+-   What makes my approach distinctive.
+-   What kind of work I do.
+-   How to explore my projects.
+-   How to contact me or access my resume.
+
+The website should feel like a carefully art-directed designer’s
+portfolio, not a conventional corporate website or generic template.
+
+Build it so I can manage the content independently without editing
+source code.
+
+------------------------------------------------------------------------
+
+4. VISUAL DIRECTION — INSPIRED BY FAIZUR.COM
+
+Reference website:
+
+https://www.faizur.com/
+
+Design specification:
+
+DESIGN.md in the project root.
+
+Read the design specification and inspect the reference website if
+accessible.
+
+Study the typography, spacing, page composition, visual hierarchy,
+navigation, transitions, project presentation, section pacing, and
+responsive behavior.
+
+Use the reference as inspiration rather than copying its branding, text,
+assets, or exact layouts.
+
+Create a recognizable visual identity for Midhun M.
+
+The intended aesthetic is:
+
+-   Minimal but expressive.
+-   Editorial and typography-led.
+-   Premium and contemporary.
+-   Strong in visual hierarchy.
+-   Generous in whitespace.
+-   Carefully composed.
+-   Rich in detail without being cluttered.
+-   Professional enough for senior design roles.
+-   Distinctive enough to attract freelance clients.
+
+Avoid generic gradients, excessive glassmorphism, repetitive rounded
+cards, unnecessary decorative icons, and animations without purpose.
+
+------------------------------------------------------------------------
+
+5. MIXED LIGHT AND DARK THEME
+
+The website must use both light and dark sections throughout the
+experience. Do not make the entire website uniformly dark or uniformly
+light.
+
+Create a deliberate visual rhythm inspired by the reference design.
+
+Potential compositions include:
+
+-   A dramatic dark hero.
+-   A light editorial project-discovery section.
+-   Dark featured-project storytelling.
+-   Light career and capability sections.
+-   Dark statements or AI-assisted development showcases.
+-   Light informational sections.
+-   A strong dark contact or closing section.
+
+These are compositional suggestions, not a rigid section order.
+
+Choose the best arrangement based on the actual content.
+
+Use the colors and typography in DESIGN.md as the foundation. Normalize
+them into an accessible design system.
+
+Create centralized tokens for:
+
+-   Background and surface colors.
+-   Primary and secondary text.
+-   Borders and separators.
+-   Typography.
+-   Spacing.
+-   Grid and container widths.
+-   Radii.
+-   Shadows.
+-   Motion durations and easing.
+-   Focus states.
+-   Interactive states.
+
+Keep contrast accessible in both light and dark sections.
+
+Use shared components so the visual system remains consistent as the
+portfolio grows.
+
+If a theme toggle is appropriate to the reference and overall design,
+implement it as a functional feature. Do not add a decorative toggle
+that does nothing.
+
+------------------------------------------------------------------------
+
+5A. MANDATORY HUMAN-CRAFTED DESIGN RULES — NO GENERIC AI WEBSITE
+
+This section is a core design requirement, not optional polish. Apply it
+to every public page and, where appropriate, the CMS. The goal is a
+website that feels individually art-directed and carefully implemented
+by an experienced designer and frontend engineer—not a generic
+AI-generated template.
+
+A. Design from content, not from a template
+
+-   Make visual decisions based on the actual content, project imagery,
+    narrative, and user goals.
+-   Give every section a clear purpose. Remove sections that exist only
+    to make the page longer.
+-   Do not repeat the same section recipe throughout the site.
+-   Avoid the predictable pattern of eyebrow label + oversized heading +
+    short paragraph + three cards.
+-   Do not force every piece of content into a card.
+-   Do not use a fixed number of cards, columns, or feature items simply
+    because it is a common template pattern.
+-   Vary composition intentionally while retaining a coherent underlying
+    design system.
+-   Use asymmetry, offset alignment, different image proportions, and
+    changes in content density only when they improve hierarchy or
+    storytelling.
+-   Let some sections be quiet and restrained. Reserve visual emphasis
+    for the content that deserves it.
+-   Every decorative element must have a clear visual or functional
+    purpose. If it adds no meaning, remove it.
+
+B. Explicit anti-template rules
+
+Avoid these patterns unless there is a clear, content-specific reason to
+use them:
+
+-   Generic gradient blobs, neon glows, glassmorphism, floating circles,
+    and random abstract decorations.
+-   Repeated rounded rectangles and excessive pill-shaped UI.
+-   The same three-column grid repeated across multiple sections.
+-   Identical project cards with only the title and image changed.
+-   Excessive badges, eyebrow labels, tiny uppercase captions, and icon
+    lists.
+-   Oversized headings in every section.
+-   Unnecessary counters, animated statistics, progress bars, and skill
+    percentages.
+-   Fake code editors, terminal windows, AI dashboards, or futuristic AI
+    imagery used only to signal technical expertise.
+-   Generic slogans such as “Let’s build something amazing” or “Crafting
+    digital experiences” unless rewritten into a specific, authentic
+    statement.
+-   Stock imagery presented as personal work.
+-   Fake client logos, testimonials, project metrics, or project
+    screenshots.
+-   Decorative cursor effects, custom cursors, excessive parallax, and
+    animations that delay content.
+-   Shadows, borders, and rounded corners applied to every element by
+    default.
+
+Do not simply replace one trend with another. Restraint and context
+matter more than novelty.
+
+C. Typography must feel art-directed
+
+-   Treat typography as a primary design material, not just a default
+    heading scale.
+-   Establish a clear relationship between display typography, section
+    headings, body text, captions, and metadata.
+-   Use intentional line breaks and control text measure for comfortable
+    reading.
+-   Avoid oversized headings when a smaller, more precise typographic
+    treatment would communicate better.
+-   Vary weight, scale, and alignment to create hierarchy rather than
+    making every heading bold and large.
+-   Use serif/sans-serif contrast only when supported by DESIGN.md and
+    the overall identity.
+-   Avoid excessive letter spacing and all-caps labels.
+-   Use responsive typography that remains composed across mobile,
+    tablet, and desktop.
+-   Verify font loading and provide suitable fallbacks.
+-   Do not use typography as a substitute for meaningful content.
+
+D. Layout, spacing, and visual rhythm
+
+-   Use a consistent underlying grid and spacing system, but do not make
+    every section identical.
+-   Give text and imagery room to breathe without creating large,
+    purposeless empty areas.
+-   Avoid both cramped layouts and excessive whitespace that makes the
+    page feel unfinished.
+-   Establish hierarchy through alignment, scale, proportion, contrast,
+    and grouping.
+-   Use full-bleed imagery only when the image and narrative justify it.
+-   Use narrow reading columns for long-form text and wider layouts for
+    visual work.
+-   Vary the rhythm between dense information, visual showcases, and
+    quiet editorial moments.
+-   Align edges and baselines deliberately. Small inconsistencies should
+    not be left as accidental visual noise.
+-   Do not use arbitrary fixed heights that cause clipping or awkward
+    blank space.
+-   Review the actual rendered page at multiple viewport sizes, not just
+    the source code or a single screenshot.
+
+E. Project imagery must lead the portfolio
+
+-   Treat the actual design work as the main visual asset.
+-   Prefer real project screenshots, interface details, prototypes, and
+    images supplied in the project.
+-   Give projects individual compositions where their content warrants
+    it; do not force every project into an identical thumbnail card.
+-   Use image crops, scale, and aspect ratios deliberately.
+-   Maintain visual consistency without making all project presentations
+    interchangeable.
+-   Never present generated mockups, stock photos, or invented UI as
+    genuine client work.
+-   If project assets or details are missing, use a restrained
+    placeholder and keep the project unpublished until accurate content
+    is available.
+-   Do not invent project stories to fill empty layouts.
+-   Respect client confidentiality and avoid exposing sensitive product
+    information.
+
+F. Authentic, specific copy
+
+-   Write like a thoughtful professional, not like a marketing template.
+-   Prefer clear, specific sentences over vague claims such as “I
+    transform ideas into impactful experiences.”
+-   Use the resume as the source of truth for career facts, dates,
+    achievements, skills, and qualifications.
+-   Use only verified project information for case studies.
+-   Do not invent personal interests, motivations, testimonials, client
+    names, business results, or project responsibilities.
+-   Avoid repeating the same professional summary in the hero, About
+    page, and every project page.
+-   Give each page a distinct communication goal.
+-   Keep calls to action natural, concise, and relevant to the user’s
+    next step.
+
+G. Purposeful color and surfaces
+
+-   Use the palette in DESIGN.md as the foundation.
+-   Keep the required mixed light-and-dark visual rhythm, but do not
+    alternate themes mechanically.
+-   Use color to create hierarchy, contrast, and meaning—not to decorate
+    empty space.
+-   Do not introduce random accent colors, gradient backgrounds, or
+    glowing effects.
+-   Use borders, shadows, and radii selectively rather than applying
+    them uniformly.
+-   Check contrast and readability on every surface.
+-   Ensure light and dark sections feel like parts of one identity, not
+    separate templates stitched together.
+
+H. Motion should be restrained and meaningful
+
+-   Audit existing animation before adding new animation.
+-   Use motion to explain state changes, guide attention, reveal
+    imagery, or support narrative.
+-   Do not animate every heading, card, image, and list item.
+-   Avoid repeated stagger effects, long entrances, exaggerated easing,
+    scroll hijacking, and decorative parallax.
+-   Keep important content available immediately and ensure animations
+    never block interaction.
+-   Use transitions that feel natural and consistent.
+-   Respect prefers-reduced-motion.
+-   Test performance on mobile devices and use performant properties
+    where possible.
+
+I. Handcrafted frontend implementation
+
+Implement the design through the existing Vue 3, TypeScript, Vite, and
+SCSS stack.
+
+-   Preserve working architecture, routes, CMS behavior, and Supabase
+    security.
+-   Build reusable components only where a genuine recurring pattern
+    exists.
+-   Do not create an over-generalized component system that makes unique
+    page compositions difficult.
+-   Keep design tokens centralized and component styles understandable.
+-   Use semantic HTML, accessible controls, and clear component names.
+-   Remove obsolete styles, dead code, and unused visual effects when
+    safe.
+-   Avoid brittle selectors, arbitrary magic numbers, excessive
+    !important, and unnecessary dependencies.
+-   Do not fake functionality with static UI or decorative controls.
+-   Do not optimize only for a screenshot; ensure the implementation
+    works across screen sizes and real content lengths.
+-   Do not rewrite the application from scratch unless the current
+    architecture genuinely blocks the required quality.
+
+J. Mandatory visual review loop
+
+After implementing the redesign:
+
+1.  Run the application and inspect the rendered pages.
+2.  Review the homepage, work listing, at least one case study, About,
+    Contact, and key CMS screens.
+3.  Inspect desktop, tablet, and mobile layouts.
+4.  Identify repeated compositions, weak hierarchy, awkward line breaks,
+    inconsistent spacing, empty placeholders, and unnecessary effects.
+5.  Make a second refinement pass based on what is actually visible.
+6.  Check console output, routes, interactions, and build status.
+7.  Confirm that the redesign did not break CMS functionality,
+    persistence, authentication, or security.
+
+Do not declare the redesign complete after changing colors or editing
+CSS without reviewing the actual result.
+
+K. Human-craft acceptance test
+
+Before marking the visual work complete, ask:
+
+-   Does this look specific to Midhun and his actual work, or could it
+    belong to any designer?
+-   Are the layouts varied for a reason, rather than varied randomly?
+-   Is every card, badge, icon, border, and animation necessary?
+-   Is the typography composed with intention?
+-   Do real project visuals take priority over decoration?
+-   Does each section have a distinct purpose and rhythm?
+-   Does the site remain visually coherent across light and dark
+    surfaces?
+-   Does the mobile layout feel intentionally designed rather than
+    merely compressed?
+-   Are all claims and project details accurate?
+-   Has the running website been visually reviewed after implementation?
+
+If the answer reveals generic or repetitive patterns, refine them before
+completion.
+
+Primary principle: do not imitate “human design” through imperfections
+or random decoration. Achieve a human-crafted result through
+specificity, restraint, strong hierarchy, authentic content, deliberate
+composition, and careful implementation.
+
+------------------------------------------------------------------------
+
+6. ANIMATIONS AND MICRO-INTERACTIONS
+
+Create smooth, sophisticated motion inspired by the reference website.
+
+First inspect DESIGN.md and the live reference when possible. Do not
+claim to have verified an animation that could not be inspected.
+
+Implement purposeful motion such as:
+
+-   Staggered hero text reveals.
+-   Subtle section entrances.
+-   Image crop and reveal transitions.
+-   Project-image hover treatments.
+-   Navigation indicators.
+-   Refined button interactions.
+-   Project filtering transitions.
+-   Mobile menu transitions.
+-   Smooth case-study storytelling.
+-   Subtle scroll-linked effects where useful.
+
+Use CSS transitions and IntersectionObserver for straightforward
+effects.
+
+Reuse existing animation dependencies where possible. Introduce GSAP or
+another library only if the existing stack cannot provide the required
+behavior cleanly.
+
+Prefer performant transform and opacity animations.
+
+Requirements:
+
+-   Support prefers-reduced-motion.
+-   Never prevent users from reading or navigating.
+-   Avoid scroll hijacking.
+-   Avoid unnecessary animation delays.
+-   Support keyboard and touch interaction.
+-   Ensure animation never hides essential information.
+-   Keep mobile performance in mind.
+
+------------------------------------------------------------------------
+
+7. PUBLIC WEBSITE
+
+Implement these routes using Vue Router:
+
+-   /
+-   /work
+-   /work/:slug
+-   /about
+-   /contact
+-   A resume download.
+-   A not-found page.
+
+Use the existing architecture and preserve working routes where
+possible.
+
+Homepage
+
+Create an engaging, art-directed homepage with:
+
+1.  Refined navigation.
+2.  A distinctive hero and professional introduction.
+3.  A concise design philosophy.
+4.  Selected work.
+5.  Verified achievement highlights.
+6.  AI-assisted design and development capabilities.
+7.  Professional experience highlights.
+8.  A resume action.
+9.  A clear contact section.
+10. A considered footer.
+
+Do not place every possible section on the homepage simply to make it
+longer. Prioritize clarity, narrative, and visual quality.
+
+Work discovery
+
+Build a Behance-inspired project discovery experience.
+
+Include:
+
+-   Responsive project grid.
+-   Featured projects.
+-   High-quality project covers.
+-   Category filtering.
+-   Search only if it adds real value.
+-   Project title and concise description.
+-   Role and discipline.
+-   Year and tools where verified.
+-   Clear project-detail navigation.
+-   Loading, empty, and error states.
+
+All filters and controls must work.
+
+Case studies
+
+Build flexible case-study pages rather than one fixed project template.
+
+Support the following content types:
+
+-   Project cover.
+-   Overview.
+-   Context and problem.
+-   Goals and constraints.
+-   Role and responsibilities.
+-   Team and timeline.
+-   Research and discovery.
+-   Personas and user journeys.
+-   User flows.
+-   Wireframes.
+-   Prototypes.
+-   Design exploration.
+-   Final interface visuals.
+-   Image galleries.
+-   Before-and-after comparisons.
+-   Design systems.
+-   Development and implementation.
+-   Verified outcomes.
+-   Lessons learned.
+-   Related projects.
+-   Contact action.
+
+Only show details that are supported by the resume, confirmed project
+information, or content explicitly provided by me.
+
+Do not invent client names, confidential details, testimonials,
+screenshots, or case-study outcomes.
+
+Where information is missing, create unpublished placeholders in the
+CMS.
+
+About page
+
+Present my professional story, capabilities, career timeline, skills,
+tools, education, certifications, language proficiency, and resume
+access.
+
+Keep the narrative concise, engaging, and faithful to the resume.
+
+Do not create a fictional personal story or claim experiences that are
+not documented.
+
+Contact page
+
+Provide accessible contact links and a functional enquiry form if the
+backend is configured.
+
+Implement validation, spam protection where appropriate, and clear
+success and error states.
+
+Do not claim that a message was delivered unless the delivery mechanism
+confirms success.
+
+------------------------------------------------------------------------
+
+8. FULLY FUNCTIONAL CMS
+
+The private CMS is a core product requirement, not an optional future
+feature.
+
+Implement protected routes for:
+
+-   /admin/login
+-   /admin
+-   /admin/projects
+-   /admin/projects/new
+-   /admin/projects/:id/edit
+-   /admin/media
+-   /admin/profile
+-   /admin/experience
+-   /admin/skills
+-   /admin/education
+-   /admin/certifications
+-   /admin/settings
+
+Adapt route naming only when necessary to preserve the existing
+application structure.
+
+Dashboard
+
+Provide a useful overview of projects, drafts, published content, and
+recent activity where the data is available.
+
+Do not invent statistics.
+
+Project management
+
+Support:
+
+-   Create.
+-   Edit.
+-   Duplicate.
+-   Archive.
+-   Delete with confirmation.
+-   Publish.
+-   Unpublish.
+-   Draft status.
+-   Featured status.
+-   Slug management.
+-   Category management.
+-   Cover image selection.
+-   SEO metadata.
+-   Private preview.
+
+Publishing and unpublishing must affect the actual public website.
+
+Reorderable case-study editor
+
+Use the existing @formkit/drag-and-drop dependency selected for this
+project, provided it is compatible with the scaffold.
+
+Build a structured editor with independently editable content blocks.
+
+Required block types:
+
+1.  Markdown or formatted text.
+2.  Full-width image.
+3.  Image gallery.
+4.  Side-by-side comparison.
+5.  Text-and-image layout.
+6.  Validated video embed.
+7.  Metrics and outcome highlights.
+8.  Quotes or testimonials.
+9.  Process steps.
+10. Project metadata.
+11. Spacers and dividers.
+
+Every block needs:
+
+-   A typed data structure.
+-   An editing interface.
+-   Input validation.
+-   A public renderer.
+-   A predictable persistence format.
+-   Error handling where relevant.
+
+Allow users to add, edit, duplicate, delete, and reorder blocks.
+
+Provide accessible Move Up and Move Down controls as alternatives to
+drag-and-drop.
+
+Markdown editor
+
+Use the selected lightweight Markdown editor with a formatting toolbar
+and live preview.
+
+Support headings, paragraphs, lists, bold, italic, and links.
+
+Sanitize rendered content and prevent script execution or unsafe HTML.
+
+Saving and publishing
+
+Implement reliable content persistence.
+
+Provide visible states for:
+
+-   Saving.
+-   Saved.
+-   Unsaved changes.
+-   Save failed.
+-   Publishing.
+-   Published.
+
+Use debounced autosave where appropriate, along with an explicit Save
+action.
+
+Never silently discard edits after a failed request.
+
+Draft previews must be private and accessible only to authorized users.
+
+------------------------------------------------------------------------
+
+9. SUPABASE BACKEND
+
+Use the existing Supabase integration if already configured. Do not
+create duplicate clients or replace working integrations unnecessarily.
+
+Use Supabase for:
+
+-   PostgreSQL database.
+-   Authentication.
+-   Image and document storage.
+-   Persistent CMS content.
+
+Data model
+
+Create or extend structured entities for:
+
+-   Profiles.
+-   Projects.
+-   Project sections or blocks.
+-   Categories.
+-   Project-category relationships.
+-   Experience.
+-   Skills.
+-   Education.
+-   Certifications.
+-   Media assets.
+-   Site settings.
+
+Use appropriate UUIDs, timestamps, foreign keys, constraints, indexes,
+and relationships.
+
+Use a versioned schema for structured case-study blocks.
+
+Support migration scripts and document how to apply them.
+
+Security
+
+Security is mandatory.
+
+-   Enable Row Level Security on API-accessible tables.
+-   Allow public reads only for published projects and intentionally
+    public profile content.
+-   Prevent unauthorized modifications.
+-   Restrict administrative actions to the authorized owner.
+-   Protect unpublished projects and previews.
+-   Configure secure Storage policies.
+-   Validate uploaded file types and sizes.
+-   Sanitize content.
+-   Never expose Supabase service-role credentials in frontend code.
+-   Never commit secrets.
+-   Do not rely exclusively on frontend route guards for authorization.
+-   Keep environment variables documented in an example file without
+    actual secret values.
+
+Do not modify a live database or deploy changes without authorization.
+
+------------------------------------------------------------------------
+
+10. TECHNICAL ARCHITECTURE
+
+Preserve the selected stack:
+
+-   Vue 3.
+-   TypeScript.
+-   Vite.
+-   Vue Router.
+-   SCSS.
+-   Vue composables for lightweight shared state.
+-   Supabase.
+-   @formkit/drag-and-drop.
+-   Markdown editor with toolbar and live preview.
+
+Use the existing TypeScript scaffold.
+
+Do not introduce Pinia unless a demonstrated requirement justifies it.
+
+Organize code into maintainable areas such as:
+
+-   Application and routing.
+-   Public pages.
+-   Admin pages.
+-   Shared components.
+-   Layouts.
+-   Composables.
+-   Types and schemas.
+-   Supabase client and data-access services.
+-   Content-block editors.
+-   Content-block renderers.
+-   Styles and design tokens.
+-   Utilities.
+-   Tests.
+
+Treat these as architectural guidelines, not a reason to restructure
+everything unnecessarily.
+
+Avoid unnecessary dependencies and duplicate implementations.
+
+Keep components reusable, typed, and easy to maintain.
+
+Use real backend content in production. Clearly label any development
+fixtures.
+
+------------------------------------------------------------------------
+
+11. MOBILE RESPONSIVENESS AND USABILITY
+
+The website and CMS must work across:
+
+-   Mobile phones.
+-   Tablets.
+-   Laptops.
+-   Desktop displays.
+
+The CMS must be usable on mobile, including editing project content and
+managing images.
+
+Ensure:
+
+-   No horizontal overflow.
+-   Responsive typography and spacing.
+-   Touch-friendly controls.
+-   Accessible menus.
+-   Appropriate image crops.
+-   Responsive grids.
+-   Readable case studies.
+-   Comfortable editor controls.
+-   Clear form validation.
+-   No desktop-only critical actions.
+
+Test narrow viewports and large displays rather than relying on a single
+preview.
+
+------------------------------------------------------------------------
+
+12. ACCESSIBILITY, SEO, AND PERFORMANCE
+
+Implement:
+
+-   WCAG 2.2 AA-oriented accessibility.
+-   Semantic HTML.
+-   Meaningful heading structure.
+-   Keyboard-accessible controls.
+-   Visible focus indicators.
+-   Appropriate color contrast.
+-   Descriptive alt text.
+-   Reduced-motion support.
+-   Responsive image loading.
+-   Lazy loading where appropriate.
+-   Unique page titles and meta descriptions.
+-   Open Graph metadata.
+-   Canonical URLs.
+-   Sitemap and robots configuration.
+-   Search-engine-friendly project pages.
+
+Evaluate prerendering or static generation if needed to improve
+discoverability of public case studies.
+
+Optimize image delivery, unnecessary JavaScript, and layout stability.
+
+Do not sacrifice accessibility or performance for visual effects.
+
+------------------------------------------------------------------------
+
+13. RESUME DOWNLOAD AND PROFESSIONAL CONTENT MANAGEMENT
+
+Provide a resume download only after confirming the intended PDF is
+appropriate for public distribution.
+
+Keep the resume file and public download location configurable.
+
+Do not expose private source files or project-folder paths through the
+public website.
+
+Allow the owner to update the resume file through the CMS if the upload
+and storage workflow is implemented securely.
+
+The resume must not become a substitute for the About page or detailed
+case studies.
+
+------------------------------------------------------------------------
+
+14. IMPLEMENTATION MILESTONES
+
+Work incrementally and preserve existing progress.
+
+Milestone 1 — Audit and foundation
+
+-   Inspect the existing repository.
+-   Read DESIGN.md.
+-   Read Midhun_M_Resume.pdf.
+-   Review the existing TypeScript scaffold.
+-   Identify reusable components and dependencies.
+-   Map the design tokens.
+-   Confirm the professional content model.
+-   Report genuine blockers.
+
+Milestone 2 — Design system
+
+-   Establish light and dark surfaces.
+-   Create typography, spacing, color, layout, and motion tokens.
+-   Build shared navigation, footer, buttons, links, and layout
+    components.
+-   Validate responsive behavior.
+
+Milestone 3 — Public portfolio
+
+-   Build the homepage.
+-   Build the work listing.
+-   Build the dynamic case-study renderer.
+-   Build About and Contact pages.
+-   Use accurate resume-derived content.
+-   Use clearly labeled placeholders for unverified project information.
+
+Milestone 4 — Backend and security
+
+-   Configure Supabase integration.
+-   Create migrations.
+-   Implement database access.
+-   Configure authentication, RLS, and storage policies.
+-   Verify access restrictions.
+
+Milestone 5 — CMS
+
+-   Build the dashboard.
+-   Build project management.
+-   Implement the reorderable editor.
+-   Implement Markdown editing and preview.
+-   Build media management.
+-   Build profile and career editing.
+-   Implement save, draft, preview, and publish workflows.
+
+Milestone 6 — Integration
+
+-   Connect public pages to published database content.
+-   Ensure unpublished projects remain private.
+-   Verify persistence and error handling.
+
+Milestone 7 — Quality and delivery
+
+-   Test responsive layouts.
+-   Verify accessibility.
+-   Refine animations.
+-   Verify SEO and performance.
+-   Run TypeScript and production build checks.
+-   Test critical CMS workflows.
+-   Document setup, environment variables, migrations, and deployment.
+
+After each milestone, report:
+
+-   What was implemented.
+-   Files created or changed.
+-   Tests actually run and their results.
+-   Known limitations.
+-   Remaining acceptance criteria.
+
+Do not claim that a feature works unless it has been tested
+sufficiently.
+
+------------------------------------------------------------------------
+
+15. FINAL ACCEPTANCE CRITERIA
+
+The project is complete only when:
+
+1.  The public website reflects the existing DESIGN.md and uses an
+    intentional mix of light and dark sections.
+2.  Animations feel polished, perform well, and respect reduced-motion
+    preferences.
+3.  My professional information accurately reflects the latest resume
+    PDF.
+4.  Employment history, education, certifications, and metrics are
+    represented correctly.
+5.  Public case studies render dynamically from persistent content.
+6.  The CMS can create, edit, reorder, save, preview, publish, and
+    unpublish projects.
+7.  Media uploads and selection work correctly.
+8.  Profile and career information can be edited through the CMS.
+9.  Unpublished content is not publicly accessible.
+10. Database and storage security policies have been implemented and
+    verified.
+11. Responsive layouts work on mobile, tablet, and desktop.
+12. Navigation, filters, forms, and other visible controls perform their
+    intended actions.
+13. TypeScript and production build checks pass, or any remaining
+    failures are clearly documented.
+14. Critical user journeys have been tested.
+15. Setup, configuration, migrations, and deployment instructions are
+    documented.
+16. The interface passes the human-craft acceptance test in Section 5A.
+17. The rendered website has been reviewed at desktop, tablet, and
+    mobile sizes.
+18. The redesign removes generic, repetitive AI-template patterns rather
+    than merely changing colors or adding effects.
+19. Actual project imagery and verified content are prioritized;
+    placeholders are not presented as completed work.
+20. A second visual refinement pass has been completed after inspecting
+    the running application.
+
+Do not mark unfinished work as complete.
+
+------------------------------------------------------------------------
+
+16. FINAL EXECUTION INSTRUCTION
+
+Start by inspecting the existing project folder.
+
+Read DESIGN.md and Midhun_M_Resume.pdf from the project folder before
+implementation. These files already exist and are intentional inputs to
+this task.
+
+Preserve the existing scaffold and all working features.
+
+Use the resume for professional facts and DESIGN.md for visual
+direction.
+
+Build an original, premium portfolio with a deliberate light/dark visual
+rhythm, sophisticated motion, dynamic case studies, and a secure,
+functional CMS.
+
+Apply the mandatory Human-Crafted Design Rules in Section 5A across the
+website. The goal is not to add visual effects or simulate imperfection;
+it is to create a specific, restrained, carefully art-directed
+interface. Inspect the rendered result and complete a visual refinement
+pass before declaring the work finished.
+
+Work through the milestones in order, verify each implementation, and
+report any genuine blockers honestly.
+
+Do not stop after creating a plan. After the initial audit, continue
+implementing the next appropriate milestone.
+
+The final product must be a usable professional portfolio and publishing
+platform that I can maintain independently as my career and body of work
+grow.
