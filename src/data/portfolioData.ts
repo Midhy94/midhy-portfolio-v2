@@ -356,6 +356,146 @@ export const WORKS_CONTENT = {
           { label: 'Inbound Inquiries', value: '+35%' }
         ]
       }
+    },
+    {
+      id: 'crypto-wallet-vault',
+      slug: 'crypto-wallet-vault',
+      number: '06 / WEB3 & FINTECH',
+      actionLabel: 'CASE STUDY →',
+      pixelWord: 'Vault',
+      title: 'Crypto custody & biometric vault',
+      summary: 'Non-custodial digital asset manager with MPC security and calm biometric approval flows.',
+      tags: ['Mobile App', 'Fintech', 'Biometrics'],
+      theme: 'terracotta' as const,
+      inProgress: false,
+      caseStudy: {
+        title: 'Institutional Crypto Asset Custody Platform',
+        subtitle: 'Designing high-security key management workflows with human error prevention.',
+        role: 'Senior Product Designer',
+        timeline: '2023',
+        overview: 'Architected the mobile interface for multi-party computation (MPC) transaction signing and seedless recovery.',
+        challenge: 'Bridging the technical complexity of cryptographic key shares with reassuring, intuitive mobile interactions.',
+        keyDecisions: [
+          {
+            title: 'Dual-Factor Hardware Confirmation',
+            detail: 'Clear sequential steps verifying transfer addresses against whitelisted registries.'
+          },
+          {
+            title: 'Tactile Biometric Gate',
+            detail: 'Haptic feedback loops preventing unintended high-value transfers.'
+          }
+        ],
+        solution: 'A calm, institutional-grade wallet trusted by over 50,000 decentralized finance operators.',
+        metrics: [
+          { label: 'Assets Secured', value: '$120M+' },
+          { label: 'Transfer Error Rate', value: '0%' }
+        ]
+      }
+    },
+    {
+      id: 'clinical-telemetry-dashboard',
+      slug: 'clinical-telemetry-dashboard',
+      number: '07 / HEALTHCARE SAAS',
+      actionLabel: 'CASE STUDY →',
+      pixelWord: 'Health',
+      title: 'Clinical telemetry & ICU monitor',
+      summary: 'Real-time vital telemetry interface with high-urgency alarm hierarchy for ICU wards.',
+      tags: ['Healthcare UX', 'Data visualization', 'SaaS'],
+      theme: 'stone' as const,
+      inProgress: false,
+      caseStudy: {
+        title: 'Critical Care ICU Telemetry Monitoring System',
+        subtitle: 'Reducing alarm fatigue for hospital nursing teams through clear sensory triage.',
+        role: 'Principal UX Consultant',
+        timeline: '2022',
+        overview: 'Synthesized telemetry feeds from multi-parameter patient bedside monitors into an actionable central dashboard.',
+        challenge: 'Alarm fatigue caused clinicians to overlook critical cardiac notifications amidst hundreds of daily false alerts.',
+        keyDecisions: [
+          {
+            title: 'Three-Tier Audio-Visual Escalation',
+            detail: 'Categorized telemetry into Informational, Advisory, and Code-Blue warning thresholds.'
+          },
+          {
+            title: 'Glanceable 10-Bed Matrix',
+            detail: 'High-contrast typography readable from across a 20-foot nursing station.'
+          }
+        ],
+        solution: 'Deployed across 4 regional medical centers, lowering non-critical alarm noise by 45%.',
+        metrics: [
+          { label: 'Alarm Noise Reduced', value: '45%' },
+          { label: 'Nurse Response Time', value: '3.2s faster' }
+        ]
+      }
+    },
+    {
+      id: 'ai-workflow-canvas',
+      slug: 'ai-workflow-canvas',
+      number: '08 / AI PLATFORM',
+      actionLabel: 'CASE STUDY →',
+      pixelWord: 'Canvas',
+      title: 'AI prompt & workflow canvas',
+      summary: 'Node-based workspace for engineers to chain LLM models, test evaluations, and deploy prompts.',
+      tags: ['AI Tools', 'Node UI', 'Frontend Dev'],
+      theme: 'dark' as const,
+      inProgress: true,
+      caseStudy: {
+        title: 'Generative AI Pipeline Studio',
+        subtitle: 'Visual node graph orchestration for prompt engineering and synthetic data generation.',
+        role: 'Lead Product Designer & Prototyper',
+        timeline: '2024',
+        overview: 'Conceived the canvas interactions, custom connection nodes, and run-trace debugger for AI engineers.',
+        challenge: 'Developers struggled to visualize complex multi-agent execution branches with nested tools.',
+        keyDecisions: [
+          {
+            title: 'Spatial Canvas Navigation',
+            detail: 'Infinite minimap zoom with progressive disclosure of token latency and cost metrics.'
+          },
+          {
+            title: 'Live Output Sandbox',
+            detail: 'Split-view live execution pane streaming token generations in real time.'
+          }
+        ],
+        solution: 'A fluid, keyboard-driven canvas praised by developer communities for its speed.',
+        metrics: [
+          { label: 'Daily Active Pipelines', value: '15K+' },
+          { label: 'Workflow Build Time', value: '60% faster' }
+        ]
+      }
+    },
+    {
+      id: 'tokens-studio-cli',
+      slug: 'tokens-studio-cli',
+      number: '09 / DEVELOPER TOOLS',
+      actionLabel: 'CASE STUDY →',
+      pixelWord: 'Tokens',
+      title: 'Enterprise design tokens engine',
+      summary: 'Automating multi-brand token transformation from Figma variables to Vue, React, and SCSS.',
+      tags: ['Design Systems', 'CLI', 'Open Source'],
+      theme: 'stone' as const,
+      inProgress: false,
+      caseStudy: {
+        title: 'Design Token Build Pipeline & CLI',
+        subtitle: 'Zero-maintenance synchronization between Figma design variables and production codebases.',
+        role: 'Design Technologist',
+        timeline: '2023',
+        overview: 'Authored an open-source toolchain that validates W3C token formats and exports them directly into typed stylesheets.',
+        challenge: 'Manual developer handoffs led to token drift and outdated color constants across iOS, Android, and Web.',
+        keyDecisions: [
+          {
+            title: 'Automated GitHub Action PRs',
+            detail: 'Pushes from Figma Variables trigger automated pull requests with visual diff reports.'
+          },
+          {
+            title: 'Type-Safe Theme Interfaces',
+            detail: 'Generates TypeScript declaration files guaranteeing compile-time theme correctness.'
+          }
+        ],
+        solution: 'Adopted across 5 enterprise product suites, eliminating manual theme synchronization entirely.',
+        metrics: [
+          { label: 'Weekly Token Builds', value: '250+' },
+          { label: 'Token Drift Bugs', value: '0' }
+        ]
+      }
     }
   ] as Project[]
 };

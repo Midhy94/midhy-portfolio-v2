@@ -3,6 +3,7 @@
     class="header"
     :class="{
       'header--stuck': isScrolled,
+      'header--hidden': isHidden,
       'header--over-dark': isOverDark,
       'header--menu-open': isMenuOpen
     }"
@@ -65,40 +66,78 @@
           </template>
         </nav>
 
-        <!-- Quick Contact Pill -->
+        <!-- Quick Contact Pill (Matching Faizur.com contact roll) -->
         <button
+          ref="contactBtnRef"
           type="button"
           class="header__contact"
+          :class="{ 'header__contact--copied': copied }"
+          :data-ready="isReady ? '' : undefined"
           @click="handleCopyEmail"
-          :aria-label="copied ? 'Email copied to clipboard' : 'Copy email mnairmidhun@gmail.com'"
+          :aria-label="copied ? 'mnairmidhun@gmail.com copied to clipboard' : 'Copy email mnairmidhun@gmail.com'"
+          :title="copied ? 'mnairmidhun@gmail.com copied to clipboard' : 'Click to copy mnairmidhun@gmail.com'"
         >
-          <span class="contact-text">{{ copied ? '✓ Copied' : 'Contact' }}</span>
+          <span
+            ref="contactLabelRef"
+            data-label="contact"
+            class="contact-label"
+            :data-pos="contactPos"
+          >
+            Contact
+          </span>
+          <span
+            ref="emailLabelRef"
+            data-label="email"
+            class="email-label"
+            :data-pos="emailPos"
+          >
+            <span class="check-badge" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0C4.02943 0 0 4.02943 0 9C0 13.9705 4.02943 18 9 18C13.9705 18 18 13.9705 18 9C18 4.02943 13.9705 0 9 0ZM12.2224 7.17744C12.4585 6.88891 12.4159 6.46365 12.1274 6.22758C11.8389 5.99152 11.4136 6.03404 11.1776 6.32256L7.59989 10.6953L6.3273 9.42273C6.0637 9.15912 5.6363 9.15912 5.3727 9.42273C5.1091 9.68634 5.1091 10.1137 5.3727 10.3773L7.1727 12.1773C7.30755 12.3122 7.49316 12.3836 7.68362 12.3742C7.87409 12.3646 8.05166 12.275 8.17242 12.1274L12.2224 7.17744Z" fill="currentColor" />
+              </svg>
+            </span>
+            <span class="email-text">mnairmidhun@gmail.com</span>
+          </span>
         </button>
 
         <!-- 3-Slash Menu Component -->
         <div class="header__menu" ref="menuContainerRef">
-          <!-- 3-Slash Menu Toggle Trigger Button with Dynamic Color -->
+          <!-- Morphing Toggle Trigger Button that transforms into the close button in place -->
           <button
             type="button"
             class="header__toggle"
             :class="{ 'header__toggle--open': isMenuOpen }"
             @click.stop="toggleMenu"
             :aria-expanded="isMenuOpen"
-            aria-label="Toggle navigation menu"
+            :aria-label="isMenuOpen ? 'Close navigation menu' : 'Toggle navigation menu'"
           >
-            <svg
-              class="slash-icon"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <line class="slash-line line-1" x1="4" y1="11" x2="11" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-              <line class="slash-line line-2" x1="5" y1="19" x2="19" y2="5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-              <line class="slash-line line-3" x1="13" y1="20" x2="20" y2="13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-            </svg>
+            <span class="toggle-icon-wrap" aria-hidden="true">
+              <svg
+                class="slash-icon icon-slashes"
+                width="19"
+                height="19"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line class="slash-line line-1" x1="4" y1="11" x2="11" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                <line class="slash-line line-2" x1="5" y1="19" x2="19" y2="5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                <line class="slash-line line-3" x1="13" y1="20" x2="20" y2="13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+              </svg>
+              <svg
+                class="slash-icon icon-close"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </span>
           </button>
 
           <!-- Fluid Glass Menu Panel (Expanding from Top-Right) -->
@@ -111,30 +150,10 @@
               aria-label="Site Navigation"
               @click.stop
             >
-              <!-- Panel Header: Eyebrow + Integrated Close Button -->
+              <!-- Panel Header: Eyebrow + Spacer for aligned toggle button -->
               <div class="panel__header">
                 <span class="panel__eyebrow">MENU</span>
-                <button
-                  type="button"
-                  class="panel__close-btn"
-                  @click="closeMenu"
-                  aria-label="Close menu"
-                >
-                  <svg
-                    class="close-svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.2"
-                    stroke-linecap="round"
-                    aria-hidden="true"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
+                <div class="panel__header-spacer" aria-hidden="true" />
               </div>
 
               <div class="panel__body">
@@ -270,7 +289,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import type { PortfolioMode } from '@/types/portfolio';
 
@@ -285,10 +304,44 @@ const emit = defineEmits<{
 }>();
 
 const isScrolled = ref(false);
+const isHidden = ref(false);
 const isOverDark = ref(false);
 const isMenuOpen = ref(false);
 const copied = ref(false);
+const isReady = ref(false);
+const contactPos = ref<'in' | 'out'>('in');
+const emailPos = ref<'in' | 'wait' | 'right'>('wait');
 const menuContainerRef = ref<HTMLElement | null>(null);
+
+const contactBtnRef = ref<HTMLButtonElement | null>(null);
+const contactLabelRef = ref<HTMLElement | null>(null);
+const emailLabelRef = ref<HTMLElement | null>(null);
+
+let contactWidth = 0;
+let emailWidth = 0;
+let copyTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const initContactWidths = () => {
+  const btn = contactBtnRef.value;
+  const contactEl = contactLabelRef.value;
+  const emailEl = emailLabelRef.value;
+  if (!btn || !contactEl || !emailEl) return;
+
+  const cs = window.getComputedStyle(btn);
+  const padding = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+
+  // Measure natural widths of both labels
+  contactWidth = Math.ceil(contactEl.offsetWidth + padding);
+  emailWidth = Math.ceil(emailEl.offsetWidth + padding);
+
+  if (contactWidth > 0) {
+    btn.style.width = `${copied.value ? emailWidth : contactWidth}px`;
+    isReady.value = true;
+  }
+};
+
+let lastScrollY = typeof window !== 'undefined' ? Math.max(0, window.scrollY) : 0;
+const scrollThreshold = 90;
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -302,21 +355,62 @@ const closeMenu = () => {
 const handleCopyEmail = async () => {
   try {
     await navigator.clipboard.writeText('mnairmidhun@gmail.com');
-    copied.value = true;
-    setTimeout(() => {
-      copied.value = false;
-    }, 2400);
   } catch {
     window.location.href = 'mailto:mnairmidhun@gmail.com';
+    return;
   }
+
+  if (copyTimeout) clearTimeout(copyTimeout);
+
+  const btn = contactBtnRef.value;
+  if (!emailWidth || !contactWidth) {
+    initContactWidths();
+  }
+
+  contactPos.value = 'out';
+  emailPos.value = 'in';
+  copied.value = true;
+  if (btn && emailWidth) {
+    btn.style.width = `${emailWidth}px`;
+  }
+
+  copyTimeout = setTimeout(() => {
+    contactPos.value = 'in';
+    emailPos.value = 'right';
+    copied.value = false;
+    if (btn && contactWidth) {
+      btn.style.width = `${contactWidth}px`;
+    }
+  }, 1800);
 };
 
 /**
- * Automatically inspects whether the section behind the header is dark or light
+ * Automatically inspects whether the section behind the header is dark or light,
+ * and handles smart hide/reveal on scroll with easing.
  */
 const updateHeaderAppearance = () => {
-  const scrollY = window.scrollY;
+  const scrollY = Math.max(0, window.scrollY);
   isScrolled.value = scrollY > 15;
+
+  // Smart Hide on Scroll Down / Reveal on Scroll Up
+  if (!isMenuOpen.value) {
+    if (scrollY <= scrollThreshold) {
+      isHidden.value = false;
+    } else {
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      if (scrollY < maxScroll) {
+        const delta = scrollY - lastScrollY;
+        if (delta > 8) {
+          isHidden.value = true;
+        } else if (delta < -6) {
+          isHidden.value = false;
+        }
+      }
+    }
+  } else {
+    isHidden.value = false;
+  }
+  lastScrollY = scrollY;
 
   // Check any elements designated as dark sections (or footer / hero card)
   const headerHeight = 72;
@@ -384,13 +478,26 @@ watch(isMenuOpen, (isOpen) => {
 
 onMounted(() => {
   window.addEventListener('scroll', updateHeaderAppearance, { passive: true });
-  window.addEventListener('resize', updateHeaderAppearance, { passive: true });
+  window.addEventListener('resize', () => {
+    updateHeaderAppearance();
+    initContactWidths();
+  }, { passive: true });
   window.addEventListener('click', handleClickOutside);
   window.addEventListener('keydown', handleKeydown);
   updateHeaderAppearance();
+
+  nextTick(() => {
+    initContactWidths();
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        initContactWidths();
+      });
+    }
+  });
 });
 
 onUnmounted(() => {
+  if (copyTimeout) clearTimeout(copyTimeout);
   document.body.classList.remove('menu-is-open');
   document.body.style.overflow = '';
   window.removeEventListener('scroll', updateHeaderAppearance);
@@ -410,54 +517,29 @@ onUnmounted(() => {
   width: 100%;
   pointer-events: none;
   color: var(--color-ink);
-  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+
+  // Smart Scroll: slide up out of view when scrolling down
+  &--hidden {
+    transform: translateY(-100%);
+    pointer-events: none !important;
+
+    * {
+      pointer-events: none !important;
+    }
+  }
 
   &--menu-open {
     z-index: 100;
-  }
-
-  // Progressive gradient fade background from top edge - matching Faizur reference photo
-  &:before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    width: 100%;
-    height: 7.875rem; /* ~126px progressive fade */
-    background: linear-gradient(180deg,
-      var(--color-paper) 0%,
-      var(--color-paper) 18%,
-      color-mix(in srgb, var(--color-paper) 92%, transparent) 28%,
-      color-mix(in srgb, var(--color-paper) 78%, transparent) 38%,
-      color-mix(in srgb, var(--color-paper) 60%, transparent) 48%,
-      color-mix(in srgb, var(--color-paper) 42%, transparent) 58%,
-      color-mix(in srgb, var(--color-paper) 26%, transparent) 68%,
-      color-mix(in srgb, var(--color-paper) 13%, transparent) 78%,
-      color-mix(in srgb, var(--color-paper) 5%, transparent) 88%,
-      transparent 100%
-    );
-    pointer-events: none;
-    z-index: 0;
-    transition: opacity 0.3s ease;
+    transform: translateY(0) !important;
   }
 
   // When over dark background (Automatic color change for logo, text, and gradient)
   &--over-dark {
     color: #FFFFFF;
-
-    &:before {
-      background: linear-gradient(180deg,
-        #141210 0%,
-        #141210 18%,
-        color-mix(in srgb, #141210 92%, transparent) 28%,
-        color-mix(in srgb, #141210 78%, transparent) 38%,
-        color-mix(in srgb, #141210 60%, transparent) 48%,
-        color-mix(in srgb, #141210 42%, transparent) 58%,
-        color-mix(in srgb, #141210 26%, transparent) 68%,
-        color-mix(in srgb, #141210 13%, transparent) 78%,
-        color-mix(in srgb, #141210 5%, transparent) 88%,
-        transparent 100%
-      );
-    }
 
     .header__logo {
       color: #FFFFFF !important;
@@ -552,39 +634,102 @@ onUnmounted(() => {
     }
   }
 
-  // Quick Contact Pill Button (Clean Solid White Pill)
+  // Quick Contact Pill Button (Matching Faizur.com contact roll)
   .header__contact {
-    display: inline-flex;
+    display: inline-grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
     align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1.35rem;
-    font-size: 0.8125rem;
+    text-align: center;
+    height: 2.375rem;
+    padding: 0 1.25rem;
+    font-size: 0.875rem;
     font-weight: 550;
     font-family: var(--font-family-sans);
     color: var(--color-ink);
     background-color: #FFFFFF;
     border: none;
     border-radius: 9999px;
-    box-shadow:
-      0 0 0 1px rgba(20, 18, 16, 0.08),
-      0 2px 6px rgba(20, 18, 16, 0.08);
+    box-shadow: 0 0 0 0.5px rgba(20, 18, 16, 0.08), 0 1px 2px rgba(20, 18, 16, 0.08);
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    outline: none;
+    transition: width 0.65s cubic-bezier(0.65, 0, 0.35, 1),
+                background-color 0.2s ease,
+                box-shadow 0.25s ease;
 
-    &:hover {
+    &:hover:not(.header__contact--copied) {
       background-color: #F8F7F4;
-      box-shadow:
-        0 0 0 1px rgba(20, 18, 16, 0.12),
-        0 4px 12px rgba(20, 18, 16, 0.12);
-      transform: translateY(-1px);
     }
 
-    &:active {
-      transform: translateY(0) scale(0.97);
+    &--copied {
+      background-color: #FFFFFF;
+      box-shadow: 0 0 0 0.5px rgba(20, 18, 16, 0.08), 0 1px 2px rgba(20, 18, 16, 0.08);
+      cursor: default;
     }
 
-    .contact-text {
+    &:not([data-ready]) [data-label="email"] {
+      letter-spacing: normal;
+      visibility: hidden;
+      position: absolute;
+    }
+
+    [data-label] {
+      grid-area: 1 / 1;
+      justify-self: center;
+      align-items: center;
+      gap: 0.45rem;
       white-space: nowrap;
+      display: inline-flex;
+      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1),
+                  letter-spacing 0.65s cubic-bezier(0.65, 0, 0.35, 1),
+                  opacity 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+
+      &[data-pos="in"] {
+        letter-spacing: normal;
+        opacity: 1;
+        translate: 0 0;
+      }
+
+      &[data-pos="out"] {
+        letter-spacing: 0.5em;
+        opacity: 0;
+        translate: -8rem 0;
+      }
+
+      &[data-pos="wait"],
+      &[data-pos="right"] {
+        letter-spacing: 0.5em;
+        opacity: 0;
+        translate: 8rem 0;
+      }
+    }
+
+    .contact-label {
+      color: var(--color-ink);
+      line-height: 1;
+    }
+
+    .email-label {
+      color: var(--color-laterite);
+      font-size: 0.8125rem;
+      font-weight: 550;
+      line-height: 1;
+
+      .check-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-laterite);
+        flex-shrink: 0;
+      }
+
+      .email-text {
+        font-family: var(--font-family-sans);
+        letter-spacing: -0.01em;
+      }
     }
   }
 
@@ -599,15 +744,20 @@ onUnmounted(() => {
       height: 2.375rem;
       display: grid;
       place-items: center;
-      border: none;
+      border: 0.5px solid transparent;
       border-radius: 9999px;
       background: transparent;
       color: currentColor;
       cursor: pointer;
       position: relative;
-      transition: background-color 0.2s ease, transform 0.15s ease, color 0.2s ease;
+      z-index: 105;
+      transition: background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  color 0.25s ease;
 
-      &:hover {
+      &:hover:not(.header__toggle--open) {
         background-color: rgba(20, 18, 16, 0.06);
       }
 
@@ -615,41 +765,53 @@ onUnmounted(() => {
         transform: scale(0.94);
       }
 
-      .slash-icon {
-        width: 20px;
-        height: 20px;
-        display: block;
-        overflow: visible;
+      .toggle-icon-wrap {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
 
-        .slash-line {
-          stroke: currentColor;
-          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                      opacity 0.2s ease;
+        .slash-icon {
+          grid-area: 1 / 1;
+          display: block;
+          transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                      opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .line-1 {
-          transform-origin: 7.5px 7.5px;
+        .icon-slashes {
+          opacity: 1;
+          transform: rotate(0deg) scale(1);
         }
 
-        .line-2 {
-          transform-origin: 12px 12px;
-        }
-
-        .line-3 {
-          transform-origin: 16.5px 16.5px;
+        .icon-close {
+          opacity: 0;
+          transform: rotate(-90deg) scale(0.6);
         }
       }
 
-      // Animated morph into close 'X' when open
+      // Morph into close button in the exact same spot
       &--open {
-        background: transparent;
+        color: #FFFFFF !important;
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.24);
+        box-shadow: none;
 
-        .slash-icon {
-          .line-1 {
-            transform: translate(4.5px, 4.5px) rotate(90deg);
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.36);
+          transform: scale(1.05);
+        }
+
+        .toggle-icon-wrap {
+          .icon-slashes {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.6);
           }
-          .line-3 {
-            transform: translate(-4.5px, -4.5px) rotate(90deg);
+
+          .icon-close {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
           }
         }
       }
@@ -658,31 +820,34 @@ onUnmounted(() => {
     // Fluid Glass Menu Panel (Expanding from Top-Right)
     .header__panel {
       position: absolute;
-      top: -0.5rem;
-      right: -0.5rem;
+      top: -0.625rem;
+      right: -0.625rem;
       width: clamp(21.5rem, 90vw, 25rem);
       max-width: calc(100vw - 1.5rem);
-      border-radius: 22px;
-      background: rgba(20, 18, 16, 0.94);
-      backdrop-filter: blur(40px) saturate(190%);
-      -webkit-backdrop-filter: blur(40px) saturate(190%);
-      border: 1px solid rgba(248, 247, 244, 0.16);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%),
+        rgba(20, 18, 16, 0.72);
+      backdrop-filter: blur(32px) saturate(160%);
+      -webkit-backdrop-filter: blur(32px) saturate(160%);
+      border: 0.5px solid rgba(255, 255, 255, 0.22);
       box-shadow:
-        0 32px 72px -8px rgba(0, 0, 0, 0.65),
-        0 12px 28px -4px rgba(0, 0, 0, 0.4),
-        inset 0 1px 1.5px rgba(248, 247, 244, 0.35),
-        inset 0 -1.5px 2px rgba(248, 247, 244, 0.65);
-      padding: 1.5rem 1.65rem 1.5rem;
+        0 24px 60px -8px rgba(0, 0, 0, 0.55),
+        0 8px 24px -4px rgba(0, 0, 0, 0.35),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+      padding: 0.625rem 0.625rem 1.65rem 1.65rem;
       color: var(--color-chalk);
       z-index: 101;
       transform-origin: top right;
 
-      // Header row: 'MENU' eyebrow + close button
+      // Header row: 'MENU' eyebrow aligned with the morphing toggle button
       .panel__header {
+        height: 2.25rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 1.35rem;
+        padding-left: 0.15rem;
+        margin-bottom: 1.25rem;
         animation: fluidItemIn 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
 
         .panel__eyebrow {
@@ -690,35 +855,16 @@ onUnmounted(() => {
           font-weight: 600;
           letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(248, 247, 244, 0.45);
+          color: rgba(248, 247, 244, 0.75);
           font-family: var(--font-family-sans);
           user-select: none;
         }
 
-        .panel__close-btn {
-          width: 2rem;
-          height: 2rem;
-          display: grid;
-          place-items: center;
-          border-radius: 9999px;
-          background: rgba(248, 247, 244, 0.08);
-          border: 1px solid rgba(248, 247, 244, 0.1);
-          color: var(--color-chalk);
-          cursor: pointer;
-          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-
-          &:hover {
-            background: rgba(248, 247, 244, 0.18);
-            transform: scale(1.06);
-          }
-
-          &:active {
-            transform: scale(0.94);
-          }
-
-          .close-svg {
-            display: block;
-          }
+        .panel__header-spacer {
+          width: 2.375rem;
+          height: 2.375rem;
+          flex-shrink: 0;
+          pointer-events: none;
         }
       }
 
@@ -983,6 +1129,34 @@ onUnmounted(() => {
   }
 }
 
+@media (max-width: 640px) {
+  .header .header__contact {
+    height: 2.15rem;
+    padding: 0 1rem;
+    font-size: 0.8125rem;
+
+    .email-label {
+      font-size: 0.75rem;
+
+      .email-text {
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .header .header__menu .header__toggle {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+
+  .header .header__menu .header__panel .panel__header-spacer {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+}
+
 // Background Dim Overlay (Gentle scrim overlay without blur so website remains crisp)
 .header__backdrop {
   position: fixed;
@@ -1009,12 +1183,12 @@ onUnmounted(() => {
 
 .fluid-menu-enter-from {
   opacity: 0;
-  transform: scale(0.88) translate(10px, -12px);
+  transform: scale(0.9);
 }
 
 .fluid-menu-leave-to {
   opacity: 0;
-  transform: scale(0.92) translate(6px, -8px);
+  transform: scale(0.92);
 }
 
 // Backdrop Fade Transition

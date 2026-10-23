@@ -21,7 +21,7 @@
                 :class="{ active: mode === 'personal' }"
                 @click="switchPortal('personal')"
               >
-                Personal
+                Profile
               </button>
               <button
                 type="button"
@@ -31,7 +31,7 @@
                 :class="{ active: mode === 'works' }"
                 @click="switchPortal('works')"
               >
-                Works
+                Projects
               </button>
             </div>
 

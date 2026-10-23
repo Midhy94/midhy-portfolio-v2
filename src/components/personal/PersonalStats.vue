@@ -9,9 +9,6 @@
         </span>
       </h2>
 
-      <!-- Mid Divider Rule -->
-      <div class="legacy-mid-divider"></div>
-
       <!-- Two-column Statement -->
       <div class="legacy-columns">
         <div class="col-lead">
@@ -109,13 +106,6 @@ const legacyData = PERSONAL_CONTENT.legacy;
     }
   }
 
-  // Mid Divider Rule
-  .legacy-mid-divider {
-    width: 100%;
-    height: 1px;
-    background-color: var(--color-border);
-    margin-bottom: clamp(2.5rem, 4.5vw, 3.5rem);
-  }
 
   // Two-column Statement
   .legacy-columns {
