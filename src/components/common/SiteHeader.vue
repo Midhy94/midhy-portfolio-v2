@@ -537,9 +537,46 @@ onUnmounted(() => {
     transform: translateY(0) !important;
   }
 
+  // Progressive gradient fade background that blends into page background
+  &:before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: 7.25rem;
+    background: linear-gradient(180deg,
+      #F6F5F2 0%,
+      #F6F5F2 35%,
+      rgba(246, 245, 242, 0.95) 45%,
+      rgba(246, 245, 242, 0.82) 55%,
+      rgba(246, 245, 242, 0.64) 65%,
+      rgba(246, 245, 242, 0.42) 75%,
+      rgba(246, 245, 242, 0.22) 84%,
+      rgba(246, 245, 242, 0.08) 92%,
+      rgba(246, 245, 242, 0) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.3s ease;
+  }
+
   // When over dark background (Automatic color change for logo, text, and gradient)
   &--over-dark {
     color: #FFFFFF;
+
+    &:before {
+      background: linear-gradient(180deg,
+        #141210 0%,
+        #141210 35%,
+        rgba(20, 18, 16, 0.95) 45%,
+        rgba(20, 18, 16, 0.82) 55%,
+        rgba(20, 18, 16, 0.64) 65%,
+        rgba(20, 18, 16, 0.42) 75%,
+        rgba(20, 18, 16, 0.22) 84%,
+        rgba(20, 18, 16, 0.08) 92%,
+        rgba(20, 18, 16, 0) 100%
+      );
+    }
 
     .header__logo {
       color: #FFFFFF !important;
