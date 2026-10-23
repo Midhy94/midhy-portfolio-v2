@@ -1,87 +1,81 @@
-// Design Tokens: Handcrafted Editorial & Bespoke Digital Design System
+// Design tokens & foundational SCSS variables
+// Reconciled with Midhun's Warm Editorial Palette & Lovable Design Reference
 
-:root {
-  // Typography
-  --font-serif: 'Newsreader', 'Tiempos Text', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', 'PP Neue Montreal', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --font-script: 'Caveat', cursive, sans-serif;
+// Typography families
+$font-family-serif: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
+$font-family-pixel: 'Merriweather Sans', sans-serif;
+$font-family-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  // White Theme Primary Canvas Palette (Editorial Light Canvas)
-  --color-bg-page: #ffffff;
-  --color-bg-card: #fbfbfa;
-  --color-bg-card-hover: #f7f6f3;
-  --color-bg-surface: #f4f3f0;
-  --color-bg-elevated: #ffffff;
+// Font sizes (fluid and modular scale)
+$font-size-xs: 0.75rem;    // 12px
+$font-size-sm: 0.875rem;   // 14px
+$font-size-base: 1rem;     // 16px
+$font-size-md: 1.125rem;   // 18px
+$font-size-lg: 1.25rem;    // 20px
+$font-size-xl: 1.5rem;     // 24px
+$font-size-2xl: 2rem;      // 32px
+$font-size-3xl: 2.75rem;   // 44px
+$font-size-4xl: 3.5rem;    // 56px
+$font-size-hero: clamp(2.5rem, 5.5vw, 4.25rem);
 
-  --color-text-primary: #111010;
-  --color-text-secondary: #4a4947;
-  --color-text-muted: #787672;
-  --color-text-inverse: #ffffff;
+// Warm Editorial Color Palette (Infused with Faizur.com's luminous palette + Midhun's unique editorial identity)
+$color-paper: #F6F5F2;         // Luminous warm oyster linen canvas
+$color-cloud: #EFEFEA;         // Soft cloud / secondary container
+$color-card: #FCFBF9;          // Elevated card surfaces
+$color-ink: #141210;           // Obsidian espresso primary text & dark sections
+$color-laterite: #E14B27;      // Energetic vermilion accent (Faizur dot & brand energy)
+$color-laterite-deep: #B84A27; // Midhun signature deep terracotta
+$color-terracotta: #E07658;    // Secondary warm coral accent
+$color-terracotta-dark: #C45E42;
+$color-stone: #EBE8E1;         // Supporting stone surfaces
+$color-stone-light: #F2EFEA;
+$color-muted: #524F4A;         // Secondary text (refined high-contrast neutral)
+$color-muted-light: #827E78;   // Tertiary / timestamp text
+$color-border: #DCDAD4;        // Clean hairline borders & dividers
+$color-border-dark: #2A2622;   // Dark section borders
+$color-chalk: #F8F7F4;         // Light foregrounds
+$color-error: #D03B2B;         // Error / caution feedback
+$color-moss: #344636;          // Botanical forest moss accent (editorial status & badges)
+$color-moss-light: #E8ECE8;
 
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-border-subtle: rgba(0, 0, 0, 0.04);
-  --color-border-strong: rgba(0, 0, 0, 0.16);
+// Spacing scale (4px / 8px grid)
+$spacing-1: 0.25rem;  // 4px
+$spacing-2: 0.5rem;   // 8px
+$spacing-3: 0.75rem;  // 12px
+$spacing-4: 1rem;     // 16px
+$spacing-5: 1.25rem;  // 20px
+$spacing-6: 1.5rem;   // 24px
+$spacing-8: 2rem;     // 32px
+$spacing-10: 2.5rem;  // 40px
+$spacing-12: 3rem;    // 48px
+$spacing-16: 4rem;    // 64px
+$spacing-20: 5rem;    // 80px
+$spacing-24: 6rem;    // 96px
 
-  // Inverted / Dark Contrast Elements
-  --color-dark-bg: #0c0b0b;
-  --color-dark-card: #151413;
-  --color-dark-surface: #1e1d1c;
-  --color-dark-text-primary: #fafafa;
-  --color-dark-text-secondary: #a6a4a0;
-  --color-dark-text-muted: #73716c;
-  --color-dark-border: rgba(255, 255, 255, 0.1);
+// Radii
+$radius-xs: 2px;
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-2xl: 24px;
+$radius-full: 9999px;
 
-  // Accent & Brand Colors
-  --color-accent-terracotta: #d95732; // Signature terracotta warmth
-  --color-accent-terracotta-soft: rgba(217, 87, 50, 0.08);
-  --color-accent-blue: #2563eb;
-  --color-success: #15803d;
-  --color-warning: #b45309;
+// Shadows & Elevations
+$shadow-sm: 0 1px 2px rgba(25, 21, 18, 0.05);
+$shadow-md: 0 4px 12px rgba(25, 21, 18, 0.08);
+$shadow-lg: 0 10px 25px rgba(25, 21, 18, 0.12);
+$shadow-floating: 0 12px 32px rgba(25, 21, 18, 0.16), 0 2px 6px rgba(25, 21, 18, 0.08);
 
-  // Spacing Scale
-  --space-1: 2px;
-  --space-2: 4px;
-  --space-3: 6px;
-  --space-4: 8px;
-  --space-5: 10px;
-  --space-6: 12px;
-  --space-7: 16px;
-  --space-8: 20px;
-  --space-9: 24px;
-  --space-10: 32px;
-  --space-11: 40px;
-  --space-12: 48px;
-  --space-13: 56px;
-  --space-14: 64px;
-  --space-15: 72px;
-  --space-16: 80px;
-  --space-17: 96px;
-  --space-18: 120px;
-  --space-19: 144px;
+// Transitions
+$transition-instant: 100ms cubic-bezier(0.16, 1, 0.3, 1);
+$transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+$transition-base: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+$transition-smooth: 350ms cubic-bezier(0.16, 1, 0.3, 1);
+$transition-slow: 500ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  // Intentional Geometric Radii (Restrained, not everything rounded into a blob)
-  --radius-xs: 3px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-pill: 9999px;
-
-  // Subtle Handcrafted Shadows (Clean paper-like elevation)
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02);
-  --shadow-btn-dark: 0 1px 2px rgba(0, 0, 0, 0.2);
-
-  // Motion Transitions (Subtle & organic, no over-elastic delays)
-  --ease-editorial: cubic-bezier(0.215, 0.61, 0.355, 1);
-  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-fast: 0.15s var(--ease-out-quad);
-  --transition-base: 0.25s var(--ease-editorial);
-  --transition-smooth: 0.4s var(--ease-editorial);
-
-  // Layout Constraints
-  --container-max-width: 1180px;
-  --content-max-width: 1140px;
-  --reading-max-width: 680px;
-}
+// Layout boundaries
+$layout-max-width: 1240px;
+$layout-narrow-width: 960px;
+$layout-gutter: clamp(1.25rem, 4vw, 3rem);

@@ -1,100 +1,78 @@
-<script setup lang="ts">
-import { onMounted } from 'vue';
-import { useAuthStore } from '@/stores/auth.store';
-import { useUiStore } from '@/stores/ui.store';
-import AppNavbar from '@/components/layout/AppNavbar.vue';
-import AppFooter from '@/components/layout/AppFooter.vue';
-import ToastContainer from '@/components/common/ToastContainer.vue';
-import { Eye, X } from 'lucide-vue-next';
-
-const authStore = useAuthStore();
-const uiStore = useUiStore();
-
-onMounted(async () => {
-  await authStore.initSession();
-});
-</script>
-
 <template>
-  <div class="app-root">
-    <!-- Live Preview Banner for Unpublished Drafts -->
-    <div v-if="uiStore.isPreviewMode" class="preview-banner">
-      <div class="container preview-banner__inner">
-        <div class="preview-badge">
-          <Eye :size="14" />
-          <span>Live Draft Preview Mode (Administrator View)</span>
-        </div>
-        <button
-          type="button"
-          class="btn-exit-preview"
-          @click="uiStore.isPreviewMode = false"
-        >
-          <span>Exit Preview</span>
-          <X :size="12" />
-        </button>
-      </div>
-    </div>
+  <div class="portfolio-shell" :class="'portal-' + mode">
+    <!-- Shared Site Header with 2-mode switcher pill & 3 simple links -->
+    <SiteHeader :mode="mode" />
 
-    <AppNavbar />
-
-    <main class="app-main">
-      <router-view v-slot="{ Component }">
-        <transition name="page-fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+    <!-- Main View with Smooth Page Transition -->
+    <main class="portfolio-main" role="main">
+      <RouterView v-slot="{ Component, route }">
+        <Transition name="page-fade" mode="out-in">
+          <component :is="Component" :key="route.path" />
+        </Transition>
+      </RouterView>
     </main>
 
-    <AppFooter />
-    <ToastContainer />
+    <!-- Shared Dark Editorial Footer -->
+    <SiteFooter :mode="mode" />
+
+    <!-- Persistent Floating Portal Switcher -->
+    <ModeSwitcher :mode="mode" />
   </div>
 </template>
 
-<style lang="scss">
-@use '@/styles/main.scss';
+<script setup lang="ts">
+import { usePortfolioMode } from '@/composables/usePortfolioMode';
 
-.app-root {
+import SiteHeader from '@/components/common/SiteHeader.vue';
+import SiteFooter from '@/components/common/SiteFooter.vue';
+import ModeSwitcher from '@/components/common/ModeSwitcher.vue';
+
+const { mode } = usePortfolioMode();
+</script>
+
+<style scoped lang="scss">
+@use '@/styles/variables' as *;
+
+.portfolio-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  position: relative;
 
-.app-main {
-  flex: 1;
-}
-
-.preview-banner {
-  background: var(--color-warning);
-  color: #000000;
-  padding: var(--space-2) 0;
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-
-  &__inner {
+  .portfolio-main {
+    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
   }
 }
 
-.preview-badge {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+// Restrained Page Transition
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-exit-preview {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  background: rgba(0, 0, 0, 0.15);
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.25);
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade-enter-active,
+  .page-fade-leave-active {
+    transition: none;
+  }
+  .page-fade-enter-from,
+  .page-fade-leave-to {
+    opacity: 1;
+    transform: none;
   }
 }
 </style>
