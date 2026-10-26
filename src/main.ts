@@ -13,12 +13,11 @@ function initAdaptiveFavicon() {
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
   const update = (isDark: boolean) => {
-    const theme = isDark ? 'light' : 'dark'
-    // Update PNG links dynamically if browser doesn't honor media attribute on link tags
-    const link32 = document.querySelector<HTMLLinkElement>('link[rel="icon"][sizes="32x32"]')
-    const link16 = document.querySelector<HTMLLinkElement>('link[rel="icon"][sizes="16x16"]')
-    if (link32) link32.href = `/favicon-${theme}.png?v=8`
-    if (link16) link16.href = `/favicon-${theme}-16.png?v=8`
+    // Dynamic SVG Favicon: light logo (#FFFFFF) on dark tabs, dark logo (#141210) on light tabs
+    const svgLink = document.querySelector<HTMLLinkElement>('link[rel="icon"][type="image/svg+xml"]:not([media])')
+    if (svgLink) {
+      svgLink.href = isDark ? '/favicon-dark.svg?v=mi2' : '/favicon-light.svg?v=mi2'
+    }
   }
 
   update(mediaQuery.matches)

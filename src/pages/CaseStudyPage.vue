@@ -169,8 +169,11 @@ const allProjects: Project[] = [
 ];
 
 const project = computed(() => {
-  const slug = route.params.slug as string;
-  return allProjects.find(p => p.slug === slug || p.id === slug) || null;
+  const rawSlug = route.params.slug;
+  const slug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
+  if (!slug || typeof slug !== 'string' || slug.length > 100) return null;
+  const normalizedSlug = slug.trim().toLowerCase();
+  return allProjects.find(p => p.slug === normalizedSlug || p.id === normalizedSlug) || null;
 });
 </script>
 
