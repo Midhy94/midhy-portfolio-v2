@@ -56,9 +56,42 @@ const router = createRouter({
   }
 });
 
-router.afterEach((to) => {
+import { nextTick } from 'vue';
+import { useCurtainsWipe } from '@/composables/useCurtainsWipe';
+
+router.beforeEach(async (to, from) => {
+  // If first load (no from.name), initial PageLoader handles introduction
+  if (!from.name) return true;
+
+  const fromIsWork = from.path.startsWith('/work');
+  const toIsWork = to.path.startsWith('/work');
+
+  // Trigger full-screen curtains wipe ONLY when switching between Profile and Projects
+  if (fromIsWork !== toIsWork) {
+    const { cover } = useCurtainsWipe();
+    // Navigating to Projects: wipe right. Navigating to Profile: wipe left.
+    const dir = toIsWork ? 'right' : 'left';
+    await cover(dir);
+  }
+
+  return true;
+});
+
+router.afterEach(async (to, from) => {
   if (to.meta?.title) {
     document.title = to.meta.title as string;
+  }
+
+  if (!from.name) return;
+
+  const fromIsWork = from.path.startsWith('/work');
+  const toIsWork = to.path.startsWith('/work');
+
+  if (fromIsWork !== toIsWork) {
+    const { reveal } = useCurtainsWipe();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    await nextTick();
+    await reveal();
   }
 });
 

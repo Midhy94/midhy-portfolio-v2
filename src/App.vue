@@ -1,12 +1,18 @@
 <template>
-  <div class="portfolio-shell" :class="'portal-' + mode">
-    <!-- Shared Site Header with 2-mode switcher pill & 3 simple links -->
-    <SiteHeader :mode="mode" />
+  <!-- Full-Screen Initial Page Loader with Logo Animation -->
+  <PageLoader @loaded="handleLoaded" />
 
-    <!-- Main View with Smooth Page Transition -->
+  <!-- Full-Screen Motion Curtains: Wipe Overlay (Profile <-> Work switch) -->
+  <CurtainsWipe />
+
+  <div class="portfolio-shell" :class="['portal-' + mode, { 'is-loaded': isPageLoaded }]">
+    <!-- Shared Site Header with 2-mode switcher pill & 3 simple links -->
+    <SiteHeader :mode="mode" :is-loaded="isPageLoaded" />
+
+    <!-- Main View with Page Content -->
     <main class="portfolio-main" role="main">
       <RouterView v-slot="{ Component, route }">
-        <Transition name="page-fade" mode="out-in">
+        <Transition :name="isCurtainActive ? '' : 'page-fade'" :mode="isCurtainActive ? 'default' : 'out-in'">
           <component :is="Component" :key="route.path" />
         </Transition>
       </RouterView>
@@ -21,13 +27,23 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { usePortfolioMode } from '@/composables/usePortfolioMode';
+import { useCurtainsWipe } from '@/composables/useCurtainsWipe';
 
+import PageLoader from '@/components/common/PageLoader.vue';
+import CurtainsWipe from '@/components/common/CurtainsWipe.vue';
 import SiteHeader from '@/components/common/SiteHeader.vue';
 import SiteFooter from '@/components/common/SiteFooter.vue';
 import ModeSwitcher from '@/components/common/ModeSwitcher.vue';
 
 const { mode } = usePortfolioMode();
+const { isActive: isCurtainActive } = useCurtainsWipe();
+const isPageLoaded = ref(false);
+
+const handleLoaded = () => {
+  isPageLoaded.value = true;
+};
 </script>
 
 <style scoped lang="scss">
@@ -45,6 +61,8 @@ const { mode } = usePortfolioMode();
     flex: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
   }
 }
 

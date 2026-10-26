@@ -80,6 +80,8 @@ const props = defineProps<{
 const router = useRouter();
 
 const goTo = (target: PortfolioMode) => {
+  if (props.mode === target) return;
+
   if (target === 'works') {
     router.push('/work');
   } else {
