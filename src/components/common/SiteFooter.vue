@@ -155,14 +155,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import type { PortfolioMode } from '@/types/portfolio';
 import { FOOTER_CONTENT } from '@/data/portfolioData';
 import { useClipboard } from '@/composables/useClipboard';
 
-const props = defineProps<{
-  mode: PortfolioMode;
-}>();
+const props = withDefaults(
+  defineProps<{
+    mode: PortfolioMode;
+    isLoaded?: boolean;
+  }>(),
+  {
+    isLoaded: false,
+  }
+);
 
 const { copied, copy } = useClipboard();
 
@@ -175,6 +181,7 @@ const wordmarkStageRef = ref<HTMLElement | null>(null);
 const isRevealed = ref(false);
 let wordmarkObserver: IntersectionObserver | null = null;
 let scrollListener: (() => void) | null = null;
+let safetyTimer: ReturnType<typeof setTimeout> | null = null;
 
 // Purge any stale session lock from previous versions
 try {
@@ -195,7 +202,35 @@ const handleReplayLogo = () => {
   });
 };
 
-onMounted(() => {
+const triggerReveal = () => {
+  if (isRevealed.value) return;
+  isRevealed.value = true;
+
+  if (wordmarkObserver) {
+    wordmarkObserver.disconnect();
+    wordmarkObserver = null;
+  }
+  if (scrollListener && typeof window !== 'undefined') {
+    window.removeEventListener('scroll', scrollListener);
+    scrollListener = null;
+  }
+  if (safetyTimer) {
+    clearTimeout(safetyTimer);
+    safetyTimer = null;
+  }
+};
+
+const onScroll = () => {
+  if (isRevealed.value || !wordmarkStageRef.value) return;
+  const rect = wordmarkStageRef.value.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    triggerReveal();
+  }
+};
+
+const initRevealTrigger = () => {
+  if (isRevealed.value || !wordmarkStageRef.value) return;
+
   // Respect user preference for reduced motion
   const prefersReducedMotion =
     typeof window !== 'undefined' &&
@@ -206,52 +241,62 @@ onMounted(() => {
     return;
   }
 
-  const triggerReveal = () => {
-    if (isRevealed.value) return;
-    isRevealed.value = true;
+  // Setup intersection observer for scroll reveal
+  if (typeof IntersectionObserver !== 'undefined' && wordmarkStageRef.value) {
     if (wordmarkObserver) {
       wordmarkObserver.disconnect();
-      wordmarkObserver = null;
     }
-    if (scrollListener && typeof window !== 'undefined') {
-      window.removeEventListener('scroll', scrollListener);
-      scrollListener = null;
-    }
-  };
-
-  const onScroll = () => {
-    if (isRevealed.value || !wordmarkStageRef.value) return;
-    const rect = wordmarkStageRef.value.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
-      triggerReveal();
-    }
-  };
-
-  // Defer observer setup to after initial DOM layout computation to prevent false 0ms triggers
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      if (typeof IntersectionObserver !== 'undefined' && wordmarkStageRef.value) {
-        wordmarkObserver = new IntersectionObserver(
-          (entries) => {
-            const entry = entries[0];
-            if (entry && entry.isIntersecting) {
-              triggerReveal();
-            }
-          },
-          {
-            threshold: 0.05,
-            rootMargin: '0px 0px 0px 0px',
-          }
-        );
-        wordmarkObserver.observe(wordmarkStageRef.value);
-
-        scrollListener = onScroll;
-        window.addEventListener('scroll', onScroll, { passive: true });
-      } else {
-        isRevealed.value = true;
+    wordmarkObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
+          triggerReveal();
+        }
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '0px 0px 50px 0px',
       }
+    );
+    wordmarkObserver.observe(wordmarkStageRef.value);
+  }
+
+  // Also bind passive scroll listener as bulletproof dual trigger
+  if (typeof window !== 'undefined') {
+    if (!scrollListener) {
+      scrollListener = onScroll;
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+    // Check if footer is already within view
+    onScroll();
+  }
+};
+
+// Start observing when page preloader signals loaded
+watch(
+  () => props.isLoaded,
+  (loaded) => {
+    if (loaded) {
+      nextTick(() => {
+        initRevealTrigger();
+      });
+    }
+  },
+  { immediate: true }
+);
+
+onMounted(() => {
+  // If page was already loaded or loader is absent, initialize right away
+  if (props.isLoaded || (typeof document !== 'undefined' && !document.querySelector('.page-loader'))) {
+    nextTick(() => {
+      initRevealTrigger();
     });
-  });
+  } else {
+    // Safety fallback: if loaded event is missed for any reason, initialize after 2.4s
+    safetyTimer = setTimeout(() => {
+      initRevealTrigger();
+    }, 2400);
+  }
 });
 
 onUnmounted(() => {
@@ -262,6 +307,10 @@ onUnmounted(() => {
   if (scrollListener && typeof window !== 'undefined') {
     window.removeEventListener('scroll', scrollListener);
     scrollListener = null;
+  }
+  if (safetyTimer) {
+    clearTimeout(safetyTimer);
+    safetyTimer = null;
   }
 });
 </script>

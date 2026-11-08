@@ -1,6 +1,7 @@
 <template>
   <div class="personal-page">
     <PersonalHero @switch-to-works="router.push('/work')" />
+    <ScrollStatementSection />
     <PersonalPhilosophy />
     <PersonalStats />
 
@@ -26,6 +27,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import PersonalHero from '@/components/personal/PersonalHero.vue';
+import ScrollStatementSection from '@/components/personal/ScrollStatementSection.vue';
 import PersonalPhilosophy from '@/components/personal/PersonalPhilosophy.vue';
 import PersonalStats from '@/components/personal/PersonalStats.vue';
 

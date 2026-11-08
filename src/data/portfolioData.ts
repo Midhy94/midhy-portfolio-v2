@@ -9,6 +9,17 @@ import type {
 
 export const PERSONAL_CONTENT = {
   hero: {
+    greeting: "Hey, I'm a",
+    roleLine1: 'Creative',
+    roleLine2: 'Director',
+    statementTitle: 'Great design should feel invisible.',
+    statementDesc: 'From strategy to interface, I build digital products and brands that connect, convert, and scale.',
+    pillars: [
+      { number: '#01', label: 'Brand & UX Strategy' },
+      { number: '#02', label: 'Brand Identity & Systems' },
+      { number: '#03', label: 'UI/UX & Design Systems' },
+      { number: '#04', label: 'Creative Direction' },
+    ],
     overline: 'PRODUCT DESIGNER / INDIA',
     headlineStart: 'Designing digital',
     headlineMiddle: 'experiences with',
@@ -20,6 +31,10 @@ export const PERSONAL_CONTENT = {
     resumeUrl: '/Midhun_M_Resume.pdf',
     portrait: '/images/designer-portrait.png',
     portraitTag: 'Senior UI/UX & Product Designer'
+  },
+  statement: {
+    text: 'We believe the strongest digital brands are built through strategy, not just aesthetics. Every interface is designed to capture attention, inspire action, and create lasting business growth.',
+    tagline: 'Performance-driven design & strategy, from vision to execution. Built for ambitious digital brands.'
   },
   philosophy: {
     sectionTag: '01 / PHILOSOPHY',

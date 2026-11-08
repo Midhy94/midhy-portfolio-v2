@@ -59,3 +59,8 @@ export interface MetricItem {
   value: string;
   label: string;
 }
+
+export interface StatementContent {
+  text: string;
+  tagline: string;
+}

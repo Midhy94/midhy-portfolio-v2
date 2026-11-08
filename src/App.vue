@@ -19,7 +19,7 @@
     </main>
 
     <!-- Shared Dark Editorial Footer -->
-    <SiteFooter :mode="mode" />
+    <SiteFooter :mode="mode" :is-loaded="isPageLoaded" />
 
     <!-- Persistent Floating Portal Switcher -->
     <ModeSwitcher :mode="mode" />
@@ -62,7 +62,7 @@ const handleLoaded = () => {
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    overflow-x: clip;
   }
 }
 

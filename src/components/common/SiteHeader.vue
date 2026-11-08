@@ -67,40 +67,6 @@
           </template>
         </nav>
 
-        <!-- Quick Contact Pill (Matching Faizur.com contact roll) -->
-        <button
-          ref="contactBtnRef"
-          type="button"
-          class="header__contact"
-          :class="{ 'header__contact--copied': copied }"
-          :data-ready="isReady ? '' : undefined"
-          @click="handleCopyEmail"
-          :aria-label="copied ? 'mnairmidhun@gmail.com copied to clipboard' : 'Copy email mnairmidhun@gmail.com'"
-          :title="copied ? 'mnairmidhun@gmail.com copied to clipboard' : 'Click to copy mnairmidhun@gmail.com'"
-        >
-          <span
-            ref="contactLabelRef"
-            data-label="contact"
-            class="contact-label"
-            :data-pos="contactPos"
-          >
-            Contact
-          </span>
-          <span
-            ref="emailLabelRef"
-            data-label="email"
-            class="email-label"
-            :data-pos="emailPos"
-          >
-            <span class="check-badge" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0C4.02943 0 0 4.02943 0 9C0 13.9705 4.02943 18 9 18C13.9705 18 18 13.9705 18 9C18 4.02943 13.9705 0 9 0ZM12.2224 7.17744C12.4585 6.88891 12.4159 6.46365 12.1274 6.22758C11.8389 5.99152 11.4136 6.03404 11.1776 6.32256L7.59989 10.6953L6.3273 9.42273C6.0637 9.15912 5.6363 9.15912 5.3727 9.42273C5.1091 9.68634 5.1091 10.1137 5.3727 10.3773L7.1727 12.1773C7.30755 12.3122 7.49316 12.3836 7.68362 12.3742C7.87409 12.3646 8.05166 12.275 8.17242 12.1274L12.2224 7.17744Z" fill="currentColor" />
-              </svg>
-            </span>
-            <span class="email-text">mnairmidhun@gmail.com</span>
-          </span>
-        </button>
-
         <!-- 3-Slash Menu Component -->
         <div class="header__menu" ref="menuContainerRef">
           <!-- Morphing Toggle Trigger Button that transforms into the close button in place -->
@@ -108,7 +74,7 @@
             type="button"
             class="header__toggle"
             :class="{ 'header__toggle--open': isMenuOpen }"
-            @click.stop="toggleMenu"
+            @click.stop.prevent="toggleMenu"
             :aria-expanded="isMenuOpen"
             :aria-label="isMenuOpen ? 'Close navigation menu' : 'Toggle navigation menu'"
           >
@@ -314,81 +280,38 @@ const isScrolled = ref(false);
 const isHidden = ref(false);
 const isOverDark = ref(false);
 const isMenuOpen = ref(false);
-const copied = ref(false);
-const isReady = ref(false);
-const contactPos = ref<'in' | 'out'>('in');
-const emailPos = ref<'in' | 'wait' | 'right'>('wait');
 const menuContainerRef = ref<HTMLElement | null>(null);
 
-const contactBtnRef = ref<HTMLButtonElement | null>(null);
-const contactLabelRef = ref<HTMLElement | null>(null);
-const emailLabelRef = ref<HTMLElement | null>(null);
+const copied = ref(false);
+let copyTimeout: number | null = null;
 
-let contactWidth = 0;
-let emailWidth = 0;
-let copyTimeout: ReturnType<typeof setTimeout> | null = null;
-
-const initContactWidths = () => {
-  const btn = contactBtnRef.value;
-  const contactEl = contactLabelRef.value;
-  const emailEl = emailLabelRef.value;
-  if (!btn || !contactEl || !emailEl) return;
-
-  const cs = window.getComputedStyle(btn);
-  const padding = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-
-  // Measure natural widths of both labels
-  contactWidth = Math.ceil(contactEl.offsetWidth + padding);
-  emailWidth = Math.ceil(emailEl.offsetWidth + padding);
-
-  if (contactWidth > 0) {
-    btn.style.width = `${copied.value ? emailWidth : contactWidth}px`;
-    isReady.value = true;
+const handleCopyEmail = async () => {
+  try {
+    await navigator.clipboard.writeText('mnairmidhun@gmail.com');
+    copied.value = true;
+    if (copyTimeout) clearTimeout(copyTimeout);
+    copyTimeout = window.setTimeout(() => {
+      copied.value = false;
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy email:', err);
   }
 };
 
 let lastScrollY = typeof window !== 'undefined' ? Math.max(0, window.scrollY) : 0;
 const scrollThreshold = 90;
 
-const toggleMenu = () => {
+const toggleMenu = (event?: MouseEvent | TouchEvent) => {
+  if (event) {
+    event.stopPropagation?.();
+    event.preventDefault?.();
+  }
   isMenuOpen.value = !isMenuOpen.value;
   emit('toggle-menu');
 };
 
 const closeMenu = () => {
   isMenuOpen.value = false;
-};
-
-const handleCopyEmail = async () => {
-  try {
-    await navigator.clipboard.writeText('mnairmidhun@gmail.com');
-  } catch {
-    window.location.href = 'mailto:mnairmidhun@gmail.com';
-    return;
-  }
-
-  if (copyTimeout) clearTimeout(copyTimeout);
-
-  const btn = contactBtnRef.value;
-  if (!emailWidth || !contactWidth) {
-    initContactWidths();
-  }
-
-  contactPos.value = 'out';
-  emailPos.value = 'in';
-  copied.value = true;
-  if (btn && emailWidth) {
-    btn.style.width = `${emailWidth}px`;
-  }
-
-  copyTimeout = setTimeout(() => {
-    contactPos.value = 'in';
-    emailPos.value = 'right';
-    copied.value = false;
-    if (btn && contactWidth) {
-      btn.style.width = `${contactWidth}px`;
-    }
-  }, 1800);
 };
 
 /**
@@ -476,9 +399,25 @@ const updateHeaderAppearance = () => {
 };
 
 const handleClickOutside = (event: MouseEvent) => {
-  if (isMenuOpen.value && menuContainerRef.value && !menuContainerRef.value.contains(event.target as Node)) {
-    closeMenu();
+  if (!isMenuOpen.value) return;
+  const target = event.target as Element | null;
+  if (!target) return;
+
+  // Never close if clicking inside toggle button or inside menu panel
+  if (
+    target.closest?.('.header__toggle') ||
+    target.closest?.('.header__panel') ||
+    (menuContainerRef.value && menuContainerRef.value.contains(target))
+  ) {
+    return;
   }
+
+  // Never close if target element is detached from DOM during re-render
+  if (!document.contains(target)) {
+    return;
+  }
+
+  closeMenu();
 };
 
 const handleKeydown = (event: KeyboardEvent) => {
@@ -507,22 +446,10 @@ watch(() => route.path, () => {
 
 onMounted(() => {
   window.addEventListener('scroll', updateHeaderAppearance, { passive: true });
-  window.addEventListener('resize', () => {
-    updateHeaderAppearance();
-    initContactWidths();
-  }, { passive: true });
+  window.addEventListener('resize', updateHeaderAppearance, { passive: true });
   window.addEventListener('click', handleClickOutside);
   window.addEventListener('keydown', handleKeydown);
   updateHeaderAppearance();
-
-  nextTick(() => {
-    initContactWidths();
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(() => {
-        initContactWidths();
-      });
-    }
-  });
 });
 
 onUnmounted(() => {
@@ -560,24 +487,26 @@ onUnmounted(() => {
       opacity: 0;
       visibility: hidden;
     }
-
-    * {
-      pointer-events: none !important;
-    }
   }
 
   &--menu-open {
     z-index: 100;
     transform: translateY(0) !important;
+    pointer-events: auto !important;
+
+    .header__toggle {
+      color: #FFFFFF !important;
+    }
   }
 
-  // Progressive gradient fade background that blends into page background
+  // Progressive gradient fade background that blends into page background only when scrolled
   &:before {
     content: "";
     position: absolute;
     inset: 0 0 auto 0;
     width: 100%;
     height: 5rem;
+    opacity: 0;
     background: linear-gradient(180deg,
       #F6F5F2 0%,
       #F6F5F2 35%,
@@ -591,14 +520,19 @@ onUnmounted(() => {
     );
     pointer-events: none;
     z-index: 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease;
+  }
+
+  &--stuck:before {
+    opacity: 1;
   }
 
   // When over dark background (Automatic color change for logo, text, and gradient)
   &--over-dark {
     color: #FFFFFF;
 
-    &:before {
+    &.header--stuck:before {
+      opacity: 1;
       background: linear-gradient(180deg,
         #141210 0%,
         #141210 35%,
@@ -792,105 +726,6 @@ onUnmounted(() => {
     }
   }
 
-  // Quick Contact Pill Button (Matching Faizur.com contact roll)
-  .header__contact {
-    display: inline-grid;
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
-    align-items: center;
-    text-align: center;
-    height: 2.375rem;
-    padding: 0 1.25rem;
-    font-size: 0.875rem;
-    font-weight: 550;
-    font-family: var(--font-family-sans);
-    color: var(--color-ink);
-    background-color: #FFFFFF;
-    border: none;
-    border-radius: 9999px;
-    box-shadow: 0 0 0 0.5px rgba(20, 18, 16, 0.08), 0 1px 2px rgba(20, 18, 16, 0.08);
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
-    box-sizing: border-box;
-    outline: none;
-    transition: width 0.65s cubic-bezier(0.65, 0, 0.35, 1),
-                background-color 0.2s ease,
-                box-shadow 0.25s ease;
-
-    &:hover:not(.header__contact--copied) {
-      background-color: #F8F7F4;
-    }
-
-    &--copied {
-      background-color: #FFFFFF;
-      box-shadow: 0 0 0 0.5px rgba(20, 18, 16, 0.08), 0 1px 2px rgba(20, 18, 16, 0.08);
-      cursor: default;
-    }
-
-    &:not([data-ready]) [data-label="email"] {
-      letter-spacing: normal;
-      visibility: hidden;
-      position: absolute;
-    }
-
-    [data-label] {
-      grid-area: 1 / 1;
-      justify-self: center;
-      align-items: center;
-      gap: 0.45rem;
-      white-space: nowrap;
-      display: inline-flex;
-      transition: translate 0.65s cubic-bezier(0.65, 0, 0.35, 1),
-                  letter-spacing 0.65s cubic-bezier(0.65, 0, 0.35, 1),
-                  opacity 0.65s cubic-bezier(0.65, 0, 0.35, 1);
-
-      &[data-pos="in"] {
-        letter-spacing: normal;
-        opacity: 1;
-        translate: 0 0;
-      }
-
-      &[data-pos="out"] {
-        letter-spacing: 0.5em;
-        opacity: 0;
-        translate: -8rem 0;
-      }
-
-      &[data-pos="wait"],
-      &[data-pos="right"] {
-        letter-spacing: 0.5em;
-        opacity: 0;
-        translate: 8rem 0;
-      }
-    }
-
-    .contact-label {
-      color: var(--color-ink);
-      line-height: 1;
-    }
-
-    .email-label {
-      color: var(--color-laterite);
-      font-size: 0.8125rem;
-      font-weight: 550;
-      line-height: 1;
-
-      .check-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--color-laterite);
-        flex-shrink: 0;
-      }
-
-      .email-text {
-        font-family: var(--font-family-sans);
-        letter-spacing: -0.01em;
-      }
-    }
-  }
-
   // Menu Anchor with 3-Diagonal Slashes Toggle
   .header__menu {
     position: relative;
@@ -929,12 +764,18 @@ onUnmounted(() => {
         width: 100%;
         height: 100%;
         position: relative;
+        pointer-events: none;
 
         .slash-icon {
           grid-area: 1 / 1;
           display: block;
+          pointer-events: none;
           transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
                       opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+
+          line {
+            pointer-events: none;
+          }
         }
 
         .icon-slashes {
