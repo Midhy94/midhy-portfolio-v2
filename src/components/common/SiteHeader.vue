@@ -2,24 +2,45 @@
   <header
     class="header"
     :class="{
-      'header--stuck': isScrolled,
-      'header--hidden': isHidden,
-      'header--over-dark': isOverDark,
+      'header--embedded': embedded,
+      'header--stuck': !embedded && isScrolled,
+      'header--hidden': !embedded && isHidden,
+      'header--over-dark': embedded || isOverDark,
       'header--menu-open': isMenuOpen
     }"
     role="banner"
   >
     <div class="header__bar">
-      <!-- Left: Brand Logo (No Switcher - floating switch is at bottom center) -->
+      <!-- Left: Brand Logo -->
       <div class="header__start">
         <RouterLink
-          :to="mode === 'works' ? '/work' : '/'"
+          :to="currentMode === 'works' ? '/work' : '/'"
           class="header__logo"
           :class="{ 'header__logo--enter': isLoaded }"
           aria-label="Midhun M. — Home"
         >
+          <!-- Full Wordmark Logo from Logo.svg for Normal State -->
           <svg
-            class="header__logo-svg"
+            class="header__logo-full"
+            width="145"
+            height="24"
+            viewBox="0 0 1915 317"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <circle class="logo-dot" cx="1885" cy="287" r="30" fill="#B84A27" />
+            <path d="M191.098 46.5661C199.976 52.9368 203.585 60.6829 207.598 67.8988L248.347 138.414C255.507 150.643 259.087 157.704 259.087 159.597H261.087C262.477 156.127 264.234 152.501 266.359 148.719L311.367 70.0034C318.97 56.1547 324.29 48.3355 332.701 44.0654C343.996 39.1751 355.945 39.2681 364.914 41.6117C376.953 46.9352 383.171 58.1432 389.13 69.1352L513.385 290.988C519.222 300.468 521.443 306.35 520.048 308.637C517.91 311.619 515.578 313.121 513.052 313.144L367.624 313.288C357.119 313.369 349.602 311.485 345.074 307.637C340.937 303.216 336.938 297.048 333.076 289.132L263.774 167.095C262.077 164.003 260.515 162.171 259.087 161.597C257.696 165.071 255.962 168.735 253.885 172.589L186.146 291.109C179.335 302.107 172.32 309.283 165.102 312.638C161.631 313.152 156.348 313.363 149.253 313.269L7.10374 313.144C3.90622 312.068 1.58057 310.566 0.126795 308.637C-0.384461 305.342 0.650382 301.282 3.23132 296.458L131.974 67.5708C137.928 57.0599 145.174 45.7138 157.103 41.5647C169.379 38.986 180.78 38.929 191.098 46.5661Z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+            <path d="M508.254 178.468L579.878 178.245C587.77 178.305 593.521 180.968 599.185 186.63L652.968 285.584C661.426 299.371 664.845 307.727 663.225 310.65C661.576 312.301 659.379 313.054 656.634 312.911L548.314 313.025C545.984 312.173 544.263 311.048 543.151 309.649L488.117 208.634C485.735 204.377 485.068 199.043 486.116 192.631C488.403 187.041 492.072 182.707 497.122 179.629C500.744 178.706 504.454 178.319 508.254 178.468Z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+            <path d="M835 40H923C937.667 40 945 47.3333 945 62V291C945 305.667 937.667 313 923 313H736C703.333 313 680 301.667 666 279C654 256.333 654 234 666 212C679.333 189.333 702.667 178 736 178H835V40ZM756 230C741.333 230 734 235.167 734 245.5C734 255.833 741.333 261 756 261H835V230H756Z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+            <path d="M963 62C963 47.3333 970.333 40 985 40H1073V178H1138C1170.67 178 1194 191 1208 217L1254 297C1260 307.667 1257 313 1245 313H1164C1155.33 313 1148.67 308.667 1144 300L1113 246C1108.33 238 1101.33 234 1092 234H1073V291C1073 305.667 1065.67 313 1051 313H985C970.333 313 963 305.667 963 291V62Z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+            <path d="M1248 178H1348V240C1348 252 1354.67 258 1368 258H1426V178H1536V291C1536 305.667 1528.67 313 1514 313H1338C1278 313 1248 283 1248 223V178Z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+            <path d="M1553 178H1728C1760.67 178 1784 191 1798 217L1844 297C1850 307.667 1847 313 1835 313H1754C1745.33 313 1738.67 308.667 1734 300L1703 246C1698.33 238 1691.33 234 1682 234H1663V291C1663 305.667 1655.67 313 1641 313H1575C1560.33 313 1553 305.667 1553 291V178Z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+          </svg>
+
+          <!-- Monogram Icon from icon.svg for Scrolled / Compact Header State -->
+          <svg
+            class="header__logo-icon"
             width="65"
             height="24"
             viewBox="0 0 754 277"
@@ -42,30 +63,33 @@
         </RouterLink>
       </div>
 
-      <!-- Right: Desktop Nav Links + Contact Pill + 3x3 Dot Grid Menu Toggle -->
+      <!-- Right: Work and Profile switch toggle button + 3-Slash Menu Toggle -->
       <div class="header__end">
-        <!-- Desktop Nav Links -->
-        <nav class="header__nav" aria-label="Main Navigation">
-          <template v-if="mode === 'personal'">
-            <RouterLink to="/" class="nav-link" :class="{ active: route.path === '/' }">
-              Overview
-            </RouterLink>
-            <RouterLink to="/about" class="nav-link" :class="{ active: route.path === '/about' }">
-              About & Career
-            </RouterLink>
-          </template>
-          <template v-else>
-            <RouterLink to="/work" class="nav-link" :class="{ active: route.path === '/work' }">
-              Selected
-            </RouterLink>
-            <RouterLink to="/work/archive" class="nav-link" :class="{ active: route.path === '/work/archive' }">
-              Archive
-            </RouterLink>
-            <RouterLink to="/about" class="nav-link" :class="{ active: route.path === '/about' }">
-              About
-            </RouterLink>
-          </template>
-        </nav>
+        <!-- Work & Profile Switch Capsule matching the glass reference -->
+        <div class="header__switcher" role="radiogroup" aria-label="Portal Selection">
+          <button
+            type="button"
+            role="radio"
+            :aria-checked="currentMode === 'personal'"
+            class="header__switcher-btn"
+            :class="{ 'is-active': currentMode === 'personal' }"
+            @click="switchMode('personal')"
+            aria-label="Switch to Profile"
+          >
+            <span class="switcher-text">Profile</span>
+          </button>
+          <button
+            type="button"
+            role="radio"
+            :aria-checked="currentMode === 'works'"
+            class="header__switcher-btn"
+            :class="{ 'is-active': currentMode === 'works' }"
+            @click="switchMode('works')"
+            aria-label="Switch to Works"
+          >
+            <span class="switcher-text">Works</span>
+          </button>
+        </div>
 
         <!-- 3-Slash Menu Component -->
         <div class="header__menu" ref="menuContainerRef">
@@ -256,25 +280,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, watch, onMounted, onUnmounted, nextTick, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import type { PortfolioMode } from '@/types/portfolio';
 
 const route = useRoute();
+const router = useRouter();
 
 const props = withDefaults(
   defineProps<{
-    mode: PortfolioMode;
+    mode?: PortfolioMode;
     isLoaded?: boolean;
+    embedded?: boolean;
   }>(),
   {
-    isLoaded: true
+    mode: 'personal',
+    isLoaded: true,
+    embedded: false
   }
 );
 
 const emit = defineEmits<{
   (e: 'toggle-menu'): void;
 }>();
+
+const currentMode = computed<PortfolioMode>(() => {
+  return route.path.startsWith('/work') ? 'works' : 'personal';
+});
+
+const switchMode = (target: PortfolioMode) => {
+  if (currentMode.value === target) return;
+  if (target === 'works') {
+    router.push('/work');
+  } else {
+    router.push('/');
+  }
+};
 
 const isScrolled = ref(false);
 const isHidden = ref(false);
@@ -319,6 +360,11 @@ const closeMenu = () => {
  * and handles smart hide/reveal on scroll with easing.
  */
 const updateHeaderAppearance = () => {
+  if (props.embedded) {
+    isOverDark.value = true;
+    return;
+  }
+
   const scrollY = Math.max(0, window.scrollY);
   isScrolled.value = scrollY > 15;
 
@@ -361,7 +407,6 @@ const updateHeaderAppearance = () => {
   });
 
   // Dynamic luminance detection from element directly under header ONLY when scrolled
-  // (Prevents accidental dark triggers on first load / top hero cards)
   if (!overlappingDark && scrollY > 20) {
     try {
       const sampleX = window.innerWidth / 2;
@@ -478,6 +523,25 @@ onUnmounted(() => {
               color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 
+  // Embedded mode: sits natively inside the hero card stage
+  &--embedded {
+    position: relative !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100%;
+    pointer-events: auto;
+    z-index: 25;
+
+    &:before {
+      display: none !important;
+    }
+
+    .header__bar {
+      max-width: 100%;
+      padding: 0 0 clamp(1rem, 2vw, 1.75rem) 0;
+    }
+  }
+
   // Smart Scroll: slide up out of view when scrolling down
   &--hidden {
     transform: translateY(calc(-100% - 4rem));
@@ -523,11 +587,23 @@ onUnmounted(() => {
     transition: opacity 0.3s ease;
   }
 
-  &--stuck:before {
-    opacity: 1;
+  &--stuck {
+    &:before {
+      opacity: 1;
+    }
+
+    .header__logo {
+      .header__logo-full {
+        display: none;
+      }
+
+      .header__logo-icon {
+        display: block;
+      }
+    }
   }
 
-  // When over dark background (Automatic color change for logo, text, and gradient)
+  // When over dark background or embedded in hero
   &--over-dark {
     color: #FFFFFF;
 
@@ -549,18 +625,51 @@ onUnmounted(() => {
     .header__logo {
       color: #FFFFFF !important;
     }
+  }
 
-    .header__nav .nav-link {
-      color: rgba(255, 255, 255, 0.8) !important;
+  // Dynamic light mode adaptation on light canvas (both embedded & floating stuck)
+  &:not(.header--over-dark) {
+    .header__switcher {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 238, 234, 0.8) 100%),
+        rgba(20, 18, 16, 0.06);
+      border-color: rgba(20, 18, 16, 0.14);
+      box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
+        0 4px 14px rgba(0, 0, 0, 0.06);
 
-      &.active,
-      &:hover {
-        color: #FFFFFF !important;
+      .header__switcher-btn {
+        color: var(--color-muted);
+
+        &:hover:not(.is-active) {
+          color: var(--color-ink);
+          background: rgba(20, 18, 16, 0.06);
+        }
+
+        &.is-active {
+          background: #FFFFFF;
+          color: var(--color-ink);
+          border-color: rgba(20, 18, 16, 0.16);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+        }
       }
     }
 
-    .header__toggle {
-      color: #FFFFFF !important;
+    .header__toggle:not(.header__toggle--open) {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 238, 234, 0.8) 100%),
+        rgba(20, 18, 16, 0.06);
+      border-color: rgba(20, 18, 16, 0.14);
+      color: var(--color-ink);
+      box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
+        0 4px 14px rgba(0, 0, 0, 0.06);
+
+      &:hover {
+        background: #FFFFFF;
+        border-color: rgba(20, 18, 16, 0.22);
+        transform: translateY(-1px);
+      }
     }
   }
 
@@ -593,10 +702,28 @@ onUnmounted(() => {
     outline: none;
     transition: color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-    .header__logo-svg {
+    // Full Wordmark Logo (from Logo.svg) for normal state
+    .header__logo-full {
+      height: 22px;
+      width: auto;
+      max-width: 145px;
+      display: block;
+      overflow: visible;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+      .logo-dot {
+        transform-origin: 1885px 287px;
+        transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    fill 0.25s ease,
+                    filter 0.35s ease;
+      }
+    }
+
+    // Monogram icon (from icon.svg) for compact / sticky header
+    .header__logo-icon {
       height: 24px;
       width: auto;
-      display: block;
+      display: none;
       overflow: visible;
 
       .logo-mark {
@@ -622,23 +749,31 @@ onUnmounted(() => {
 
     // Interactive Hover: Playful kinetic lift on marks & elastic spring bounce on terracotta dot
     &:hover {
-      .logo-mark--left {
-        transform: translateY(-1.5px) rotate(-1.5deg);
-      }
-
-      .logo-mark--right {
-        transform: translateY(-1px) rotate(1.5deg);
-      }
-
-      .logo-dot {
-        transform: translateY(-7px) scale(1.22);
+      .header__logo-full .logo-dot {
+        transform: translateY(-6px) scale(1.25);
         fill: #E14B27;
         filter: drop-shadow(0 2px 6px rgba(225, 75, 39, 0.5));
+      }
+
+      .header__logo-icon {
+        .logo-mark--left {
+          transform: translateY(-1.5px) rotate(-1.5deg);
+        }
+
+        .logo-mark--right {
+          transform: translateY(-1px) rotate(1.5deg);
+        }
+
+        .logo-dot {
+          transform: translateY(-7px) scale(1.22);
+          fill: #E14B27;
+          filter: drop-shadow(0 2px 6px rgba(225, 75, 39, 0.5));
+        }
       }
     }
 
     &:active {
-      transform: scale(0.93);
+      transform: scale(0.96);
 
       .logo-dot {
         transform: translateY(1px) scale(0.9);
@@ -647,6 +782,10 @@ onUnmounted(() => {
 
     // Entrance animation when page loads
     &--enter {
+      .header__logo-full {
+        animation: fluidItemIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
       .logo-mark--left {
         animation: headerLogoMarkIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
@@ -655,7 +794,7 @@ onUnmounted(() => {
         animation: headerLogoMarkIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
       }
 
-      .logo-dot {
+      .header__logo-icon .logo-dot {
         animation: headerLogoDotIn 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.16s both;
       }
     }
@@ -688,40 +827,78 @@ onUnmounted(() => {
   }
 }
 
-// Right Section: Nav Links + Contact Pill + 3x3 Dot Grid Button
+// Right Section: Work/Profile Switch Capsule + 3-Slash Menu Toggle
 .header__end {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 
-  // Desktop Navigation
-  .header__nav {
-    display: none;
+  // Work & Profile Switch Capsule matching the frosted glass reference
+  .header__switcher {
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 3px;
+    gap: 2px;
+    border-radius: 9999px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%),
+      rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow:
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -1px 1px 0 rgba(0, 0, 0, 0.18),
+      0 8px 24px -4px rgba(0, 0, 0, 0.35),
+      0 2px 6px -1px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-    @media (min-width: 768px) {
-      display: flex;
-    }
-
-    // Faizur subtle dimming behavior on hover
-    &:has(.nav-link:hover) .nav-link:not(:hover) {
-      opacity: 0.45;
-    }
-
-    .nav-link {
-      padding: 0.45rem 0.75rem;
-      font-size: 0.875rem;
+    .header__switcher-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 clamp(0.75rem, 1.2vw, 1.05rem);
+      border-radius: 9999px;
+      border: 0.5px solid transparent;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.72);
+      font-family: var(--font-family-sans);
+      font-size: 0.8125rem;
       font-weight: 500;
-      color: var(--color-muted);
-      text-decoration: none;
-      border-radius: 9999px; // Fully rounded pill
-      transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      outline: none;
+      transition: color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 
-      &.active,
-      &:hover {
-        color: var(--color-ink);
+      .switcher-text {
+        line-height: 1;
+        pointer-events: none;
+      }
+
+      &:hover:not(.is-active) {
+        color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &.is-active {
+        color: #FFFFFF;
+        font-weight: 600;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.15) 100%),
+          rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.45);
+        box-shadow:
+          inset 0 1px 1px 0 rgba(255, 255, 255, 0.6),
+          inset 0 -1px 1px 0 rgba(0, 0, 0, 0.15),
+          0 2px 8px rgba(0, 0, 0, 0.25);
+      }
+
+      &:active {
+        transform: scale(0.96);
       }
     }
   }
@@ -737,13 +914,23 @@ onUnmounted(() => {
       height: 2.375rem;
       display: grid;
       place-items: center;
-      border: 0.5px solid transparent;
       border-radius: 9999px;
-      background: transparent;
-      color: currentColor;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%),
+        rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -1px 1px 0 rgba(0, 0, 0, 0.18),
+        0 8px 24px -4px rgba(0, 0, 0, 0.35),
+        0 2px 6px -1px rgba(0, 0, 0, 0.2);
+      color: #FFFFFF;
       cursor: pointer;
       position: relative;
       z-index: 105;
+      outline: none;
       transition: background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
                   border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
                   transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
@@ -751,7 +938,11 @@ onUnmounted(() => {
                   color 0.25s ease;
 
       &:hover:not(.header__toggle--open) {
-        background-color: rgba(20, 18, 16, 0.06);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.1) 100%),
+          rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.42);
+        transform: translateY(-1px);
       }
 
       &:active {
@@ -792,13 +983,15 @@ onUnmounted(() => {
       // Morph into close button in the exact same spot
       &--open {
         color: #FFFFFF !important;
-        background: rgba(255, 255, 255, 0.12);
-        border-color: rgba(255, 255, 255, 0.24);
-        box-shadow: none;
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.42);
+        box-shadow:
+          inset 0 1px 1px 0 rgba(255, 255, 255, 0.5),
+          0 4px 16px rgba(0, 0, 0, 0.3);
 
         &:hover {
-          background: rgba(255, 255, 255, 0.2);
-          border-color: rgba(255, 255, 255, 0.36);
+          background: rgba(255, 255, 255, 0.3);
+          border-color: rgba(255, 255, 255, 0.55);
           transform: scale(1.05);
         }
 
@@ -919,203 +1112,204 @@ onUnmounted(() => {
                 position: absolute;
                 top: 100%;
                 left: 0;
-                width: 100%;
-                color: #FFFFFF;
                 transform: translateY(0%);
+                color: #FFFFFF;
               }
             }
           }
 
-          &:hover {
-            opacity: 1;
-            color: #FFFFFF;
+          &:hover .roller-line--default {
+            transform: translateY(-100%);
+          }
 
-            .roller-line.line--default {
-              transform: translateY(-100%);
-            }
-
-            .roller-line.line--hover {
-              transform: translateY(-100%);
-            }
+          &:hover .roller-line--hover {
+            transform: translateY(-100%);
           }
 
           &.is-active {
-            color: var(--color-chalk);
+            color: #FFFFFF;
+            font-weight: 550;
+
+            &:after {
+              content: "";
+              display: inline-block;
+              width: 6px;
+              height: 6px;
+              border-radius: 50%;
+              background: var(--color-laterite);
+              margin-left: 0.5rem;
+              vertical-align: middle;
+            }
           }
         }
       }
 
-      // 2-Column Metadata & Socials Section (Matching Fluid Glass)
+      // Meta grid
       .panel__meta-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1.25rem;
-        padding-top: 1.45rem;
-        margin-top: 1.45rem;
-        border-top: 1px solid rgba(248, 247, 244, 0.1);
-        animation: fluidItemIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+        padding-top: 1.25rem;
+        margin-top: 1.25rem;
+        border-top: 0.5px solid rgba(255, 255, 255, 0.12);
+        animation: fluidItemIn 0.46s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
 
-        .meta-heading {
-          display: block;
-          margin-bottom: 0.65rem;
-          font-size: 0.6875rem;
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: rgba(248, 247, 244, 0.4);
-          font-family: var(--font-family-sans);
-        }
-
-        .meta-links {
+        .meta-col {
           display: flex;
           flex-direction: column;
-          gap: 0.4rem;
 
-          &:has(a:hover) a:not(:hover) {
-            opacity: 0.45;
-          }
-
-          a {
-            display: inline-flex;
-            font-size: 0.875rem;
-            font-weight: 450;
-            color: rgba(248, 247, 244, 0.8);
-            text-decoration: none;
-            transition: color 0.18s ease, opacity 0.2s ease;
-
-            .meta-roller {
-              display: inline-flex;
-              flex-direction: column;
-              position: relative;
-              overflow: hidden;
-              height: 1.25em;
-              vertical-align: top;
-
-              .meta-line {
-                display: block;
-                line-height: 1.25;
-                white-space: nowrap;
-                transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-
-                &.line--default {
-                  transform: translateY(0%);
-                }
-
-                &.line--hover {
-                  position: absolute;
-                  top: 100%;
-                  left: 0;
-                  width: 100%;
-                  color: #FFFFFF;
-                  transform: translateY(0%);
-                }
-              }
-            }
-
-            &:hover {
-              color: #FFFFFF;
-
-              .meta-line.line--default {
-                transform: translateY(-100%);
-              }
-
-              .meta-line.line--hover {
-                transform: translateY(-100%);
-              }
-            }
-          }
-        }
-
-        .meta-info {
-          display: flex;
-          flex-direction: column;
-          gap: 0.45rem;
-
-          .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            font-weight: 500;
-            font-size: 0.8125rem;
-            color: var(--color-chalk);
-
-            .status-pulse {
-              width: 7px;
-              height: 7px;
-              border-radius: 9999px;
-              background-color: #22C55E;
-              box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
-              flex-shrink: 0;
-            }
-          }
-
-          .meta-location {
-            margin: 0;
-            font-size: 0.8125rem;
-            color: rgba(248, 247, 244, 0.55);
-            line-height: 1.35;
-          }
-
-          .meta-email-action {
-            background: transparent;
-            border: none;
-            padding: 0;
-            text-align: left;
-            font-size: 0.8125rem;
+          .meta-heading {
+            font-size: 0.625rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(248, 247, 244, 0.45);
+            margin-bottom: 0.65rem;
             font-family: var(--font-family-sans);
-            color: rgba(248, 247, 244, 0.75);
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            cursor: pointer;
-            transition: color 0.18s ease;
+          }
 
-            &:hover {
-              color: #FFFFFF;
+          .meta-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+
+            a {
+              font-size: 0.875rem;
+              color: rgba(248, 247, 244, 0.75);
+              text-decoration: none;
+              line-height: 1.35;
+              transition: color 0.2s ease;
+
+              .meta-roller {
+                display: inline-flex;
+                flex-direction: column;
+                position: relative;
+                overflow: hidden;
+                height: 1.35em;
+                vertical-align: top;
+
+                .meta-line {
+                  display: block;
+                  line-height: 1.35;
+                  white-space: nowrap;
+                  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+                  &.line--default {
+                    transform: translateY(0%);
+                  }
+
+                  &.line--hover {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    color: #FFFFFF;
+                  }
+                }
+              }
+
+              &:hover .line--default {
+                transform: translateY(-100%);
+              }
+              &:hover .line--hover {
+                transform: translateY(-100%);
+              }
+            }
+          }
+
+          .meta-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+
+            .status-indicator {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.45rem;
+
+              .status-pulse {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #22C55E;
+                box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+                animation: pulseGlow 2s infinite ease-in-out;
+              }
+
+              .status-label {
+                font-size: 0.8125rem;
+                color: rgba(248, 247, 244, 0.9);
+                font-weight: 500;
+              }
+            }
+
+            .meta-location {
+              font-size: 0.75rem;
+              color: rgba(248, 247, 244, 0.5);
+              margin: 0;
+              line-height: 1.35;
+            }
+
+            .meta-email-action {
+              padding: 0;
+              margin-top: 0.15rem;
+              border: none;
+              background: none;
+              font-size: 0.75rem;
+              color: rgba(248, 247, 244, 0.7);
+              text-decoration: underline;
+              text-underline-offset: 2px;
+              cursor: pointer;
+              text-align: left;
+              transition: color 0.2s ease;
+
+              &:hover {
+                color: #FFFFFF;
+              }
             }
           }
         }
       }
 
-      // Bottom Full-Width Inset Action Button (Matching Fluid Glass '↳ GET A QUOTE')
+      // Bottom CTA Button
       .panel__cta {
-        display: flex;
+        margin-top: 1.25rem;
+        width: 100%;
+        height: 2.75rem;
+        border-radius: 9999px;
+        border: 0.5px solid rgba(255, 255, 255, 0.24);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%),
+          rgba(255, 255, 255, 0.08);
+        color: #FFFFFF;
+        font-family: var(--font-family-sans);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.55rem;
-        width: 100%;
-        padding: 0.85rem 1.25rem;
-        margin-top: 1.35rem;
-        border-radius: var(--radius-full);
-        background: rgba(14, 12, 10, 0.9);
-        border: 1px solid rgba(248, 247, 244, 0.12);
-        color: var(--color-chalk);
-        font-size: 0.8125rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        gap: 0.5rem;
         cursor: pointer;
-        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-        animation: fluidItemIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        padding: 0 1.25rem;
+        box-shadow:
+          inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+          0 4px 14px rgba(0, 0, 0, 0.25);
+        transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+        animation: fluidItemIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
 
         &:hover {
-          background: rgba(28, 25, 23, 0.96);
-          border-color: rgba(248, 247, 244, 0.22);
+          background: rgba(255, 255, 255, 0.22);
+          border-color: rgba(255, 255, 255, 0.45);
           transform: translateY(-1px);
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-
-          .cta-arrow {
-            transform: translate(2px, -2px);
-          }
         }
 
         &:active {
-          transform: translateY(0) scale(0.99);
+          transform: scale(0.98);
         }
 
         .cta-arrow {
-          font-size: 1.05rem;
-          line-height: 1;
-          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          font-size: 0.875rem;
         }
 
         .cta-text {
@@ -1129,19 +1323,22 @@ onUnmounted(() => {
 }
 
 @media (max-width: 640px) {
-  .header .header__contact {
+  .header .header__logo .header__logo-full {
+    height: 18px;
+    max-width: 112px;
+  }
+
+  .header .header__end {
+    gap: 0.5rem;
+  }
+
+  .header .header__switcher {
     height: 2.15rem;
-    padding: 0 1rem;
-    font-size: 0.8125rem;
+    padding: 2px;
 
-    .email-label {
+    .header__switcher-btn {
+      padding: 0 0.7rem;
       font-size: 0.75rem;
-
-      .email-text {
-        max-width: 140px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
     }
   }
 
@@ -1156,7 +1353,7 @@ onUnmounted(() => {
   }
 }
 
-// Background Dim Overlay (Gentle scrim overlay without blur so website remains crisp)
+// Background Dim Overlay
 .header__backdrop {
   position: fixed;
   inset: 0;
@@ -1167,7 +1364,7 @@ onUnmounted(() => {
   pointer-events: auto;
 }
 
-// Fluid Morph Transitions (Matching Fluid Glass)
+// Fluid Morph Transitions
 .fluid-menu-enter-active {
   transition:
     transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1210,6 +1407,17 @@ onUnmounted(() => {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
   }
 }
 </style>

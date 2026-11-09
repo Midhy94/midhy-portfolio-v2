@@ -6,8 +6,8 @@
   <CurtainsWipe />
 
   <div class="portfolio-shell" :class="['portal-' + mode, { 'is-loaded': isPageLoaded }]">
-    <!-- Shared Site Header with 2-mode switcher pill & 3 simple links -->
-    <SiteHeader :mode="mode" :is-loaded="isPageLoaded" />
+    <!-- Shared Site Header (rendered on non-home pages; on home page it is embedded inside PersonalHero) -->
+    <SiteHeader v-if="currentRoute.path !== '/'" :mode="mode" :is-loaded="isPageLoaded" />
 
     <!-- Main View with Page Content -->
     <main class="portfolio-main" role="main">
@@ -20,14 +20,12 @@
 
     <!-- Shared Dark Editorial Footer -->
     <SiteFooter :mode="mode" :is-loaded="isPageLoaded" />
-
-    <!-- Persistent Floating Portal Switcher -->
-    <ModeSwitcher :mode="mode" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { usePortfolioMode } from '@/composables/usePortfolioMode';
 import { useCurtainsWipe } from '@/composables/useCurtainsWipe';
 
@@ -35,8 +33,8 @@ import PageLoader from '@/components/common/PageLoader.vue';
 import CurtainsWipe from '@/components/common/CurtainsWipe.vue';
 import SiteHeader from '@/components/common/SiteHeader.vue';
 import SiteFooter from '@/components/common/SiteFooter.vue';
-import ModeSwitcher from '@/components/common/ModeSwitcher.vue';
 
+const currentRoute = useRoute();
 const { mode } = usePortfolioMode();
 const { isActive: isCurtainActive } = useCurtainsWipe();
 const isPageLoaded = ref(false);

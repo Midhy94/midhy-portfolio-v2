@@ -5,12 +5,15 @@
     aria-labelledby="personal-hero-heading"
   >
     <div class="hero-card-stage">
+      <!-- Embedded Navbar inside the top of the hero image/card -->
+      <SiteHeader :mode="'personal'" :is-loaded="true" :embedded="true" />
+
       <!-- Upper 3-Zone Compositional Grid -->
       <div class="hero-main-grid">
         <!-- Left Column: Bold Display Typography -->
         <div class="hero-left-column">
           <span class="hero-greeting font-sans">{{ heroData.greeting }}</span>
-          <h1 id="personal-hero-heading" class="hero-role-title font-sans">
+          <h1 id="personal-hero-heading" class="hero-role-title font-serif">
             <span class="role-line">{{ heroData.roleLine1 }}</span>
             <span class="role-line">{{ heroData.roleLine2 }}</span>
           </h1>
@@ -36,7 +39,7 @@
 
         <!-- Right Column: Statement, Narrative & Action Levers -->
         <div class="hero-right-column">
-          <h2 class="hero-statement-title font-sans">
+          <h2 class="hero-statement-title font-serif">
             {{ heroData.statementTitle }}
           </h2>
           <p class="hero-statement-desc font-sans">
@@ -81,6 +84,7 @@
 
 <script setup lang="ts">
 import { PERSONAL_CONTENT } from '@/data/portfolioData';
+import SiteHeader from '@/components/common/SiteHeader.vue';
 
 defineEmits<{
   (e: 'switch-to-works'): void;
@@ -93,38 +97,44 @@ const heroData = PERSONAL_CONTENT.hero;
 @use '@/styles/variables' as *;
 
 .personal-hero {
+  --hero-frame-gap: clamp(0.75rem, 1.25vw, 1.25rem);
+
   position: relative;
   width: 100%;
   margin: 0;
-  // Clean framing spacing below navbar
-  padding: clamp(0.5rem, 1.2vw, 1rem) clamp(0.75rem, 2vw, 2rem) clamp(2.5rem, 4vw, 4rem);
+  background-color: var(--color-paper);
+  // Identical 4-sided whitespace framing around the hero stage (Faizur reference)
+  padding: var(--hero-frame-gap);
   box-sizing: border-box;
 
   .hero-card-stage {
     position: relative;
     width: 100%;
     margin: 0 auto;
-    border-radius: clamp(24px, 3.2vw, 36px);
-    overflow: hidden;
-    box-shadow:
-      0 20px 50px -12px rgba(14, 12, 11, 0.25),
-      0 0 0 1px rgba(255, 255, 255, 0.10);
+    border-radius: clamp(22px, 2.5vw, 32px);
+    overflow: visible;
 
-    // Ash-to-Silver Studio Gradient (Sampled directly from reference mockup)
-    background-color: #0E0C0B;
+    // Completely removed box shadow from below hero section (flush, razor-clean framing)
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    // Dark moody background using provided gradient image
+    background-color: #050811;
     background-image:
-      // 1. Subtle warm studio rim backlight centered behind subject
-      radial-gradient(ellipse 50% 45% at 50% 46%, rgba(225, 75, 39, 0.26) 0%, rgba(180, 100, 60, 0.10) 35%, transparent 70%),
-      // 2. High-key silver ambient illumination wash across top-right & top-center
-      radial-gradient(ellipse 90% 70% at 75% 0%, #E0DFE1 0%, #D4D0CE 24%, #A29C9A 52%, transparent 85%),
-      // 3. Diagonal foundational ash-to-carbon gradient ramp
-      linear-gradient(155deg, #8A827F 0%, #645A58 22%, #38312F 50%, #1A1615 78%, #0C0A09 100%);
+      linear-gradient(180deg, rgba(5, 8, 17, 0.45) 0%, rgba(5, 8, 17, 0.2) 35%, rgba(5, 8, 17, 0.65) 100%),
+      url('/images/hero-gradient-blue.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 
-    padding: clamp(2.5rem, 4vw, 3.75rem) clamp(1.5rem, 3.5vw, 3.5rem) clamp(3.25rem, 4.5vw, 4.5rem);
+    padding: clamp(1rem, 1.6vw, 1.5rem) clamp(1.5rem, 3.5vw, 3.5rem) clamp(1.25rem, 2vw, 2rem);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: clamp(680px, 90vh, 860px);
+
+    // Dynamic Viewport Height: Card dynamically scales to viewport height minus the 4-sided uniform whitespace
+    height: calc(100dvh - (2 * var(--hero-frame-gap)));
+    min-height: max(580px, calc(100dvh - (2 * var(--hero-frame-gap))));
     box-sizing: border-box;
   }
 
@@ -133,14 +143,15 @@ const heroData = PERSONAL_CONTENT.hero;
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.15fr 1.35fr 1.05fr;
+    grid-template-columns: 1.05fr 1.45fr 1fr;
     align-items: center;
-    gap: clamp(1rem, 2vw, 3rem);
-    margin-bottom: clamp(1.5rem, 2.5vw, 2.5rem);
+    gap: clamp(1rem, 2vw, 2.5rem);
+    margin-bottom: clamp(0.75rem, 1.5vw, 1.5rem);
     flex: 1;
+    min-height: 0;
   }
 
-  // Left Column: Bold Display Typography
+  // Left Column: Bold Display Typography (Refined Editorial Serif)
   .hero-left-column {
     display: flex;
     flex-direction: column;
@@ -156,10 +167,11 @@ const heroData = PERSONAL_CONTENT.hero;
     }
 
     .hero-role-title {
-      font-size: clamp(3.6rem, 7.2vw, 6.6rem);
-      font-weight: 800;
-      line-height: 0.94;
-      letter-spacing: -0.04em;
+      font-family: var(--font-family-serif);
+      font-size: clamp(3.2rem, 6.8vw, 6.2rem);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
       color: #FFFFFF;
       margin: 0;
       display: flex;
@@ -172,7 +184,7 @@ const heroData = PERSONAL_CONTENT.hero;
     }
   }
 
-  // Center Column: Subject Portrait & Rim Light Halo
+  // Center Column: Subject Portrait & Cool Ambient Light (No orange glow, enlarged)
   .hero-portrait-column {
     position: relative;
     display: flex;
@@ -188,7 +200,7 @@ const heroData = PERSONAL_CONTENT.hero;
       justify-content: center;
       width: 100%;
       height: 100%;
-      max-width: 520px;
+      max-width: clamp(380px, 42vw, 560px);
     }
 
     .portrait-lighting-halo {
@@ -199,8 +211,9 @@ const heroData = PERSONAL_CONTENT.hero;
       width: clamp(280px, 32vw, 420px);
       height: clamp(280px, 32vw, 420px);
       border-radius: 50%;
-      background: radial-gradient(circle at 50% 50%, rgba(225, 75, 39, 0.32) 0%, rgba(255, 255, 255, 0.12) 35%, transparent 70%);
-      filter: blur(32px);
+      // Cool luminous atmospheric glow - zero orange tint
+      background: radial-gradient(circle at 50% 48%, rgba(95, 160, 245, 0.28) 0%, rgba(45, 95, 180, 0.12) 45%, transparent 70%);
+      filter: blur(40px);
       pointer-events: none;
       z-index: 1;
     }
@@ -210,10 +223,10 @@ const heroData = PERSONAL_CONTENT.hero;
       z-index: 2;
       width: 100%;
       height: auto;
-      max-height: clamp(480px, 62vh, 660px);
+      max-height: clamp(380px, 50vh, 560px);
       object-fit: contain;
       object-position: bottom center;
-      filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.55));
       user-select: none;
       pointer-events: none;
     }
@@ -228,10 +241,11 @@ const heroData = PERSONAL_CONTENT.hero;
     padding-left: clamp(0.5rem, 1.5vw, 1.5rem);
 
     .hero-statement-title {
-      font-size: clamp(1.4rem, 2.3vw, 2rem);
-      font-weight: 700;
-      line-height: 1.25;
-      letter-spacing: -0.025em;
+      font-family: var(--font-family-serif);
+      font-size: clamp(1.6rem, 2.6vw, 2.35rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
       color: #FFFFFF;
       margin: 0 0 1rem;
       text-wrap: balance;
@@ -353,6 +367,15 @@ const heroData = PERSONAL_CONTENT.hero;
 // Tablet Layout (max-width: 1080px)
 @media (max-width: 1080px) {
   .personal-hero {
+    --hero-frame-gap: clamp(0.625rem, 1.5vw, 1rem);
+    padding: var(--hero-frame-gap);
+
+    .hero-card-stage {
+      height: auto;
+      min-height: calc(100dvh - (2 * var(--hero-frame-gap)));
+      padding: clamp(1rem, 2vw, 1.5rem) clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 2.5vw, 2rem);
+    }
+
     .hero-main-grid {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
@@ -371,7 +394,10 @@ const heroData = PERSONAL_CONTENT.hero;
     .hero-portrait-column {
       grid-area: portrait;
       .portrait-stage {
-        max-width: 320px;
+        max-width: 420px;
+      }
+      .portrait-img {
+        max-height: 480px;
       }
     }
 
@@ -391,12 +417,14 @@ const heroData = PERSONAL_CONTENT.hero;
 // Mobile Layout (max-width: 720px)
 @media (max-width: 720px) {
   .personal-hero {
-    padding: 0.25rem 0.5rem 2rem;
+    --hero-frame-gap: clamp(0.5rem, 1.8vw, 0.75rem);
+    padding: var(--hero-frame-gap);
 
     .hero-card-stage {
-      padding: 2.25rem 1.15rem 4.5rem;
-      border-radius: 20px;
-      min-height: auto;
+      height: auto;
+      min-height: calc(100dvh - (2 * var(--hero-frame-gap)));
+      padding: 1.15rem 1.15rem 2.25rem;
+      border-radius: clamp(16px, 3.5vw, 22px);
     }
 
     .hero-main-grid {
@@ -427,11 +455,11 @@ const heroData = PERSONAL_CONTENT.hero;
       justify-content: center;
 
       .portrait-stage {
-        max-width: 280px;
+        max-width: 340px;
       }
 
       .portrait-img {
-        max-height: 320px;
+        max-height: 380px;
       }
     }
 
