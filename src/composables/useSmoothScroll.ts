@@ -89,3 +89,4 @@ export function useSmoothScroll() {
     isLenisReady,
   };
 }
+
