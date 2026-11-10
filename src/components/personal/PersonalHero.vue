@@ -131,8 +131,7 @@ const heroRootRef = ref<HTMLElement | null>(null);
 const { scrollToNext } = useOneScrollTransition({
   targetSelector: '#statement',
   heroRef: heroRootRef,
-  duration: 1.15,
-  ease: 'power3.inOut',
+  duration: 1.35,
 });
 </script>
 

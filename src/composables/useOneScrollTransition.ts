@@ -1,32 +1,31 @@
 import { onMounted, onUnmounted, type Ref } from 'vue';
 import { gsap } from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSmoothScroll } from '@/composables/useSmoothScroll';
 
-gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 interface OneScrollOptions {
   /** Target element selector to scroll down to (e.g. '#statement') */
   targetSelector: string;
   /** Hero section element reference */
   heroRef?: Ref<HTMLElement | null>;
-  /** Duration of scroll animation in seconds */
+  /** Duration in seconds */
   duration?: number;
-  /** GSAP easing formula */
-  ease?: string;
 }
 
 export function useOneScrollTransition(options: OneScrollOptions) {
   const {
     targetSelector,
     heroRef,
-    duration = 1.15,
-    ease = 'power3.inOut',
+    duration = 1.35,
   } = options;
 
-  let isAutoScrolling = false;
-  let touchStartY = 0;
+  const { getLenis, scrollTo } = useSmoothScroll();
+
   let scrollTriggerInstance: ScrollTrigger | null = null;
+  let isNavigating = false;
+  let touchStartY = 0;
 
   const isReducedMotion = () => {
     return (
@@ -36,108 +35,67 @@ export function useOneScrollTransition(options: OneScrollOptions) {
   };
 
   /**
-   * Get the target scroll position (in pixels from document top)
+   * Buttery-smooth quartic ease-out curve (fast initial takeoff, ultra-soft glide)
    */
-  const getTargetScrollY = (): number => {
-    const el = document.querySelector(targetSelector);
-    if (!el) {
-      return window.innerHeight;
-    }
-    const rect = el.getBoundingClientRect();
-    return Math.round(window.scrollY + rect.top);
-  };
+  const smoothEaseOut = (t: number) => 1 - Math.pow(1 - t, 4);
 
   /**
-   * Perform the ultra-smooth animated scroll down to the next section
+   * Scroll smoothly down to the target section
    */
   const scrollToNext = () => {
-    if (isAutoScrolling) return;
+    if (isNavigating) return;
+    isNavigating = true;
 
-    const targetY = getTargetScrollY();
-    if (isReducedMotion()) {
-      window.scrollTo({ top: targetY, behavior: 'auto' });
-      return;
-    }
-
-    isAutoScrolling = true;
-
-    gsap.to(window, {
+    scrollTo(targetSelector, {
       duration,
-      scrollTo: {
-        y: targetY,
-        autoKill: false,
-      },
-      ease,
-      overwrite: 'auto',
+      easing: smoothEaseOut,
       onComplete: () => {
-        // Cooldown buffer allows trailing trackpad momentum to expire
-        setTimeout(() => {
-          isAutoScrolling = false;
-        }, 160);
+        isNavigating = false;
       },
     });
   };
 
   /**
-   * Perform smooth animated scroll back up to the hero top
+   * Scroll smoothly back up to the top of the hero
    */
   const scrollToTop = () => {
-    if (isAutoScrolling) return;
+    if (isNavigating) return;
+    isNavigating = true;
 
-    if (isReducedMotion()) {
-      window.scrollTo({ top: 0, behavior: 'auto' });
-      return;
-    }
-
-    isAutoScrolling = true;
-
-    gsap.to(window, {
-      duration: duration * 0.9,
-      scrollTo: {
-        y: 0,
-        autoKill: false,
-      },
-      ease: 'power3.out',
-      overwrite: 'auto',
+    scrollTo(0, {
+      duration: duration * 0.85,
+      easing: smoothEaseOut,
       onComplete: () => {
-        setTimeout(() => {
-          isAutoScrolling = false;
-        }, 160);
+        isNavigating = false;
       },
     });
   };
 
   /**
-   * Wheel event listener for "one-scroll" trigger
+   * Passive wheel gesture listener:
+   * When resting at the very top (hero), one scroll down smoothly glides to the target.
+   * When scrolled back up into the hero zone, one scroll up glides back to top.
    */
   const handleWheel = (e: WheelEvent) => {
-    // If currently in an animated glide, consume events to prevent micro-stutters
-    if (isAutoScrolling) {
-      e.preventDefault();
-      return;
-    }
+    if (isNavigating || isReducedMotion()) return;
 
     const currentY = window.scrollY;
-    const targetY = getTargetScrollY();
 
-    // Trigger 1: At top of Hero or inside Hero zone, user initiates scroll DOWN
-    // Uses low threshold (> 1) so Mac trackpad initial micro-deltas don't cause jitter
-    if (currentY < targetY - 60 && e.deltaY > 1) {
-      e.preventDefault();
+    // Trigger 1: Sitting at the top of Hero (scrollY <= 20) and user rolls down
+    if (currentY <= 20 && e.deltaY > 15) {
       scrollToNext();
       return;
     }
 
-    // Trigger 2: At boundary of next section, user initiates scroll UP
-    if (currentY >= 15 && currentY <= targetY + 30 && e.deltaY < -1) {
-      e.preventDefault();
+    // Trigger 2: Re-entered hero zone (scrollY between 20px and 220px) and user rolls up
+    if (currentY > 20 && currentY < 220 && e.deltaY < -15) {
       scrollToTop();
       return;
     }
   };
 
   /**
-   * Touch support for mobile / touch devices
+   * Mobile touch gestures
    */
   const handleTouchStart = (e: TouchEvent) => {
     if (e.touches.length > 0) {
@@ -146,33 +104,21 @@ export function useOneScrollTransition(options: OneScrollOptions) {
   };
 
   const handleTouchMove = (e: TouchEvent) => {
-    if (isAutoScrolling) {
-      e.preventDefault();
-      return;
-    }
+    if (isNavigating || isReducedMotion() || e.touches.length === 0) return;
 
-    if (e.touches.length === 0) return;
     const currentTouchY = e.touches[0].clientY;
     const deltaY = touchStartY - currentTouchY; // positive = swipe up = scroll down
-
     const currentY = window.scrollY;
-    const targetY = getTargetScrollY();
 
-    if (currentY < targetY - 60 && deltaY > 30) {
-      e.preventDefault();
+    if (currentY <= 20 && deltaY > 30) {
       scrollToNext();
-      return;
-    }
-
-    if (currentY >= 15 && currentY <= targetY + 30 && deltaY < -30) {
-      e.preventDefault();
+    } else if (currentY > 20 && currentY < 220 && deltaY < -30) {
       scrollToTop();
-      return;
     }
   };
 
   /**
-   * Keyboard support: ArrowDown, PageDown, Space when at top
+   * Keyboard shortcuts: ArrowDown / PageDown / Space at top
    */
   const handleKeyDown = (e: KeyboardEvent) => {
     const active = document.activeElement;
@@ -186,21 +132,19 @@ export function useOneScrollTransition(options: OneScrollOptions) {
     }
 
     const currentY = window.scrollY;
-    const targetY = getTargetScrollY();
-
-    if (currentY < targetY - 60 && (e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey))) {
+    if (currentY <= 20 && (e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey))) {
       e.preventDefault();
       scrollToNext();
     }
   };
 
   onMounted(() => {
-    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('wheel', handleWheel, { passive: true });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('keydown', handleKeyDown, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('keydown', handleKeyDown);
 
-    // Setup subtle hero depth / exit parallax animation with ScrollTrigger
+    // Subtle spatial parallax on hero exit synced to smooth scroller
     if (heroRef?.value && !isReducedMotion()) {
       const stageEl = heroRef.value.querySelector('.hero-card-stage');
       const portraitEl = heroRef.value.querySelector('.portrait-img');
@@ -211,24 +155,23 @@ export function useOneScrollTransition(options: OneScrollOptions) {
           trigger: heroRef.value,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.6,
+          scrub: 1, // 1s smooth catchup for pristine momentum
           onUpdate: (self) => {
             const p = self.progress;
-            // Subtle 3D scale and opacity fade as hero leaves view
             gsap.set(stageEl, {
-              scale: 1 - p * 0.035,
-              opacity: 1 - p * 0.45,
+              scale: 1 - p * 0.03,
+              opacity: 1 - p * 0.4,
               transformOrigin: 'center center',
             });
             if (portraitEl) {
               gsap.set(portraitEl, {
-                y: -p * 50,
+                y: -p * 45,
               });
             }
             if (textEls.length > 0) {
               gsap.set(textEls, {
-                y: -p * 35,
-                opacity: 1 - p * 0.6,
+                y: -p * 30,
+                opacity: 1 - p * 0.5,
               });
             }
           },
@@ -247,7 +190,6 @@ export function useOneScrollTransition(options: OneScrollOptions) {
       scrollTriggerInstance.kill();
       scrollTriggerInstance = null;
     }
-    gsap.killTweensOf(window);
   });
 
   return {

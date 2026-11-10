@@ -24,10 +24,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePortfolioMode } from '@/composables/usePortfolioMode';
 import { useCurtainsWipe } from '@/composables/useCurtainsWipe';
+import { useSmoothScroll } from '@/composables/useSmoothScroll';
 
 import PageLoader from '@/components/common/PageLoader.vue';
 import CurtainsWipe from '@/components/common/CurtainsWipe.vue';
@@ -37,11 +38,27 @@ import SiteFooter from '@/components/common/SiteFooter.vue';
 const currentRoute = useRoute();
 const { mode } = usePortfolioMode();
 const { isActive: isCurtainActive } = useCurtainsWipe();
+const { initSmoothScroll, destroySmoothScroll, scrollTo } = useSmoothScroll();
 const isPageLoaded = ref(false);
 
 const handleLoaded = () => {
   isPageLoaded.value = true;
 };
+
+onMounted(() => {
+  initSmoothScroll();
+});
+
+onUnmounted(() => {
+  destroySmoothScroll();
+});
+
+watch(
+  () => currentRoute.path,
+  () => {
+    scrollTo(0, { immediate: true });
+  }
+);
 </script>
 
 <style scoped lang="scss">
