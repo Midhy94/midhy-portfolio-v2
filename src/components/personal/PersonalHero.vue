@@ -1,10 +1,26 @@
 <template>
   <section
     id="personal-hero"
+    ref="heroRootRef"
     class="personal-hero"
     aria-labelledby="personal-hero-heading"
   >
     <div class="hero-card-stage">
+      <!-- Living Dynamic Mesh Background (Grainient WebGL2 Shader from React Bits) -->
+      <Grainient
+        class="hero-card-canvas"
+        :colors="['#000000', '#000b21', '#1a3b5e', '#4c7fae', '#649ccd', '#34618b', '#081d38', '#000000']"
+        :angle="221"
+        :flow="0.55"
+        :silk="0"
+        :grain-amount="0"
+        :scale="3"
+        :speed="0.9"
+        :grain-size="0.9"
+        :saturation="0.96"
+        :intro="false"
+      />
+
       <!-- Embedded Navbar inside the top of the hero image/card -->
       <SiteHeader :mode="'personal'" :is-loaded="true" :embedded="true" />
 
@@ -47,22 +63,38 @@
           </p>
 
           <div class="hero-actions">
+            <div class="hero-cta-group">
+              <button
+                type="button"
+                class="cta-primary-btn font-sans"
+                @click="$emit('switch-to-works')"
+              >
+                {{ heroData.primaryCta }}
+              </button>
+
+              <a
+                :href="heroData.resumeUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="cta-secondary-link font-sans"
+              >
+                {{ heroData.secondaryCta }}
+              </a>
+            </div>
+
+            <!-- Smooth One-Scroll Down Trigger -->
             <button
               type="button"
-              class="cta-primary-btn font-sans"
-              @click="$emit('switch-to-works')"
+              class="cta-scroll-cue-btn font-sans"
+              aria-label="Scroll down to next section"
+              @click="scrollToNext"
             >
-              {{ heroData.primaryCta }}
+              <span class="mouse-track" aria-hidden="true">
+                <span class="mouse-dot"></span>
+              </span>
+              <span class="cue-label">Scroll to explore</span>
+              <span class="cue-arrow" aria-hidden="true">↓</span>
             </button>
-
-            <a
-              :href="heroData.resumeUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="cta-secondary-link font-sans"
-            >
-              {{ heroData.secondaryCta }}
-            </a>
           </div>
         </div>
       </div>
@@ -83,14 +115,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { PERSONAL_CONTENT } from '@/data/portfolioData';
 import SiteHeader from '@/components/common/SiteHeader.vue';
+import Grainient from '@/components/common/Grainient.vue';
+import { useOneScrollTransition } from '@/composables/useOneScrollTransition';
 
 defineEmits<{
   (e: 'switch-to-works'): void;
 }>();
 
 const heroData = PERSONAL_CONTENT.hero;
+const heroRootRef = ref<HTMLElement | null>(null);
+
+const { scrollToNext } = useOneScrollTransition({
+  targetSelector: '#statement',
+  heroRef: heroRootRef,
+  duration: 1.15,
+  ease: 'power3.inOut',
+});
 </script>
 
 <style scoped lang="scss">
@@ -118,14 +161,8 @@ const heroData = PERSONAL_CONTENT.hero;
     box-shadow: none;
     border: 1px solid rgba(255, 255, 255, 0.08);
 
-    // Dark moody background using provided gradient image
-    background-color: #050811;
-    background-image:
-      linear-gradient(180deg, rgba(5, 8, 17, 0.45) 0%, rgba(5, 8, 17, 0.2) 35%, rgba(5, 8, 17, 0.65) 100%),
-      url('/images/hero-gradient-blue.jpg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+    // Deep base fallback color behind the WebGL shader canvas
+    background-color: #010814;
 
     padding: clamp(1rem, 1.6vw, 1.5rem) clamp(1.5rem, 3.5vw, 3.5rem) clamp(1.25rem, 2vw, 2rem);
     display: flex;
@@ -136,6 +173,17 @@ const heroData = PERSONAL_CONTENT.hero;
     height: calc(100dvh - (2 * var(--hero-frame-gap)));
     min-height: max(580px, calc(100dvh - (2 * var(--hero-frame-gap))));
     box-sizing: border-box;
+
+    .hero-card-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: auto;
+    }
   }
 
   // 3-Zone Panoramic Grid
@@ -200,7 +248,7 @@ const heroData = PERSONAL_CONTENT.hero;
       justify-content: center;
       width: 100%;
       height: 100%;
-      max-width: clamp(380px, 42vw, 560px);
+      max-width: clamp(440px, 46vw, 660px);
     }
 
     .portrait-lighting-halo {
@@ -208,8 +256,8 @@ const heroData = PERSONAL_CONTENT.hero;
       top: 15%;
       left: 50%;
       transform: translateX(-50%);
-      width: clamp(280px, 32vw, 420px);
-      height: clamp(280px, 32vw, 420px);
+      width: clamp(320px, 36vw, 500px);
+      height: clamp(320px, 36vw, 500px);
       border-radius: 50%;
       // Cool luminous atmospheric glow - zero orange tint
       background: radial-gradient(circle at 50% 48%, rgba(95, 160, 245, 0.28) 0%, rgba(45, 95, 180, 0.12) 45%, transparent 70%);
@@ -223,7 +271,7 @@ const heroData = PERSONAL_CONTENT.hero;
       z-index: 2;
       width: 100%;
       height: auto;
-      max-height: clamp(380px, 50vh, 560px);
+      max-height: clamp(460px, 100vh, 800px);
       object-fit: contain;
       object-position: bottom center;
       filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.55));
@@ -262,9 +310,16 @@ const heroData = PERSONAL_CONTENT.hero;
 
     .hero-actions {
       display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.15rem;
+
+      .hero-cta-group {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+      }
 
       .cta-primary-btn {
         display: inline-flex;
@@ -318,6 +373,70 @@ const heroData = PERSONAL_CONTENT.hero;
           outline-offset: 3px;
         }
       }
+
+      .cta-scroll-cue-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        background: transparent;
+        border: none;
+        padding: 0.35rem 0 0;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        transition: color $transition-fast, transform $transition-fast;
+
+        &:hover {
+          color: #FFFFFF;
+          transform: translateY(2px);
+
+          .mouse-track {
+            border-color: rgba(255, 255, 255, 0.85);
+          }
+          .cue-arrow {
+            transform: translateY(2px);
+            color: var(--color-laterite);
+          }
+        }
+
+        &:focus-visible {
+          outline: 2px solid #FFFFFF;
+          outline-offset: 3px;
+        }
+
+        .mouse-track {
+          width: 14px;
+          height: 22px;
+          border: 1.5px solid rgba(255, 255, 255, 0.45);
+          border-radius: 9px;
+          display: flex;
+          justify-content: center;
+          padding-top: 3px;
+          position: relative;
+          transition: border-color $transition-fast;
+
+          .mouse-dot {
+            width: 3px;
+            height: 4px;
+            background-color: var(--color-laterite);
+            border-radius: 2px;
+            animation: mouseWheelScroll 1.6s infinite ease-in-out;
+          }
+        }
+
+        .cue-label {
+          font-family: var(--font-family-sans);
+        }
+
+        .cue-arrow {
+          display: inline-block;
+          font-size: 0.95rem;
+          color: rgba(255, 255, 255, 0.55);
+          transition: transform $transition-fast, color $transition-fast;
+        }
+      }
     }
   }
 
@@ -327,8 +446,8 @@ const heroData = PERSONAL_CONTENT.hero;
     z-index: 2;
     display: grid;
     grid-template-columns: 1.15fr 1fr 1fr 1.15fr;
-    gap: clamp(1.5rem, 3.5vw, 4.5rem);
-    padding-top: clamp(1.5rem, 2.2vw, 2.25rem);
+    gap: clamp(4.5rem, 3.5vw, 4.5rem);
+    padding: clamp(1.5rem, 3.2vw, 2.25rem);
     border-top: 1px solid rgba(255, 255, 255, 0.12);
 
     .pillar-item {
@@ -394,10 +513,10 @@ const heroData = PERSONAL_CONTENT.hero;
     .hero-portrait-column {
       grid-area: portrait;
       .portrait-stage {
-        max-width: 420px;
+        max-width: 480px;
       }
       .portrait-img {
-        max-height: 480px;
+        max-height: 540px;
       }
     }
 
@@ -455,11 +574,11 @@ const heroData = PERSONAL_CONTENT.hero;
       justify-content: center;
 
       .portrait-stage {
-        max-width: 340px;
+        max-width: 380px;
       }
 
       .portrait-img {
-        max-height: 380px;
+        max-height: 440px;
       }
     }
 
@@ -481,7 +600,8 @@ const heroData = PERSONAL_CONTENT.hero;
         margin-bottom: 0.5rem;
 
         .cta-primary-btn,
-        .cta-secondary-link {
+        .cta-secondary-link,
+        .cta-scroll-cue-btn {
           width: 100%;
           justify-content: center;
         }
@@ -505,13 +625,33 @@ const heroData = PERSONAL_CONTENT.hero;
   }
 }
 
+// Subtle vertical gliding dot keyframe for mouse wheel icon
+@keyframes mouseWheelScroll {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.35;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+}
+
 // Respect Reduced Motion
 @media (prefers-reduced-motion: reduce) {
   .personal-hero {
     .cta-primary-btn,
-    .cta-secondary-link {
+    .cta-secondary-link,
+    .cta-scroll-cue-btn {
       transition: none !important;
       transform: none !important;
+    }
+    .cta-scroll-cue-btn .mouse-dot {
+      animation: none !important;
     }
   }
 }

@@ -65,71 +65,93 @@
 
       <!-- Right: Work and Profile switch toggle button + 3-Slash Menu Toggle -->
       <div class="header__end">
-        <!-- Work & Profile Switch Capsule matching the glass reference -->
-        <div class="header__switcher" role="radiogroup" aria-label="Portal Selection">
-          <button
-            type="button"
-            role="radio"
-            :aria-checked="currentMode === 'personal'"
-            class="header__switcher-btn"
-            :class="{ 'is-active': currentMode === 'personal' }"
-            @click="switchMode('personal')"
-            aria-label="Switch to Profile"
-          >
-            <span class="switcher-text">Profile</span>
-          </button>
-          <button
-            type="button"
-            role="radio"
-            :aria-checked="currentMode === 'works'"
-            class="header__switcher-btn"
-            :class="{ 'is-active': currentMode === 'works' }"
-            @click="switchMode('works')"
-            aria-label="Switch to Works"
-          >
-            <span class="switcher-text">Works</span>
-          </button>
-        </div>
+        <!-- Work & Profile Switch Capsule with GlassSurface effect -->
+        <GlassSurface
+          class="header__switcher-surface"
+          width="auto"
+          :height="38"
+          :border-radius="9999"
+          :distortion-scale="-180"
+          :displace="0.4"
+          :background-opacity="0.08"
+          :saturation="1.2"
+        >
+          <div class="header__switcher" role="radiogroup" aria-label="Portal Selection">
+            <button
+              type="button"
+              role="radio"
+              :aria-checked="currentMode === 'personal'"
+              class="header__switcher-btn"
+              :class="{ 'is-active': currentMode === 'personal' }"
+              @click="switchMode('personal')"
+              aria-label="Switch to Profile"
+            >
+              <span class="switcher-text">Profile</span>
+            </button>
+            <button
+              type="button"
+              role="radio"
+              :aria-checked="currentMode === 'works'"
+              class="header__switcher-btn"
+              :class="{ 'is-active': currentMode === 'works' }"
+              @click="switchMode('works')"
+              aria-label="Switch to Works"
+            >
+              <span class="switcher-text">Works</span>
+            </button>
+          </div>
+        </GlassSurface>
 
         <!-- 3-Slash Menu Component -->
         <div class="header__menu" ref="menuContainerRef">
           <!-- Morphing Toggle Trigger Button that transforms into the close button in place -->
-          <button
-            type="button"
-            class="header__toggle"
-            :class="{ 'header__toggle--open': isMenuOpen }"
-            @click.stop.prevent="toggleMenu"
-            :aria-expanded="isMenuOpen"
-            :aria-label="isMenuOpen ? 'Close navigation menu' : 'Toggle navigation menu'"
+          <GlassSurface
+            class="header__toggle-surface"
+            :width="38"
+            :height="38"
+            :border-radius="9999"
+            :distortion-scale="-180"
+            :displace="0.4"
+            :background-opacity="0.08"
+            :saturation="1.2"
           >
-            <span class="toggle-icon-wrap" aria-hidden="true">
-              <svg
-                class="slash-icon icon-slashes"
-                width="19"
-                height="19"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <line class="slash-line line-1" x1="4" y1="11" x2="11" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-                <line class="slash-line line-2" x1="5" y1="19" x2="19" y2="5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-                <line class="slash-line line-3" x1="13" y1="20" x2="20" y2="13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-              </svg>
-              <svg
-                class="slash-icon icon-close"
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.2"
-                stroke-linecap="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </span>
-          </button>
+            <button
+              type="button"
+              class="header__toggle"
+              :class="{ 'header__toggle--open': isMenuOpen }"
+              @click.stop.prevent="toggleMenu"
+              :aria-expanded="isMenuOpen"
+              :aria-label="isMenuOpen ? 'Close navigation menu' : 'Toggle navigation menu'"
+            >
+              <span class="toggle-icon-wrap" aria-hidden="true">
+                <svg
+                  class="slash-icon icon-slashes"
+                  width="19"
+                  height="19"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line class="slash-line line-1" x1="4" y1="11" x2="11" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                  <line class="slash-line line-2" x1="5" y1="19" x2="19" y2="5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                  <line class="slash-line line-3" x1="13" y1="20" x2="20" y2="13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                </svg>
+                <svg
+                  class="slash-icon icon-close"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </span>
+            </button>
+          </GlassSurface>
 
           <!-- Fluid Glass Menu Panel (Expanding from Top-Right) -->
           <Transition name="fluid-menu">
@@ -283,6 +305,7 @@
 import { ref, watch, onMounted, onUnmounted, nextTick, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { PortfolioMode } from '@/types/portfolio';
+import GlassSurface from '@/components/common/GlassSurface.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -538,7 +561,7 @@ onUnmounted(() => {
 
     .header__bar {
       max-width: 100%;
-      padding: 0 0 clamp(1rem, 2vw, 1.75rem) 0;
+      padding: 0.125rem clamp(0rem, 4vw, 0rem);
     }
   }
 
@@ -630,14 +653,6 @@ onUnmounted(() => {
   // Dynamic light mode adaptation on light canvas (both embedded & floating stuck)
   &:not(.header--over-dark) {
     .header__switcher {
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 238, 234, 0.8) 100%),
-        rgba(20, 18, 16, 0.06);
-      border-color: rgba(20, 18, 16, 0.14);
-      box-shadow:
-        inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
-        0 4px 14px rgba(0, 0, 0, 0.06);
-
       .header__switcher-btn {
         color: var(--color-muted);
 
@@ -647,27 +662,18 @@ onUnmounted(() => {
         }
 
         &.is-active {
-          background: #FFFFFF;
+          background: rgba(255, 255, 255, 0.85);
           color: var(--color-ink);
-          border-color: rgba(20, 18, 16, 0.16);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+          border-color: rgba(20, 18, 16, 0.08);
+          box-shadow: none;
         }
       }
     }
 
     .header__toggle:not(.header__toggle--open) {
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 238, 234, 0.8) 100%),
-        rgba(20, 18, 16, 0.06);
-      border-color: rgba(20, 18, 16, 0.14);
       color: var(--color-ink);
-      box-shadow:
-        inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
-        0 4px 14px rgba(0, 0, 0, 0.06);
 
       &:hover {
-        background: #FFFFFF;
-        border-color: rgba(20, 18, 16, 0.22);
         transform: translateY(-1px);
       }
     }
@@ -676,7 +682,7 @@ onUnmounted(() => {
   .header__bar {
     max-width: $layout-max-width;
     margin: 0 auto;
-    padding: 1.125rem clamp(1.25rem, 4vw, 3rem);
+    padding: 0.125rem clamp(0rem, 4vw, 0rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -833,25 +839,27 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
 
+  .header__switcher-surface {
+    flex-shrink: 0;
+
+    :deep(.glass-surface__content) {
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   // Work & Profile Switch Capsule matching the frosted glass reference
   .header__switcher {
     display: inline-flex;
     align-items: center;
-    height: 2.375rem;
+    height: 100%;
     padding: 3px;
     gap: 2px;
     border-radius: 9999px;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%),
-      rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(24px) saturate(190%);
-    -webkit-backdrop-filter: blur(24px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    box-shadow:
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.55),
-      inset 0 -1px 1px 0 rgba(0, 0, 0, 0.18),
-      0 8px 24px -4px rgba(0, 0, 0, 0.35),
-      0 2px 6px -1px rgba(0, 0, 0, 0.2);
+    background: transparent;
+    border: none;
+    box-shadow: none;
     user-select: none;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -881,20 +889,17 @@ onUnmounted(() => {
 
       &:hover:not(.is-active) {
         color: #FFFFFF;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.12);
       }
 
       &.is-active {
         color: #FFFFFF;
         font-weight: 600;
         background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.15) 100%),
-          rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.45);
-        box-shadow:
-          inset 0 1px 1px 0 rgba(255, 255, 255, 0.6),
-          inset 0 -1px 1px 0 rgba(0, 0, 0, 0.15),
-          0 2px 8px rgba(0, 0, 0, 0.25);
+          linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 100%),
+          rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.18);
+        box-shadow: none;
       }
 
       &:active {
@@ -909,28 +914,33 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
 
+    .header__toggle-surface {
+      position: relative;
+      z-index: 105;
+      flex-shrink: 0;
+
+      :deep(.glass-surface__content) {
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
     .header__toggle {
-      width: 2.375rem;
-      height: 2.375rem;
+      width: 100%;
+      height: 100%;
       display: grid;
       place-items: center;
       border-radius: 9999px;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%),
-        rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(24px) saturate(190%);
-      -webkit-backdrop-filter: blur(24px) saturate(190%);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      box-shadow:
-        inset 0 1px 1px 0 rgba(255, 255, 255, 0.55),
-        inset 0 -1px 1px 0 rgba(0, 0, 0, 0.18),
-        0 8px 24px -4px rgba(0, 0, 0, 0.35),
-        0 2px 6px -1px rgba(0, 0, 0, 0.2);
+      background: transparent;
+      border: none;
+      box-shadow: none;
       color: #FFFFFF;
       cursor: pointer;
       position: relative;
-      z-index: 105;
+      z-index: 106;
       outline: none;
+      padding: 0;
       transition: background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
                   border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
                   transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
@@ -938,11 +948,7 @@ onUnmounted(() => {
                   color 0.25s ease;
 
       &:hover:not(.header__toggle--open) {
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.1) 100%),
-          rgba(255, 255, 255, 0.12);
-        border-color: rgba(255, 255, 255, 0.42);
-        transform: translateY(-1px);
+        transform: scale(1.05);
       }
 
       &:active {
@@ -1332,19 +1338,28 @@ onUnmounted(() => {
     gap: 0.5rem;
   }
 
-  .header .header__switcher {
-    height: 2.15rem;
-    padding: 2px;
+  .header .header__switcher-surface {
+    height: 2.15rem !important;
 
-    .header__switcher-btn {
-      padding: 0 0.7rem;
-      font-size: 0.75rem;
+    .header__switcher {
+      height: 100%;
+      padding: 2px;
+
+      .header__switcher-btn {
+        padding: 0 0.7rem;
+        font-size: 0.75rem;
+      }
     }
   }
 
+  .header .header__menu .header__toggle-surface {
+    width: 2.15rem !important;
+    height: 2.15rem !important;
+  }
+
   .header .header__menu .header__toggle {
-    width: 2.15rem;
-    height: 2.15rem;
+    width: 100%;
+    height: 100%;
   }
 
   .header .header__menu .header__panel .panel__header-spacer {

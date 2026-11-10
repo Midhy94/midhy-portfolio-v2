@@ -11,6 +11,7 @@
     "test:security": "node scripts/security-audit.js"
   },
   "dependencies": {
+    "gsap": "^3.15.1",
     "lucide-vue-next": "^1.0.0",
     "motion": "^14.5.0",
     "vue": "^3.5.13",
