@@ -60,6 +60,26 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+html,
+body,
+.portfolio-shell {
+  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.theme-dark-statement {
+  background-color: #05070B !important;
+  color: #FFFFFF !important;
+
+  .portfolio-shell {
+    background-color: #05070B !important;
+    color: #FFFFFF !important;
+  }
+
+  .personal-hero {
+    background-color: #05070B !important;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;

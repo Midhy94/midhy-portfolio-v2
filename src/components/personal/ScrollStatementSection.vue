@@ -35,7 +35,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PERSONAL_CONTENT } from '@/data/portfolioData';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const props = withDefaults(
   defineProps<{
@@ -73,6 +77,7 @@ const sectionRef = ref<HTMLElement | null>(null);
 // Reactive progress state (0.0 -> 1.0)
 const scrollProgress = ref(0);
 let rafId: number | null = null;
+let themeTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
 // Compute word style based on scroll progress
@@ -99,15 +104,15 @@ const getWordStyle = (index: number) => {
   }
 
   // Linear interpolation:
-  // Base muted state: opacity 0.22, translateY 2.5px
-  // Fully active state: opacity 1.0, translateY 0px, solid ink
-  const opacity = (0.22 + 0.78 * wordProgress).toFixed(3);
+  // Base muted state: opacity 0.25, translateY 2.5px
+  // Fully active state: opacity 1.0, translateY 0px, solid text
+  const opacity = (0.25 + 0.75 * wordProgress).toFixed(3);
   const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
 
   return {
     opacity,
     transform: `translateY(${translateY}px)`,
-    color: wordProgress > 0.55 ? 'var(--color-ink)' : 'inherit',
+    color: wordProgress > 0.55 ? 'var(--statement-text-active)' : 'inherit',
   };
 };
 
@@ -121,6 +126,7 @@ const taglineStyle = computed(() => {
   return {
     opacity,
     transform: `translateY(${translateY}px)`,
+    color: 'var(--statement-tagline)',
   };
 });
 
@@ -167,6 +173,19 @@ onMounted(() => {
       return;
     }
 
+    // Atmospheric subtle dark inversion when entering and leaving statement section
+    if (sectionRef.value) {
+      themeTrigger = ScrollTrigger.create({
+        trigger: sectionRef.value,
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => document.body.classList.add('theme-dark-statement'),
+        onLeave: () => document.body.classList.remove('theme-dark-statement'),
+        onEnterBack: () => document.body.classList.add('theme-dark-statement'),
+        onLeaveBack: () => document.body.classList.remove('theme-dark-statement'),
+      });
+    }
+
     // Initial measurement
     updateProgressFromViewport();
 
@@ -178,6 +197,7 @@ onMounted(() => {
     setTimeout(() => {
       if (!isUnmounted) {
         updateProgressFromViewport();
+        themeTrigger?.refresh();
       }
     }, 1000);
   });
@@ -185,6 +205,13 @@ onMounted(() => {
 
 onUnmounted(() => {
   isUnmounted = true;
+  if (themeTrigger) {
+    themeTrigger.kill();
+    themeTrigger = null;
+  }
+  if (typeof document !== 'undefined') {
+    document.body.classList.remove('theme-dark-statement');
+  }
   if (rafId !== null) {
     cancelAnimationFrame(rafId);
     rafId = null;
@@ -200,11 +227,17 @@ onUnmounted(() => {
 @use '@/styles/variables' as *;
 
 .scroll-statement-section {
+  --statement-bg: var(--color-paper);
+  --statement-text-active: var(--color-ink);
+  --statement-text-muted: var(--color-muted-light);
+  --statement-tagline: var(--color-muted);
+
   position: relative;
   width: 100%;
   height: 220vh;
-  background-color: var(--color-paper);
-  color: var(--color-muted-light);
+  background-color: var(--statement-bg);
+  color: var(--statement-text-muted);
+  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 
   .statement-sticky-viewport {
     position: sticky;
@@ -236,12 +269,13 @@ onUnmounted(() => {
     font-weight: 500;
     line-height: 1.25;
     letter-spacing: -0.028em;
-    color: var(--color-muted-light);
+    color: var(--statement-text-muted);
     margin: 0 auto clamp(2rem, 4vw, 3.25rem);
     text-align: center;
     text-wrap: balance;
     word-break: normal;
     user-select: text;
+    transition: color 0.4s ease-out;
   }
 
   .word-wrapper {
@@ -254,7 +288,7 @@ onUnmounted(() => {
     display: inline-block;
     color: inherit;
     will-change: opacity, transform, color;
-    transition: opacity 0.1s ease-out, transform 0.1s ease-out, color 0.14s ease-out;
+    transition: opacity 0.1s ease-out, transform 0.1s ease-out, color 0.4s ease-out;
   }
 
   .word-spacer {
@@ -267,14 +301,21 @@ onUnmounted(() => {
     font-size: clamp(0.9375rem, 1.4vw, 1.15rem);
     font-weight: 400;
     line-height: 1.6;
-    color: var(--color-muted);
+    color: var(--statement-tagline);
     max-width: 620px;
     margin: 0 auto;
     text-align: center;
     text-wrap: balance;
-    will-change: opacity, transform;
-    transition: opacity 0.18s ease-out, transform 0.18s ease-out;
+    will-change: opacity, transform, color;
+    transition: opacity 0.18s ease-out, transform 0.18s ease-out, color 0.4s ease-out;
   }
+}
+
+:global(body.theme-dark-statement) .scroll-statement-section {
+  --statement-bg: #05070B;
+  --statement-text-active: #FFFFFF;
+  --statement-text-muted: rgba(255, 255, 255, 0.28);
+  --statement-tagline: rgba(255, 255, 255, 0.78);
 }
 
 // Tablet adjustments
