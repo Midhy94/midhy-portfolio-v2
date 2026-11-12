@@ -35,12 +35,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PERSONAL_CONTENT } from '@/data/portfolioData';
-import { useSmoothScroll } from '@/composables/useSmoothScroll';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const props = withDefaults(
   defineProps<{
@@ -74,24 +69,22 @@ const words = computed(() => {
 });
 
 const sectionRef = ref<HTMLElement | null>(null);
-const { getLenis } = useSmoothScroll();
 
 // Reactive progress state (0.0 -> 1.0)
 const scrollProgress = ref(0);
 let rafId: number | null = null;
-let progressTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
-// Compute word style based on scroll progress (Kinetic baseline un-skew & lift from yesterday's commit)
+// Compute word style based on scroll progress
 const getWordStyle = (index: number) => {
   const total = words.value.length;
   if (!total) return {};
 
   const p = scrollProgress.value;
-  // Reserve the first 82% of pinned scroll distance for the headline words
+  // Reserve the first 82% of scroll distance for the headline words
   const headlineMax = 0.82;
   const wordStep = headlineMax / total;
-  // Smooth window overlap between neighboring words for fluid reading cadence
+  // Smooth overlap between neighboring words so the illuminate flows naturally
   const windowSize = wordStep * 1.8;
   const start = index * wordStep;
   const end = Math.min(headlineMax, start + windowSize);
@@ -105,34 +98,29 @@ const getWordStyle = (index: number) => {
     wordProgress = (p - start) / (end - start);
   }
 
-  // Refined cubic ease-out for organic kinetic motion
-  const eased = 1 - Math.pow(1 - wordProgress, 3);
-  const translateY = ((1 - eased) * 12).toFixed(1);
-  const skewY = ((1 - eased) * 4.5).toFixed(2);
-  const scale = (0.97 + 0.03 * eased).toFixed(3);
-  // High minimum opacity (0.72) so text is 100% visible and easily legible at all times
-  const opacity = (0.72 + 0.28 * eased).toFixed(3);
+  // Linear interpolation:
+  // Base muted state: opacity 0.22, translateY 2.5px
+  // Fully active state: opacity 1.0, translateY 0px, solid ink
+  const opacity = (0.22 + 0.78 * wordProgress).toFixed(3);
+  const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px) skewY(${skewY}deg) scale(${scale})`,
-    color: wordProgress > 0.4 ? 'var(--statement-text-active)' : 'var(--statement-text-muted)',
+    transform: `translateY(${translateY}px)`,
+    color: wordProgress > 0.55 ? 'var(--color-ink)' : 'inherit',
   };
 };
 
 const taglineStyle = computed(() => {
   const p = scrollProgress.value;
-  // Tagline gently emerges as the headline concludes (0.75 -> 0.95)
-  const taglineProgress = Math.max(0, Math.min(1, (p - 0.75) / 0.20));
-  const eased = 1 - Math.pow(1 - taglineProgress, 3);
-  const opacity = (0.65 + 0.35 * eased).toFixed(3);
-  const translateY = ((1 - eased) * 10).toFixed(1);
-  const skewY = ((1 - eased) * 2.0).toFixed(2);
+  // Tagline gently emerges as the headline concludes (0.76 -> 0.96)
+  const taglineProgress = Math.max(0, Math.min(1, (p - 0.76) / 0.20));
+  const opacity = taglineProgress.toFixed(3);
+  const translateY = ((1 - taglineProgress) * 6).toFixed(1);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px) skewY(${skewY}deg)`,
-    color: 'var(--statement-tagline)',
+    transform: `translateY(${translateY}px)`,
   };
 });
 
@@ -179,27 +167,8 @@ onMounted(() => {
       return;
     }
 
-    // Synchronous scroll progress trigger pinned to section scroll duration
-    if (sectionRef.value) {
-      progressTrigger = ScrollTrigger.create({
-        trigger: sectionRef.value,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: true,
-        onUpdate: (self) => {
-          scrollProgress.value = self.progress;
-        },
-      });
-    }
-
     // Initial measurement
     updateProgressFromViewport();
-
-    // Attach Lenis listener for buttery smooth continuous updates during trackpad momentum
-    const lenis = getLenis();
-    if (lenis) {
-      lenis.on('scroll', handleScroll);
-    }
 
     // Attach passive scroll and resize listeners
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -209,7 +178,6 @@ onMounted(() => {
     setTimeout(() => {
       if (!isUnmounted) {
         updateProgressFromViewport();
-        progressTrigger?.refresh();
       }
     }, 1000);
   });
@@ -217,14 +185,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   isUnmounted = true;
-  if (progressTrigger) {
-    progressTrigger.kill();
-    progressTrigger = null;
-  }
-  const lenis = getLenis();
-  if (lenis) {
-    lenis.off('scroll', handleScroll);
-  }
   if (rafId !== null) {
     cancelAnimationFrame(rafId);
     rafId = null;
@@ -240,17 +200,11 @@ onUnmounted(() => {
 @use '@/styles/variables' as *;
 
 .scroll-statement-section {
-  --statement-bg: var(--color-paper);
-  --statement-text-active: var(--color-ink);
-  --statement-text-muted: #7E7870;
-  --statement-tagline: #524F4A;
-
   position: relative;
   width: 100%;
   height: 220vh;
-  background-color: var(--statement-bg);
-  color: var(--statement-text-muted);
-  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: var(--color-paper);
+  color: var(--color-muted-light);
 
   .statement-sticky-viewport {
     position: sticky;
@@ -288,8 +242,6 @@ onUnmounted(() => {
     text-wrap: balance;
     word-break: normal;
     user-select: text;
-    perspective: 1200px;
-    transition: color 0.4s ease-out;
   }
 
   .word-wrapper {
@@ -301,9 +253,8 @@ onUnmounted(() => {
   .word-token {
     display: inline-block;
     color: inherit;
-    transform-origin: 0% 100%;
     will-change: opacity, transform, color;
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease-out, color 0.35s ease-out;
+    transition: opacity 0.1s ease-out, transform 0.1s ease-out, color 0.14s ease-out;
   }
 
   .word-spacer {
@@ -321,9 +272,8 @@ onUnmounted(() => {
     margin: 0 auto;
     text-align: center;
     text-wrap: balance;
-    transform-origin: 50% 100%;
     will-change: opacity, transform;
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease-out, color 0.35s ease-out;
+    transition: opacity 0.18s ease-out, transform 0.18s ease-out;
   }
 }
 

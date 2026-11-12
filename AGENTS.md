@@ -11,3 +11,7 @@ Key directives:
 - Enforce `rel="noopener noreferrer"` on all external links opening new tabs.
 - Always run `npm run test:security` and `npm run build` to verify changes before concluding tasks.
 - Maintain existing visual craft, typography, transitions, and the dual-portal (Personal/Works) switcher.
+
+## Git Workflow & Commit Rules
+- **Explicit Permission Required**: Never create a Git commit (`git commit`) or push (`git push`) to any branch or remote repository without explicit user instruction. Keep all modifications in the local working tree until the user directly asks to commit or push.
+
