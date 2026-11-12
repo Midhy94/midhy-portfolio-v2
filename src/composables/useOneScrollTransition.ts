@@ -144,18 +144,14 @@ export function useOneScrollTransition(options: OneScrollOptions) {
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('keydown', handleKeyDown);
 
-    // 3D Spatial Skew, Tilt & Depth Parallax on hero exit (No fading!)
+    // Clean, natural card scale & portrait parallax on hero exit (Grounded, quiet confidence — zero fading, zero distortion)
     if (heroRef?.value && !isReducedMotion()) {
       const stageEl = heroRef.value.querySelector<HTMLElement>('.hero-card-stage');
       const portraitEl = heroRef.value.querySelector<HTMLElement>('.portrait-img');
-      const leftColEl = heroRef.value.querySelector<HTMLElement>('.hero-left-column');
-      const rightColEl = heroRef.value.querySelector<HTMLElement>('.hero-right-column');
-      const pillarsEl = heroRef.value.querySelector<HTMLElement>('.hero-pillars-row');
 
       if (stageEl) {
         gsap.set(stageEl, {
-          transformPerspective: 1400,
-          transformOrigin: '50% 10%',
+          transformOrigin: '50% 15%',
         });
 
         scrollTriggerInstance = ScrollTrigger.create({
@@ -165,50 +161,17 @@ export function useOneScrollTransition(options: OneScrollOptions) {
           scrub: 0.8,
           onUpdate: (self) => {
             const p = self.progress;
-            const velocity = self.getVelocity();
-            // Tactile velocity-responsive skew: faster scroll = dynamic slant flex
-            const velocitySkew = gsap.utils.clamp(-2.5, 2.5, velocity / 500);
 
-            // 1. Stage Card: 3D perspective tilt + dynamic skew + subtle recession (ZERO fading!)
+            // 1. Natural subtle scale-down and gentle upward parallax (1.0 -> 0.95)
             gsap.set(stageEl, {
-              scale: 1 - p * 0.07,
-              rotateX: p * 6.5,
-              skewY: -p * 2.2 + velocitySkew,
-              borderRadius: `${24 + p * 18}px`,
+              scale: 1 - p * 0.05,
+              y: -p * 20,
             });
 
-            // 2. Portrait: Floats forward in space with decoupled counter-skew and parallax lift
+            // 2. Soft portrait vertical parallax
             if (portraitEl) {
               gsap.set(portraitEl, {
-                y: -p * 75,
-                scale: 1 + p * 0.035,
-                skewY: p * 0.8,
-              });
-            }
-
-            // 3. Display Typography: Subtle lateral slide & dynamic slant
-            if (leftColEl) {
-              gsap.set(leftColEl, {
-                x: -p * 45,
-                y: -p * 28,
-                skewY: -p * 1.5,
-              });
-            }
-
-            // 4. Narrative Statement: Divergent lateral slide
-            if (rightColEl) {
-              gsap.set(rightColEl, {
-                x: p * 40,
-                y: -p * 28,
-                skewY: -p * 1.5,
-              });
-            }
-
-            // 5. Pillars Row: Sinks gracefully into depth
-            if (pillarsEl) {
-              gsap.set(pillarsEl, {
-                y: p * 25,
-                skewY: -p * 1.0,
+                y: -p * 45,
               });
             }
           },
