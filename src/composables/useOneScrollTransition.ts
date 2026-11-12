@@ -144,21 +144,37 @@ export function useOneScrollTransition(options: OneScrollOptions) {
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('keydown', handleKeyDown);
 
-    // Soft portrait vertical parallax on scroll (Hero stage itself remains solid and grounded)
+    // Earlier subtle hero depth / exit parallax animation with ScrollTrigger
     if (heroRef?.value && !isReducedMotion()) {
+      const stageEl = heroRef.value.querySelector<HTMLElement>('.hero-card-stage');
       const portraitEl = heroRef.value.querySelector<HTMLElement>('.portrait-img');
+      const textEls = heroRef.value.querySelectorAll<HTMLElement>('.hero-left-column, .hero-right-column');
 
-      if (portraitEl) {
+      if (stageEl) {
         scrollTriggerInstance = ScrollTrigger.create({
           trigger: heroRef.value,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.8,
+          scrub: 0.6,
           onUpdate: (self) => {
             const p = self.progress;
-            gsap.set(portraitEl, {
-              y: -p * 35,
+            // Subtle 3D scale and opacity fade as hero leaves view
+            gsap.set(stageEl, {
+              scale: 1 - p * 0.035,
+              opacity: 1 - p * 0.45,
+              transformOrigin: 'center center',
             });
+            if (portraitEl) {
+              gsap.set(portraitEl, {
+                y: -p * 50,
+              });
+            }
+            if (textEls.length > 0) {
+              gsap.set(textEls, {
+                y: -p * 35,
+                opacity: 1 - p * 0.6,
+              });
+            }
           },
         });
       }

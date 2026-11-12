@@ -78,6 +78,7 @@ const sectionRef = ref<HTMLElement | null>(null);
 const scrollProgress = ref(0);
 let rafId: number | null = null;
 let themeTrigger: ScrollTrigger | null = null;
+let progressTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
 // Compute word style based on scroll progress (Kinetic baseline un-skew & lift)
@@ -86,11 +87,11 @@ const getWordStyle = (index: number) => {
   if (!total) return {};
 
   const p = scrollProgress.value;
-  // Reserve the first 80% of scroll distance for the headline words
-  const headlineMax = 0.80;
+  // Reserve the first 82% of pinned scroll distance for the headline words
+  const headlineMax = 0.82;
   const wordStep = headlineMax / total;
   // Smooth window overlap between neighboring words for fluid reading cadence
-  const windowSize = wordStep * 1.85;
+  const windowSize = wordStep * 1.8;
   const start = index * wordStep;
   const end = Math.min(headlineMax, start + windowSize);
 
@@ -105,26 +106,27 @@ const getWordStyle = (index: number) => {
 
   // Refined cubic ease-out for organic kinetic motion
   const eased = 1 - Math.pow(1 - wordProgress, 3);
-  const translateY = ((1 - eased) * 16).toFixed(1);
-  const skewY = ((1 - eased) * 5.0).toFixed(2);
-  const scale = (0.95 + 0.05 * eased).toFixed(3);
-  const opacity = (0.22 + 0.78 * eased).toFixed(3);
+  const translateY = ((1 - eased) * 12).toFixed(1);
+  const skewY = ((1 - eased) * 4.5).toFixed(2);
+  const scale = (0.97 + 0.03 * eased).toFixed(3);
+  // High minimum opacity (0.72) so text is 100% visible and easily legible at all times
+  const opacity = (0.72 + 0.28 * eased).toFixed(3);
 
   return {
     opacity,
     transform: `translateY(${translateY}px) skewY(${skewY}deg) scale(${scale})`,
-    color: wordProgress > 0.45 ? 'var(--statement-text-active)' : 'inherit',
+    color: wordProgress > 0.4 ? 'var(--statement-text-active)' : 'var(--statement-text-muted)',
   };
 };
 
 const taglineStyle = computed(() => {
   const p = scrollProgress.value;
-  // Tagline gently emerges as the headline concludes (0.76 -> 0.96)
-  const taglineProgress = Math.max(0, Math.min(1, (p - 0.76) / 0.20));
+  // Tagline gently emerges as the headline concludes (0.75 -> 0.95)
+  const taglineProgress = Math.max(0, Math.min(1, (p - 0.75) / 0.20));
   const eased = 1 - Math.pow(1 - taglineProgress, 3);
-  const opacity = (0.25 + 0.75 * eased).toFixed(3);
-  const translateY = ((1 - eased) * 12).toFixed(1);
-  const skewY = ((1 - eased) * 2.5).toFixed(2);
+  const opacity = (0.65 + 0.35 * eased).toFixed(3);
+  const translateY = ((1 - eased) * 10).toFixed(1);
+  const skewY = ((1 - eased) * 2.0).toFixed(2);
 
   return {
     opacity,
@@ -187,6 +189,17 @@ onMounted(() => {
         onEnterBack: () => document.body.classList.add('theme-dark-statement'),
         onLeaveBack: () => document.body.classList.remove('theme-dark-statement'),
       });
+
+      // Synchronous scroll progress trigger pinned to section scroll duration
+      progressTrigger = ScrollTrigger.create({
+        trigger: sectionRef.value,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        onUpdate: (self) => {
+          scrollProgress.value = self.progress;
+        },
+      });
     }
 
     // Initial measurement
@@ -201,6 +214,7 @@ onMounted(() => {
       if (!isUnmounted) {
         updateProgressFromViewport();
         themeTrigger?.refresh();
+        progressTrigger?.refresh();
       }
     }, 1000);
   });
@@ -211,6 +225,10 @@ onUnmounted(() => {
   if (themeTrigger) {
     themeTrigger.kill();
     themeTrigger = null;
+  }
+  if (progressTrigger) {
+    progressTrigger.kill();
+    progressTrigger = null;
   }
   if (typeof document !== 'undefined') {
     document.body.classList.remove('theme-dark-statement');
@@ -232,8 +250,8 @@ onUnmounted(() => {
 .scroll-statement-section {
   --statement-bg: var(--color-paper);
   --statement-text-active: var(--color-ink);
-  --statement-text-muted: var(--color-muted-light);
-  --statement-tagline: var(--color-muted);
+  --statement-text-muted: #7E7870;
+  --statement-tagline: #524F4A;
 
   position: relative;
   width: 100%;
@@ -320,7 +338,7 @@ onUnmounted(() => {
 :global(body.theme-dark-statement) .scroll-statement-section {
   --statement-bg: #05070B;
   --statement-text-active: #FFFFFF;
-  --statement-text-muted: rgba(255, 255, 255, 0.28);
+  --statement-text-muted: rgba(255, 255, 255, 0.45);
   --statement-tagline: rgba(255, 255, 255, 0.78);
 }
 
