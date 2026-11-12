@@ -80,17 +80,17 @@ let rafId: number | null = null;
 let progressTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
-// Compute word style based on scroll progress (illuminated reveal)
+// Compute word style based on scroll progress (Kinetic baseline un-skew, lift & scale from yesterday's commit)
 const getWordStyle = (index: number) => {
   const total = words.value.length;
   if (!total) return {};
 
   const p = scrollProgress.value;
-  // Reserve the first 82% of scroll distance for the headline words
-  const headlineMax = 0.82;
+  // Reserve the first 80% of pinned scroll distance for the headline words
+  const headlineMax = 0.80;
   const wordStep = headlineMax / total;
-  // Smooth overlap between neighboring words so the illuminate flows naturally
-  const windowSize = wordStep * 1.8;
+  // Smooth window overlap between neighboring words for fluid reading cadence
+  const windowSize = wordStep * 1.85;
   const start = index * wordStep;
   const end = Math.min(headlineMax, start + windowSize);
 
@@ -103,16 +103,17 @@ const getWordStyle = (index: number) => {
     wordProgress = (p - start) / (end - start);
   }
 
-  // Exact linear interpolation:
-  // Base muted state: opacity 0.22, translateY 2.5px
-  // Fully active state: opacity 1.0, translateY 0px, solid ink
-  const opacity = (0.22 + 0.78 * wordProgress).toFixed(3);
-  const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
+  // Refined cubic ease-out for organic kinetic motion
+  const eased = 1 - Math.pow(1 - wordProgress, 3);
+  const translateY = ((1 - eased) * 16).toFixed(1);
+  const skewY = ((1 - eased) * 5.0).toFixed(2);
+  const scale = (0.95 + 0.05 * eased).toFixed(3);
+  const opacity = (0.22 + 0.78 * eased).toFixed(3);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px)`,
-    color: wordProgress > 0.55 ? 'var(--color-ink)' : 'inherit',
+    transform: `translateY(${translateY}px) skewY(${skewY}deg) scale(${scale})`,
+    color: wordProgress > 0.45 ? 'var(--color-ink)' : 'inherit',
   };
 };
 
@@ -120,12 +121,14 @@ const taglineStyle = computed(() => {
   const p = scrollProgress.value;
   // Tagline gently emerges as the headline concludes (0.76 -> 0.96)
   const taglineProgress = Math.max(0, Math.min(1, (p - 0.76) / 0.20));
-  const opacity = taglineProgress.toFixed(3);
-  const translateY = ((1 - taglineProgress) * 6).toFixed(1);
+  const eased = 1 - Math.pow(1 - taglineProgress, 3);
+  const opacity = (0.25 + 0.75 * eased).toFixed(3);
+  const translateY = ((1 - eased) * 12).toFixed(1);
+  const skewY = ((1 - eased) * 2.5).toFixed(2);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px)`,
+    transform: `translateY(${translateY}px) skewY(${skewY}deg)`,
   };
 });
 
@@ -265,6 +268,8 @@ onUnmounted(() => {
     text-wrap: balance;
     word-break: normal;
     user-select: text;
+    perspective: 1200px;
+    transition: color 0.4s ease-out;
   }
 
   .word-wrapper {
@@ -276,8 +281,9 @@ onUnmounted(() => {
   .word-token {
     display: inline-block;
     color: inherit;
+    transform-origin: 0% 100%;
     will-change: opacity, transform, color;
-    transition: opacity 0.1s ease-out, transform 0.1s ease-out, color 0.14s ease-out;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease-out, color 0.35s ease-out;
   }
 
   .word-spacer {
@@ -290,21 +296,15 @@ onUnmounted(() => {
     font-size: clamp(0.9375rem, 1.4vw, 1.15rem);
     font-weight: 400;
     line-height: 1.6;
-    color: var(--statement-tagline);
+    color: var(--color-muted);
     max-width: 620px;
     margin: 0 auto;
     text-align: center;
     text-wrap: balance;
+    transform-origin: 50% 100%;
     will-change: opacity, transform;
-    transition: opacity 0.18s ease-out, transform 0.18s ease-out;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease-out, color 0.35s ease-out;
   }
-}
-
-:global(body.theme-dark-statement) .scroll-statement-section {
-  --statement-bg: #05070B;
-  --statement-text-active: #FFFFFF;
-  --statement-text-muted: rgba(255, 255, 255, 0.22);
-  --statement-tagline: rgba(255, 255, 255, 0.78);
 }
 
 // Tablet adjustments
