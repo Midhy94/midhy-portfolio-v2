@@ -62,7 +62,9 @@ html {
 
 html,
 body,
-.portfolio-shell {
+.portfolio-shell,
+.personal-hero,
+.scroll-statement-section {
   transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -77,6 +79,11 @@ body.theme-dark-statement {
 
   .personal-hero {
     background-color: #05070B !important;
+  }
+
+  .scroll-statement-section {
+    background-color: #05070B !important;
+    color: #FFFFFF !important;
   }
 }
 

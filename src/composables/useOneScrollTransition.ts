@@ -144,16 +144,11 @@ export function useOneScrollTransition(options: OneScrollOptions) {
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('keydown', handleKeyDown);
 
-    // Clean, natural card scale & portrait parallax on hero exit (Grounded, quiet confidence — zero fading, zero distortion)
+    // Soft portrait vertical parallax on scroll (Hero stage itself remains solid and grounded)
     if (heroRef?.value && !isReducedMotion()) {
-      const stageEl = heroRef.value.querySelector<HTMLElement>('.hero-card-stage');
       const portraitEl = heroRef.value.querySelector<HTMLElement>('.portrait-img');
 
-      if (stageEl) {
-        gsap.set(stageEl, {
-          transformOrigin: '50% 15%',
-        });
-
+      if (portraitEl) {
         scrollTriggerInstance = ScrollTrigger.create({
           trigger: heroRef.value,
           start: 'top top',
@@ -161,19 +156,9 @@ export function useOneScrollTransition(options: OneScrollOptions) {
           scrub: 0.8,
           onUpdate: (self) => {
             const p = self.progress;
-
-            // 1. Natural subtle scale-down and gentle upward parallax (1.0 -> 0.95)
-            gsap.set(stageEl, {
-              scale: 1 - p * 0.05,
-              y: -p * 20,
+            gsap.set(portraitEl, {
+              y: -p * 35,
             });
-
-            // 2. Soft portrait vertical parallax
-            if (portraitEl) {
-              gsap.set(portraitEl, {
-                y: -p * 45,
-              });
-            }
           },
         });
       }

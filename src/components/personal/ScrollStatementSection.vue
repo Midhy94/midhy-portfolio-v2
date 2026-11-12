@@ -80,17 +80,17 @@ let rafId: number | null = null;
 let themeTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
-// Compute word style based on scroll progress
+// Compute word style based on scroll progress (Kinetic baseline un-skew & lift)
 const getWordStyle = (index: number) => {
   const total = words.value.length;
   if (!total) return {};
 
   const p = scrollProgress.value;
-  // Reserve the first 82% of scroll distance for the headline words
-  const headlineMax = 0.82;
+  // Reserve the first 80% of scroll distance for the headline words
+  const headlineMax = 0.80;
   const wordStep = headlineMax / total;
-  // Smooth overlap between neighboring words so the illuminate flows naturally
-  const windowSize = wordStep * 1.8;
+  // Smooth window overlap between neighboring words for fluid reading cadence
+  const windowSize = wordStep * 1.85;
   const start = index * wordStep;
   const end = Math.min(headlineMax, start + windowSize);
 
@@ -103,16 +103,17 @@ const getWordStyle = (index: number) => {
     wordProgress = (p - start) / (end - start);
   }
 
-  // Linear interpolation:
-  // Base muted state: opacity 0.25, translateY 2.5px
-  // Fully active state: opacity 1.0, translateY 0px, solid text
-  const opacity = (0.25 + 0.75 * wordProgress).toFixed(3);
-  const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
+  // Refined cubic ease-out for organic kinetic motion
+  const eased = 1 - Math.pow(1 - wordProgress, 3);
+  const translateY = ((1 - eased) * 16).toFixed(1);
+  const skewY = ((1 - eased) * 5.0).toFixed(2);
+  const scale = (0.95 + 0.05 * eased).toFixed(3);
+  const opacity = (0.22 + 0.78 * eased).toFixed(3);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px)`,
-    color: wordProgress > 0.55 ? 'var(--statement-text-active)' : 'inherit',
+    transform: `translateY(${translateY}px) skewY(${skewY}deg) scale(${scale})`,
+    color: wordProgress > 0.45 ? 'var(--statement-text-active)' : 'inherit',
   };
 };
 
@@ -120,12 +121,14 @@ const taglineStyle = computed(() => {
   const p = scrollProgress.value;
   // Tagline gently emerges as the headline concludes (0.76 -> 0.96)
   const taglineProgress = Math.max(0, Math.min(1, (p - 0.76) / 0.20));
-  const opacity = taglineProgress.toFixed(3);
-  const translateY = ((1 - taglineProgress) * 6).toFixed(1);
+  const eased = 1 - Math.pow(1 - taglineProgress, 3);
+  const opacity = (0.25 + 0.75 * eased).toFixed(3);
+  const translateY = ((1 - eased) * 12).toFixed(1);
+  const skewY = ((1 - eased) * 2.5).toFixed(2);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px)`,
+    transform: `translateY(${translateY}px) skewY(${skewY}deg)`,
     color: 'var(--statement-tagline)',
   };
 });
@@ -177,8 +180,8 @@ onMounted(() => {
     if (sectionRef.value) {
       themeTrigger = ScrollTrigger.create({
         trigger: sectionRef.value,
-        start: 'top 60%',
-        end: 'bottom 40%',
+        start: 'top 65%',
+        end: 'bottom 90%',
         onEnter: () => document.body.classList.add('theme-dark-statement'),
         onLeave: () => document.body.classList.remove('theme-dark-statement'),
         onEnterBack: () => document.body.classList.add('theme-dark-statement'),
@@ -275,6 +278,7 @@ onUnmounted(() => {
     text-wrap: balance;
     word-break: normal;
     user-select: text;
+    perspective: 1200px;
     transition: color 0.4s ease-out;
   }
 
@@ -287,8 +291,9 @@ onUnmounted(() => {
   .word-token {
     display: inline-block;
     color: inherit;
+    transform-origin: 0% 100%;
     will-change: opacity, transform, color;
-    transition: opacity 0.1s ease-out, transform 0.1s ease-out, color 0.4s ease-out;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease-out, color 0.35s ease-out;
   }
 
   .word-spacer {
@@ -306,8 +311,9 @@ onUnmounted(() => {
     margin: 0 auto;
     text-align: center;
     text-wrap: balance;
+    transform-origin: 50% 100%;
     will-change: opacity, transform, color;
-    transition: opacity 0.18s ease-out, transform 0.18s ease-out, color 0.4s ease-out;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease-out, color 0.35s ease-out;
   }
 }
 
