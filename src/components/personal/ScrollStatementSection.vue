@@ -81,16 +81,16 @@ let themeTrigger: ScrollTrigger | null = null;
 let progressTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
-// Compute word style based on scroll progress (Kinetic baseline un-skew & lift)
+// Compute word style based on scroll progress (Original illuminated fade animation from previous version)
 const getWordStyle = (index: number) => {
   const total = words.value.length;
   if (!total) return {};
 
   const p = scrollProgress.value;
-  // Reserve the first 82% of pinned scroll distance for the headline words
+  // Reserve the first 82% of scroll distance for the headline words
   const headlineMax = 0.82;
   const wordStep = headlineMax / total;
-  // Smooth window overlap between neighboring words for fluid reading cadence
+  // Smooth overlap between neighboring words so the illuminate flows naturally
   const windowSize = wordStep * 1.8;
   const start = index * wordStep;
   const end = Math.min(headlineMax, start + windowSize);
@@ -104,34 +104,30 @@ const getWordStyle = (index: number) => {
     wordProgress = (p - start) / (end - start);
   }
 
-  // Refined cubic ease-out for organic kinetic motion
-  const eased = 1 - Math.pow(1 - wordProgress, 3);
-  const translateY = ((1 - eased) * 12).toFixed(1);
-  const skewY = ((1 - eased) * 4.5).toFixed(2);
-  const scale = (0.97 + 0.03 * eased).toFixed(3);
-  // High minimum opacity (0.72) so text is 100% visible and easily legible at all times
-  const opacity = (0.72 + 0.28 * eased).toFixed(3);
+  // Exact linear interpolation from previous version:
+  // Base muted state: opacity 0.22, translateY 2.5px (other texts shouldn't be visible)
+  // Fully active state: opacity 1.0, translateY 0px, solid white text
+  const opacity = (0.22 + 0.78 * wordProgress).toFixed(3);
+  const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px) skewY(${skewY}deg) scale(${scale})`,
-    color: wordProgress > 0.4 ? 'var(--statement-text-active)' : 'var(--statement-text-muted)',
+    transform: `translateY(${translateY}px)`,
+    color: wordProgress > 0.55 ? '#FFFFFF' : 'inherit',
   };
 };
 
 const taglineStyle = computed(() => {
   const p = scrollProgress.value;
-  // Tagline gently emerges as the headline concludes (0.75 -> 0.95)
-  const taglineProgress = Math.max(0, Math.min(1, (p - 0.75) / 0.20));
-  const eased = 1 - Math.pow(1 - taglineProgress, 3);
-  const opacity = (0.65 + 0.35 * eased).toFixed(3);
-  const translateY = ((1 - eased) * 10).toFixed(1);
-  const skewY = ((1 - eased) * 2.0).toFixed(2);
+  // Tagline gently emerges as the headline concludes (0.76 -> 0.96)
+  const taglineProgress = Math.max(0, Math.min(1, (p - 0.76) / 0.20));
+  const opacity = taglineProgress.toFixed(3);
+  const translateY = ((1 - taglineProgress) * 6).toFixed(1);
 
   return {
     opacity,
-    transform: `translateY(${translateY}px) skewY(${skewY}deg)`,
-    color: 'var(--statement-tagline)',
+    transform: `translateY(${translateY}px)`,
+    color: 'rgba(255, 255, 255, 0.78)',
   };
 });
 
@@ -250,8 +246,8 @@ onUnmounted(() => {
 .scroll-statement-section {
   --statement-bg: var(--color-paper);
   --statement-text-active: var(--color-ink);
-  --statement-text-muted: #7E7870;
-  --statement-tagline: #524F4A;
+  --statement-text-muted: var(--color-muted-light);
+  --statement-tagline: var(--color-muted);
 
   position: relative;
   width: 100%;
@@ -296,8 +292,6 @@ onUnmounted(() => {
     text-wrap: balance;
     word-break: normal;
     user-select: text;
-    perspective: 1200px;
-    transition: color 0.4s ease-out;
   }
 
   .word-wrapper {
@@ -309,9 +303,8 @@ onUnmounted(() => {
   .word-token {
     display: inline-block;
     color: inherit;
-    transform-origin: 0% 100%;
     will-change: opacity, transform, color;
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease-out, color 0.35s ease-out;
+    transition: opacity 0.1s ease-out, transform 0.1s ease-out, color 0.14s ease-out;
   }
 
   .word-spacer {
@@ -329,16 +322,15 @@ onUnmounted(() => {
     margin: 0 auto;
     text-align: center;
     text-wrap: balance;
-    transform-origin: 50% 100%;
-    will-change: opacity, transform, color;
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease-out, color 0.35s ease-out;
+    will-change: opacity, transform;
+    transition: opacity 0.18s ease-out, transform 0.18s ease-out;
   }
 }
 
 :global(body.theme-dark-statement) .scroll-statement-section {
   --statement-bg: #05070B;
   --statement-text-active: #FFFFFF;
-  --statement-text-muted: rgba(255, 255, 255, 0.45);
+  --statement-text-muted: rgba(255, 255, 255, 0.22);
   --statement-tagline: rgba(255, 255, 255, 0.78);
 }
 
