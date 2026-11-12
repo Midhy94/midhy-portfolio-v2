@@ -77,11 +77,10 @@ const sectionRef = ref<HTMLElement | null>(null);
 // Reactive progress state (0.0 -> 1.0)
 const scrollProgress = ref(0);
 let rafId: number | null = null;
-let themeTrigger: ScrollTrigger | null = null;
 let progressTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
-// Compute word style based on scroll progress (Original illuminated fade animation from previous version)
+// Compute word style based on scroll progress (illuminated reveal)
 const getWordStyle = (index: number) => {
   const total = words.value.length;
   if (!total) return {};
@@ -104,16 +103,16 @@ const getWordStyle = (index: number) => {
     wordProgress = (p - start) / (end - start);
   }
 
-  // Exact linear interpolation from previous version:
-  // Base muted state: opacity 0.22, translateY 2.5px (other texts shouldn't be visible)
-  // Fully active state: opacity 1.0, translateY 0px, solid white text
+  // Exact linear interpolation:
+  // Base muted state: opacity 0.22, translateY 2.5px
+  // Fully active state: opacity 1.0, translateY 0px, solid ink
   const opacity = (0.22 + 0.78 * wordProgress).toFixed(3);
   const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
 
   return {
     opacity,
     transform: `translateY(${translateY}px)`,
-    color: wordProgress > 0.55 ? '#FFFFFF' : 'inherit',
+    color: wordProgress > 0.55 ? 'var(--color-ink)' : 'inherit',
   };
 };
 
@@ -127,7 +126,6 @@ const taglineStyle = computed(() => {
   return {
     opacity,
     transform: `translateY(${translateY}px)`,
-    color: 'rgba(255, 255, 255, 0.78)',
   };
 });
 
@@ -174,16 +172,8 @@ onMounted(() => {
       return;
     }
 
-    // Atmospheric subtle dark inversion when reaching statement section; remains black while scrolling down
+    // Synchronous scroll progress trigger pinned to section scroll duration
     if (sectionRef.value) {
-      themeTrigger = ScrollTrigger.create({
-        trigger: sectionRef.value,
-        start: 'top 60%',
-        onEnter: () => document.body.classList.add('theme-dark-statement'),
-        onLeaveBack: () => document.body.classList.remove('theme-dark-statement'),
-      });
-
-      // Synchronous scroll progress trigger pinned to section scroll duration
       progressTrigger = ScrollTrigger.create({
         trigger: sectionRef.value,
         start: 'top top',
@@ -206,7 +196,6 @@ onMounted(() => {
     setTimeout(() => {
       if (!isUnmounted) {
         updateProgressFromViewport();
-        themeTrigger?.refresh();
         progressTrigger?.refresh();
       }
     }, 1000);
@@ -215,16 +204,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   isUnmounted = true;
-  if (themeTrigger) {
-    themeTrigger.kill();
-    themeTrigger = null;
-  }
   if (progressTrigger) {
     progressTrigger.kill();
     progressTrigger = null;
-  }
-  if (typeof document !== 'undefined') {
-    document.body.classList.remove('theme-dark-statement');
   }
   if (rafId !== null) {
     cancelAnimationFrame(rafId);
@@ -241,17 +223,11 @@ onUnmounted(() => {
 @use '@/styles/variables' as *;
 
 .scroll-statement-section {
-  --statement-bg: #05070B;
-  --statement-text-active: #FFFFFF;
-  --statement-text-muted: rgba(255, 255, 255, 0.22);
-  --statement-tagline: rgba(255, 255, 255, 0.78);
-
   position: relative;
   width: 100%;
   height: 220vh;
-  background-color: #05070B;
-  color: var(--statement-text-muted);
-  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: var(--color-paper);
+  color: var(--color-muted-light);
 
   .statement-sticky-viewport {
     position: sticky;
@@ -283,7 +259,7 @@ onUnmounted(() => {
     font-weight: 500;
     line-height: 1.25;
     letter-spacing: -0.028em;
-    color: var(--statement-text-muted);
+    color: var(--color-muted-light);
     margin: 0 auto clamp(2rem, 4vw, 3.25rem);
     text-align: center;
     text-wrap: balance;

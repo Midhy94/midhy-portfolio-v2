@@ -145,7 +145,6 @@ const { scrollToNext } = useOneScrollTransition({
   width: 100%;
   margin: 0;
   background-color: var(--color-paper);
-  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   // Identical 4-sided whitespace framing around the hero stage (Faizur reference)
   padding: var(--hero-frame-gap);
   box-sizing: border-box;
