@@ -64,8 +64,11 @@ html,
 body,
 .portfolio-shell,
 .personal-hero,
-.scroll-statement-section {
-  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+.scroll-statement-section,
+.personal-philosophy,
+.personal-legacy,
+.career-preview-bridge {
+  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body.theme-dark-statement {
@@ -83,9 +86,117 @@ body.theme-dark-statement {
     background-color: #05070B !important;
   }
 
+  // PersonalPhilosophy dark theme
   .personal-philosophy {
-    background-color: var(--color-paper) !important;
-    color: var(--color-ink) !important;
+    background-color: #05070B !important;
+    border-top-color: rgba(255, 255, 255, 0.12) !important;
+
+    .sidebar-headline {
+      color: #FFFFFF !important;
+
+      .headline-accent {
+        color: var(--color-laterite) !important;
+      }
+    }
+
+    .philosophy-lead {
+      color: rgba(255, 255, 255, 0.92) !important;
+    }
+
+    .principle-card {
+      border-top-color: rgba(255, 255, 255, 0.12) !important;
+
+      .principle-num {
+        color: rgba(255, 255, 255, 0.45) !important;
+      }
+
+      .principle-title {
+        color: #FFFFFF !important;
+      }
+
+      .principle-desc {
+        color: rgba(255, 255, 255, 0.68) !important;
+      }
+    }
+
+    .irc-frame {
+      background-color: #12151C !important;
+      box-shadow: 0 18px 36px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+    }
+  }
+
+  // PersonalStats dark theme
+  .personal-legacy {
+    background-color: #05070B !important;
+    border-top-color: rgba(255, 255, 255, 0.12) !important;
+
+    .legacy-headline {
+      color: #FFFFFF !important;
+
+      .headline-indent {
+        color: #FFFFFF !important;
+      }
+
+      .headline-accent {
+        color: var(--color-laterite) !important;
+      }
+    }
+
+    .col-lead .lead-statement {
+      color: rgba(255, 255, 255, 0.92) !important;
+    }
+
+    .col-detail .detail-statement {
+      color: rgba(255, 255, 255, 0.68) !important;
+    }
+
+    .legacy-marquee-stage {
+      background-color: #0B0E14 !important;
+      border-top-color: rgba(255, 255, 255, 0.12) !important;
+      border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+
+      .ticker-item.item--primary {
+        color: #FFFFFF !important;
+
+        .item-bullet {
+          color: var(--color-laterite) !important;
+        }
+      }
+
+      .ticker-item.item--secondary {
+        color: rgba(255, 255, 255, 0.68) !important;
+
+        .item-dot {
+          color: rgba(255, 255, 255, 0.3) !important;
+        }
+      }
+    }
+  }
+
+  // Career Preview Bridge dark theme
+  .career-preview-bridge {
+    .bridge-card {
+      background-color: #0E121A !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+
+      .bridge-title {
+        color: #FFFFFF !important;
+      }
+
+      .bridge-desc {
+        color: rgba(255, 255, 255, 0.68) !important;
+      }
+
+      .bridge-link-btn {
+        background-color: #FFFFFF !important;
+        color: #05070B !important;
+
+        &:hover {
+          background-color: var(--color-laterite) !important;
+          color: #FFFFFF !important;
+        }
+      }
+    }
   }
 }
 

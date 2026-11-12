@@ -174,15 +174,12 @@ onMounted(() => {
       return;
     }
 
-    // Atmospheric subtle dark inversion when entering and leaving statement section
+    // Atmospheric subtle dark inversion when reaching statement section; remains black while scrolling down
     if (sectionRef.value) {
       themeTrigger = ScrollTrigger.create({
         trigger: sectionRef.value,
-        start: 'top 65%',
-        end: 'bottom top',
+        start: 'top 60%',
         onEnter: () => document.body.classList.add('theme-dark-statement'),
-        onLeave: () => document.body.classList.remove('theme-dark-statement'),
-        onEnterBack: () => document.body.classList.add('theme-dark-statement'),
         onLeaveBack: () => document.body.classList.remove('theme-dark-statement'),
       });
 
