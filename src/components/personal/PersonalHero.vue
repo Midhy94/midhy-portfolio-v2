@@ -148,6 +148,7 @@ const { scrollToNext } = useOneScrollTransition({
   // Identical 4-sided whitespace framing around the hero stage (Faizur reference)
   padding: var(--hero-frame-gap);
   box-sizing: border-box;
+  perspective: 1400px;
 
   .hero-card-stage {
     position: relative;
@@ -155,6 +156,8 @@ const { scrollToNext } = useOneScrollTransition({
     margin: 0 auto;
     border-radius: clamp(22px, 2.5vw, 32px);
     overflow: visible;
+    transform-style: preserve-3d;
+    will-change: transform;
 
     // Completely removed box shadow from below hero section (flush, razor-clean framing)
     box-shadow: none;
