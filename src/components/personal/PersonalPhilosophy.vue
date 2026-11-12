@@ -316,6 +316,9 @@ onUnmounted(() => {
   overflow: hidden;
   padding: clamp(4.5rem, 7vw, 7rem) 0;
   border-top: 1px solid var(--color-border);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  z-index: 2;
   --irc-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --irc-dim: 0.35;
 

@@ -70,11 +70,9 @@ body,
 
 body.theme-dark-statement {
   background-color: #05070B !important;
-  color: #FFFFFF !important;
 
   .portfolio-shell {
     background-color: #05070B !important;
-    color: #FFFFFF !important;
   }
 
   .personal-hero {
@@ -83,6 +81,11 @@ body.theme-dark-statement {
 
   .scroll-statement-section {
     background-color: #05070B !important;
+  }
+
+  .personal-philosophy {
+    background-color: var(--color-paper) !important;
+    color: var(--color-ink) !important;
   }
 }
 

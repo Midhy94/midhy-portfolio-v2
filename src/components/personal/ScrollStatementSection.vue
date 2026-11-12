@@ -244,15 +244,15 @@ onUnmounted(() => {
 @use '@/styles/variables' as *;
 
 .scroll-statement-section {
-  --statement-bg: var(--color-paper);
-  --statement-text-active: var(--color-ink);
-  --statement-text-muted: var(--color-muted-light);
-  --statement-tagline: var(--color-muted);
+  --statement-bg: #05070B;
+  --statement-text-active: #FFFFFF;
+  --statement-text-muted: rgba(255, 255, 255, 0.22);
+  --statement-tagline: rgba(255, 255, 255, 0.78);
 
   position: relative;
   width: 100%;
   height: 220vh;
-  background-color: var(--statement-bg);
+  background-color: #05070B;
   color: var(--statement-text-muted);
   transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 
