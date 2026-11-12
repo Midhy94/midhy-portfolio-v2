@@ -38,6 +38,7 @@ import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PERSONAL_CONTENT } from '@/data/portfolioData';
+import { useSmoothScroll } from '@/composables/useSmoothScroll';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,6 +74,7 @@ const words = computed(() => {
 });
 
 const sectionRef = ref<HTMLElement | null>(null);
+const { getLenis } = useSmoothScroll();
 
 // Reactive progress state (0.0 -> 1.0)
 const scrollProgress = ref(0);
@@ -80,17 +82,17 @@ let rafId: number | null = null;
 let progressTrigger: ScrollTrigger | null = null;
 let isUnmounted = false;
 
-// Compute word style based on scroll progress (Kinetic baseline un-skew, lift & scale from yesterday's commit)
+// Compute word style based on scroll progress (Kinetic baseline un-skew & lift from yesterday's commit)
 const getWordStyle = (index: number) => {
   const total = words.value.length;
   if (!total) return {};
 
   const p = scrollProgress.value;
-  // Reserve the first 80% of pinned scroll distance for the headline words
-  const headlineMax = 0.80;
+  // Reserve the first 82% of pinned scroll distance for the headline words
+  const headlineMax = 0.82;
   const wordStep = headlineMax / total;
   // Smooth window overlap between neighboring words for fluid reading cadence
-  const windowSize = wordStep * 1.85;
+  const windowSize = wordStep * 1.8;
   const start = index * wordStep;
   const end = Math.min(headlineMax, start + windowSize);
 
@@ -105,30 +107,32 @@ const getWordStyle = (index: number) => {
 
   // Refined cubic ease-out for organic kinetic motion
   const eased = 1 - Math.pow(1 - wordProgress, 3);
-  const translateY = ((1 - eased) * 16).toFixed(1);
-  const skewY = ((1 - eased) * 5.0).toFixed(2);
-  const scale = (0.95 + 0.05 * eased).toFixed(3);
-  const opacity = (0.22 + 0.78 * eased).toFixed(3);
+  const translateY = ((1 - eased) * 12).toFixed(1);
+  const skewY = ((1 - eased) * 4.5).toFixed(2);
+  const scale = (0.97 + 0.03 * eased).toFixed(3);
+  // High minimum opacity (0.72) so text is 100% visible and easily legible at all times
+  const opacity = (0.72 + 0.28 * eased).toFixed(3);
 
   return {
     opacity,
     transform: `translateY(${translateY}px) skewY(${skewY}deg) scale(${scale})`,
-    color: wordProgress > 0.45 ? 'var(--color-ink)' : 'inherit',
+    color: wordProgress > 0.4 ? 'var(--statement-text-active)' : 'var(--statement-text-muted)',
   };
 };
 
 const taglineStyle = computed(() => {
   const p = scrollProgress.value;
-  // Tagline gently emerges as the headline concludes (0.76 -> 0.96)
-  const taglineProgress = Math.max(0, Math.min(1, (p - 0.76) / 0.20));
+  // Tagline gently emerges as the headline concludes (0.75 -> 0.95)
+  const taglineProgress = Math.max(0, Math.min(1, (p - 0.75) / 0.20));
   const eased = 1 - Math.pow(1 - taglineProgress, 3);
-  const opacity = (0.25 + 0.75 * eased).toFixed(3);
-  const translateY = ((1 - eased) * 12).toFixed(1);
-  const skewY = ((1 - eased) * 2.5).toFixed(2);
+  const opacity = (0.65 + 0.35 * eased).toFixed(3);
+  const translateY = ((1 - eased) * 10).toFixed(1);
+  const skewY = ((1 - eased) * 2.0).toFixed(2);
 
   return {
     opacity,
     transform: `translateY(${translateY}px) skewY(${skewY}deg)`,
+    color: 'var(--statement-tagline)',
   };
 });
 
@@ -191,6 +195,12 @@ onMounted(() => {
     // Initial measurement
     updateProgressFromViewport();
 
+    // Attach Lenis listener for buttery smooth continuous updates during trackpad momentum
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.on('scroll', handleScroll);
+    }
+
     // Attach passive scroll and resize listeners
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
@@ -211,6 +221,10 @@ onUnmounted(() => {
     progressTrigger.kill();
     progressTrigger = null;
   }
+  const lenis = getLenis();
+  if (lenis) {
+    lenis.off('scroll', handleScroll);
+  }
   if (rafId !== null) {
     cancelAnimationFrame(rafId);
     rafId = null;
@@ -226,11 +240,17 @@ onUnmounted(() => {
 @use '@/styles/variables' as *;
 
 .scroll-statement-section {
+  --statement-bg: var(--color-paper);
+  --statement-text-active: var(--color-ink);
+  --statement-text-muted: #7E7870;
+  --statement-tagline: #524F4A;
+
   position: relative;
   width: 100%;
   height: 220vh;
-  background-color: var(--color-paper);
-  color: var(--color-muted-light);
+  background-color: var(--statement-bg);
+  color: var(--statement-text-muted);
+  transition: background-color 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 
   .statement-sticky-viewport {
     position: sticky;
