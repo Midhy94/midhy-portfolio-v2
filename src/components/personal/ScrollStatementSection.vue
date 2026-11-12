@@ -179,7 +179,7 @@ onMounted(() => {
       themeTrigger = ScrollTrigger.create({
         trigger: sectionRef.value,
         start: 'top 65%',
-        end: 'bottom 90%',
+        end: 'bottom top',
         onEnter: () => document.body.classList.add('theme-dark-statement'),
         onLeave: () => document.body.classList.remove('theme-dark-statement'),
         onEnterBack: () => document.body.classList.add('theme-dark-statement'),
