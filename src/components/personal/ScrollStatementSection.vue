@@ -7,23 +7,24 @@
   >
     <div class="statement-sticky-viewport">
       <div class="statement-container container-editorial">
-        <h2 class="statement-headline font-sans">
+        <h2 class="statement-headline font-serif">
           <span
-            v-for="(word, index) in words"
+            v-for="(token, index) in words"
             :key="index"
             class="word-wrapper"
           >
             <span
               class="word-token"
+              :class="{ 'token--highlighted': token.isHighlighted }"
               :style="getWordStyle(index)"
-            >{{ word }}</span>
+            >{{ token.text }}</span>
             <span class="word-spacer" aria-hidden="true">&nbsp;</span>
           </span>
         </h2>
 
-        <!-- Refined Secondary Subtitle / Tagline -->
+        <!-- Refined Secondary Subtitle / Tagline in Editorial Serif -->
         <p
-          class="statement-tagline font-sans"
+          class="statement-tagline font-serif"
           :style="taglineStyle"
         >
           {{ taglineText }}
@@ -48,11 +49,16 @@ const props = withDefaults(
   }
 );
 
+interface WordToken {
+  text: string;
+  isHighlighted: boolean;
+}
+
 const statementText = computed(() => {
   return (
     props.text ||
     PERSONAL_CONTENT.statement?.text ||
-    'We believe the strongest digital brands are built through strategy, not just aesthetics. Every interface is designed to capture attention, inspire action, and create lasting business growth.'
+    'We believe the strongest digital brands are built through *strategy,* not just aesthetics. Every interface is designed to capture attention, inspire action, and create lasting business *growth.*'
   );
 });
 
@@ -64,8 +70,21 @@ const taglineText = computed(() => {
   );
 });
 
-const words = computed(() => {
-  return statementText.value.trim().split(/\s+/).filter(Boolean);
+const words = computed<WordToken[]>(() => {
+  const rawWords = statementText.value.trim().split(/\s+/).filter(Boolean);
+  const defaultHighlights = new Set(['strategy,', 'strategy', 'growth.', 'growth']);
+
+  return rawWords.map((raw) => {
+    // Check if wrapped in markdown-style asterisks: *word*
+    const hasAsterisks = raw.startsWith('*') && raw.endsWith('*');
+    const cleanWord = hasAsterisks ? raw.slice(1, -1) : raw;
+    const isHighlightMatch = defaultHighlights.has(cleanWord.toLowerCase());
+
+    return {
+      text: cleanWord,
+      isHighlighted: hasAsterisks || isHighlightMatch,
+    };
+  });
 });
 
 const sectionRef = ref<HTMLElement | null>(null);
@@ -80,6 +99,7 @@ const getWordStyle = (index: number) => {
   const total = words.value.length;
   if (!total) return {};
 
+  const token = words.value[index];
   const p = scrollProgress.value;
   // Reserve the first 82% of scroll distance for the headline words
   const headlineMax = 0.82;
@@ -98,11 +118,26 @@ const getWordStyle = (index: number) => {
     wordProgress = (p - start) / (end - start);
   }
 
-  // Linear interpolation:
+  const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
+
+  if (token.isHighlighted) {
+    // Highlighted terracotta italic words (matching Auxia / Editorial reference)
+    // Base muted state: opacity 0.30 with subtle terracotta glow
+    // Active illuminated state: opacity 1.0, var(--color-laterite)
+    const opacity = (0.28 + 0.72 * wordProgress).toFixed(3);
+    const color = wordProgress > 0.45 ? 'var(--color-laterite)' : 'rgba(225, 75, 39, 0.45)';
+
+    return {
+      opacity,
+      transform: `translateY(${translateY}px)`,
+      color,
+    };
+  }
+
+  // Standard words:
   // Base muted state: opacity 0.22, translateY 2.5px
   // Fully active state: opacity 1.0, translateY 0px, solid ink
   const opacity = (0.22 + 0.78 * wordProgress).toFixed(3);
-  const translateY = ((1 - wordProgress) * 2.5).toFixed(1);
 
   return {
     opacity,
@@ -137,9 +172,6 @@ const updateProgressFromViewport = () => {
     return;
   }
 
-  // When rect.top is > 0: section is scrolling up towards sticky position (approaching)
-  // When rect.top <= 0 and >= -totalScroll: sticky pinning is active!
-  // When rect.top < -totalScroll: scrolled past
   const currentScroll = -rect.top;
   const rawProgress = currentScroll / totalScroll;
   const clamped = Math.max(0, Math.min(1, rawProgress));
@@ -230,14 +262,15 @@ onUnmounted(() => {
     padding: 0 clamp(1.25rem, 4vw, 2.5rem);
   }
 
+  // Display Typography in Literary Editorial Serif (Matching Newsreader reference)
   .statement-headline {
-    font-family: var(--font-family-sans);
-    font-size: clamp(2.1rem, 4.4vw, 3.6rem);
-    font-weight: 500;
-    line-height: 1.25;
-    letter-spacing: -0.028em;
+    font-family: var(--font-family-serif);
+    font-size: clamp(2.35rem, 5.2vw, 4.25rem);
+    font-weight: 400;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
     color: var(--color-muted-light);
-    margin: 0 auto clamp(2rem, 4vw, 3.25rem);
+    margin: 0 auto clamp(2.25rem, 4vw, 3.5rem);
     text-align: center;
     text-wrap: balance;
     word-break: normal;
@@ -255,6 +288,11 @@ onUnmounted(() => {
     color: inherit;
     will-change: opacity, transform, color;
     transition: opacity 0.1s ease-out, transform 0.1s ease-out, color 0.14s ease-out;
+
+    &.token--highlighted {
+      font-style: italic;
+      font-weight: 400;
+    }
   }
 
   .word-spacer {
@@ -262,13 +300,15 @@ onUnmounted(() => {
     user-select: none;
   }
 
+  // Refined Secondary Description in Editorial Serif
   .statement-tagline {
-    font-family: var(--font-family-sans);
-    font-size: clamp(0.9375rem, 1.4vw, 1.15rem);
+    font-family: var(--font-family-serif);
+    font-size: clamp(1.15rem, 1.8vw, 1.45rem);
     font-weight: 400;
     line-height: 1.6;
+    letter-spacing: -0.005em;
     color: var(--color-muted);
-    max-width: 620px;
+    max-width: 680px;
     margin: 0 auto;
     text-align: center;
     text-wrap: balance;
@@ -283,26 +323,30 @@ onUnmounted(() => {
     height: 200vh;
 
     .statement-headline {
-      font-size: clamp(1.85rem, 4.8vw, 2.75rem);
-      line-height: 1.28;
+      font-size: clamp(2rem, 5.2vw, 3.25rem);
+      line-height: 1.26;
+    }
+
+    .statement-tagline {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
     }
   }
 }
 
-// Mobile adaptation
+// Mobile adjustments
 @media (max-width: 768px) {
   .scroll-statement-section {
     height: 180vh;
 
     .statement-headline {
-      font-size: clamp(1.5rem, 6.4vw, 2rem);
-      line-height: 1.34;
-      letter-spacing: -0.02em;
+      font-size: clamp(1.65rem, 6.4vw, 2.35rem);
+      line-height: 1.32;
+      letter-spacing: -0.015em;
       margin-bottom: 1.75rem;
     }
 
     .statement-tagline {
-      font-size: 0.9375rem;
+      font-size: 1rem;
       line-height: 1.55;
     }
   }
@@ -327,6 +371,10 @@ onUnmounted(() => {
       transform: none !important;
       color: var(--color-ink) !important;
       transition: none !important;
+
+      &.token--highlighted {
+        color: var(--color-laterite) !important;
+      }
     }
 
     .statement-tagline {

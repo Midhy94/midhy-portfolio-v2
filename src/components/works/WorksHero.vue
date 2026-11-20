@@ -1,5 +1,5 @@
 <template>
-  <section class="works-hero" aria-labelledby="works-hero-heading">
+  <InnerHeroStage mode="works">
     <div class="hero-container container-editorial">
       <div class="hero-header-row">
         <!-- Left: Headline -->
@@ -7,26 +7,24 @@
           <h1 id="works-hero-heading" class="hero-headline font-serif">
             <span>{{ heroData.headlineStart }}</span>
             <span>{{ heroData.headlineMiddle }}</span>
-            <span class="headline-bottom">
-              systems
-              <span class="pixel-accent font-pixel">{{ heroData.headlineAccent }}</span>
-            </span>
+            <span class="headline-accent font-serif">{{ heroData.headlineAccent }}</span>
           </h1>
         </div>
 
         <!-- Right: Lead Introduction Statement -->
         <div class="hero-lead-col">
-          <p class="hero-lead-text">
+          <p class="hero-lead-text font-sans">
             {{ heroData.lead }}
           </p>
         </div>
       </div>
     </div>
-  </section>
+  </InnerHeroStage>
 </template>
 
 <script setup lang="ts">
 import { WORKS_CONTENT } from '@/data/portfolioData';
+import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 
 const heroData = WORKS_CONTENT.hero;
 </script>
@@ -34,8 +32,10 @@ const heroData = WORKS_CONTENT.hero;
 <style scoped lang="scss">
 @use '@/styles/variables' as *;
 
-.works-hero {
-  padding: clamp(3.5rem, 6vw, 6rem) 0 clamp(3.5rem, 5vw, 5rem);
+.hero-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 
   .hero-header-row {
     display: grid;
@@ -45,32 +45,19 @@ const heroData = WORKS_CONTENT.hero;
   }
 
   .hero-title-col {
-    .hero-overline {
-      margin-bottom: 1.25rem;
-    }
-
     .hero-headline {
       font-size: clamp(2.75rem, 5.2vw, 4.375rem);
       font-weight: 400;
       line-height: 1.08;
       letter-spacing: -0.03em;
-      color: var(--color-ink);
+      color: #FFFFFF;
       margin: 0;
       display: flex;
       flex-direction: column;
 
-      .headline-bottom {
-        display: inline-flex;
-        align-items: baseline;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-
-        .pixel-accent {
-          color: var(--color-laterite);
-          font-size: 0.85em;
-          letter-spacing: -0.01em;
-          font-weight: 700;
-        }
+      .headline-accent {
+        color: var(--color-laterite);
+        font-style: italic;
       }
     }
   }
@@ -79,18 +66,20 @@ const heroData = WORKS_CONTENT.hero;
     .hero-lead-text {
       font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
       line-height: 1.65;
-      color: var(--color-muted);
+      color: rgba(255, 255, 255, 0.76);
       margin: 0;
-      max-width: 480px;
+      max-width: 520px;
+      text-wrap: pretty;
     }
   }
 }
 
 @media (max-width: 860px) {
-  .works-hero {
+  .hero-container {
     .hero-header-row {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 1.5rem;
+      align-items: flex-start;
     }
   }
 }

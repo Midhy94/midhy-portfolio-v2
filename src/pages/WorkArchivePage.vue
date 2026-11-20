@@ -1,16 +1,18 @@
 <template>
   <div class="pinterest-archive-page" :class="{ 'modal-open': !!activePin }">
-    <div class="archive-container">
-      <!-- Editorial Page Header -->
-      <header class="archive-intro-header">
+    <!-- Living Dynamic Mesh Hero Stage with Embedded Navbar -->
+    <InnerHeroStage mode="works">
+      <div class="archive-hero-inner container-editorial">
         <h1 class="archive-headline font-serif">
           All projects, systems &amp; experiments.
         </h1>
-        <p class="archive-description">
+        <p class="archive-description font-sans">
           A visual catalog of production interfaces, design system architectures, and interaction experiments crafted across fintech, healthcare, and developer tooling.
         </p>
-      </header>
+      </div>
+    </InnerHeroStage>
 
+    <div class="archive-container">
       <!-- Pinterest Top Filter Bar (Left-Aligned Text Tabs with Underline Indicator) -->
       <nav class="pinterest-filter-bar" aria-label="Archive Categories">
         <div class="filter-tabs-scroll">
@@ -219,6 +221,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
+import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 
 const router = useRouter();
 
@@ -716,35 +719,32 @@ onBeforeUnmount(() => {
   }
 }
 
-.archive-container {
-  max-width: 1720px;
-  margin: 0 auto;
-  padding-inline: clamp(1rem, 3.5vw, 2.5rem);
-}
-
-// ------------------------------------------
-// EDITORIAL ARCHIVE INTRO HEADER
-// ------------------------------------------
-.archive-intro-header {
-  margin-bottom: 2rem;
-  max-width: 800px;
+.archive-hero-inner {
+  max-width: 860px;
 
   .archive-headline {
-    font-size: clamp(2rem, 3.8vw, 2.75rem);
-    font-weight: 500;
+    font-size: clamp(2.5rem, 4.5vw, 3.85rem);
+    font-weight: 400;
     line-height: 1.15;
     letter-spacing: -0.025em;
-    color: var(--color-ink);
-    margin: 0 0 0.75rem 0;
+    color: #FFFFFF;
+    margin: 0 0 1rem 0;
   }
 
   .archive-description {
-    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    font-size: clamp(1rem, 1.5vw, 1.1875rem);
     line-height: 1.6;
-    color: var(--color-muted);
+    color: rgba(255, 255, 255, 0.76);
     margin: 0;
-    max-width: 640px;
+    max-width: 660px;
+    text-wrap: pretty;
   }
+}
+
+.archive-container {
+  max-width: 1720px;
+  margin: clamp(1.5rem, 3vw, 2.5rem) auto 0;
+  padding-inline: clamp(1rem, 3.5vw, 2.5rem);
 }
 
 // ------------------------------------------

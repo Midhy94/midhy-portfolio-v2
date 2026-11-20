@@ -158,10 +158,9 @@ export function useOneScrollTransition(options: OneScrollOptions) {
           scrub: 0.6,
           onUpdate: (self) => {
             const p = self.progress;
-            // Subtle 3D scale and opacity fade as hero leaves view
+            // Subtle 3D scale and natural parallax depth as hero leaves view (no fade)
             gsap.set(stageEl, {
               scale: 1 - p * 0.035,
-              opacity: 1 - p * 0.45,
               transformOrigin: 'center center',
             });
             if (portraitEl) {
@@ -172,7 +171,6 @@ export function useOneScrollTransition(options: OneScrollOptions) {
             if (textEls.length > 0) {
               gsap.set(textEls, {
                 y: -p * 35,
-                opacity: 1 - p * 0.6,
               });
             }
           },

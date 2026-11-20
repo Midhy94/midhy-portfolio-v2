@@ -1,47 +1,52 @@
 <template>
   <div class="case-study-page" v-if="project">
+    <!-- Living Dynamic Mesh Hero Stage with Embedded Navbar -->
+    <InnerHeroStage mode="works">
+      <div class="case-hero-inner container-editorial">
+        <!-- Breadcrumb navigation -->
+        <nav class="case-nav-breadcrumb" aria-label="Breadcrumb">
+          <RouterLink to="/work" class="back-link">
+            ← Back to Selected Works
+          </RouterLink>
+        </nav>
+
+        <!-- Case Study Header -->
+        <header class="case-header">
+          <div class="case-top-meta">
+            <span class="project-num font-mono">{{ project.number }}</span>
+            <div class="project-tags">
+              <span v-for="tag in project.tags" :key="tag" class="tag-pill">{{ tag }}</span>
+            </div>
+          </div>
+
+          <h1 class="case-headline font-serif">
+            {{ project.caseStudy?.title || project.title }}
+          </h1>
+
+          <p class="case-subheadline font-sans">
+            {{ project.caseStudy?.subtitle || project.summary }}
+          </p>
+
+          <!-- Metadata Bar -->
+          <div class="case-meta-bar" v-if="project.caseStudy">
+            <div class="meta-item" v-if="project.caseStudy.role">
+              <span class="meta-label">ROLE</span>
+              <span class="meta-val">{{ project.caseStudy.role }}</span>
+            </div>
+            <div class="meta-item" v-if="project.caseStudy.timeline">
+              <span class="meta-label">TIMELINE</span>
+              <span class="meta-val">{{ project.caseStudy.timeline }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">STATUS</span>
+              <span class="meta-val">{{ project.inProgress ? 'Case study in progress' : 'Shipped & Verified' }}</span>
+            </div>
+          </div>
+        </header>
+      </div>
+    </InnerHeroStage>
+
     <div class="case-study-container container-editorial">
-      <!-- Breadcrumb navigation -->
-      <nav class="case-nav-breadcrumb" aria-label="Breadcrumb">
-        <RouterLink to="/work" class="back-link">
-          ← Back to Selected Works
-        </RouterLink>
-      </nav>
-
-      <!-- Case Study Header -->
-      <header class="case-header">
-        <div class="case-top-meta">
-          <span class="project-num font-mono">{{ project.number }}</span>
-          <div class="project-tags">
-            <span v-for="tag in project.tags" :key="tag" class="tag-pill">{{ tag }}</span>
-          </div>
-        </div>
-
-        <h1 class="case-headline font-serif">
-          {{ project.caseStudy?.title || project.title }}
-        </h1>
-
-        <p class="case-subheadline">
-          {{ project.caseStudy?.subtitle || project.summary }}
-        </p>
-
-        <!-- Metadata Bar -->
-        <div class="case-meta-bar" v-if="project.caseStudy">
-          <div class="meta-item" v-if="project.caseStudy.role">
-            <span class="meta-label">ROLE</span>
-            <span class="meta-val">{{ project.caseStudy.role }}</span>
-          </div>
-          <div class="meta-item" v-if="project.caseStudy.timeline">
-            <span class="meta-label">TIMELINE</span>
-            <span class="meta-val">{{ project.caseStudy.timeline }}</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">STATUS</span>
-            <span class="meta-val">{{ project.inProgress ? 'Case study in progress' : 'Shipped & Verified' }}</span>
-          </div>
-        </div>
-      </header>
-
       <!-- Visual Stage Banner -->
       <div class="case-visual-banner" :class="'theme-' + project.theme">
         <span class="visual-pixel-display font-pixel">{{ project.pixelWord }}</span>
@@ -158,6 +163,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 import { WORKS_CONTENT } from '@/data/portfolioData';
 import type { Project } from '@/types/portfolio';
 
@@ -181,30 +187,34 @@ const project = computed(() => {
 @use '@/styles/variables' as *;
 
 .case-study-page {
-  padding: 3rem 0 clamp(5rem, 8vw, 7.5rem);
+  padding: 0 0 clamp(5rem, 8vw, 7.5rem);
+
+  .case-hero-inner {
+    max-width: 900px;
+  }
 
   .case-nav-breadcrumb {
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
 
     .back-link {
       font-size: 0.875rem;
       font-weight: 500;
-      color: var(--color-muted);
+      color: rgba(255, 255, 255, 0.72);
       transition: color $transition-fast, transform $transition-fast;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
+      text-decoration: none;
 
       &:hover {
-        color: var(--color-laterite);
+        color: #FFFFFF;
         transform: translateX(-3px);
       }
     }
   }
 
   .case-header {
-    max-width: 860px;
-    margin-bottom: 3.5rem;
+    max-width: 900px;
 
     .case-top-meta {
       display: flex;
@@ -213,13 +223,25 @@ const project = computed(() => {
       margin-bottom: 1.25rem;
       flex-wrap: wrap;
 
+      .project-num {
+        color: var(--color-laterite);
+        font-weight: 700;
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+      }
+
       .project-tags {
         display: flex;
         gap: 0.5rem;
+        flex-wrap: wrap;
 
         .tag-pill {
           font-size: 0.75rem;
-          color: var(--color-muted);
+          color: rgba(255, 255, 255, 0.88);
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          padding: 0.25rem 0.65rem;
+          border-radius: var(--radius-full);
         }
       }
     }
@@ -229,24 +251,24 @@ const project = computed(() => {
       font-weight: 400;
       line-height: 1.1;
       letter-spacing: -0.025em;
-      color: var(--color-ink);
-      margin: 0 0 1.5rem;
+      color: #FFFFFF;
+      margin: 0 0 1.25rem;
     }
 
     .case-subheadline {
-      font-size: clamp(1.125rem, 2vw, 1.375rem);
+      font-size: clamp(1.125rem, 2vw, 1.35rem);
       line-height: 1.6;
-      color: var(--color-muted);
-      margin: 0 0 2.5rem;
+      color: rgba(255, 255, 255, 0.76);
+      margin: 0 0 2rem;
+      text-wrap: pretty;
     }
 
     .case-meta-bar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
-      padding: 1.5rem 0;
-      border-top: 1px solid var(--color-border);
-      border-bottom: 1px solid var(--color-border);
+      padding: 1.5rem 0 0.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
 
       .meta-item {
         display: flex;
@@ -263,10 +285,14 @@ const project = computed(() => {
         .meta-val {
           font-size: 0.9375rem;
           font-weight: 500;
-          color: var(--color-ink);
+          color: #FFFFFF;
         }
       }
     }
+  }
+
+  .case-study-container {
+    margin-top: clamp(2.5rem, 4.5vw, 4rem);
   }
 
   .case-visual-banner {

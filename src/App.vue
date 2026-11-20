@@ -6,9 +6,6 @@
   <CurtainsWipe />
 
   <div class="portfolio-shell" :class="['portal-' + mode, { 'is-loaded': isPageLoaded }]">
-    <!-- Shared Site Header (rendered on non-home pages; on home page it is embedded inside PersonalHero) -->
-    <SiteHeader v-if="currentRoute.path !== '/'" :mode="mode" :is-loaded="isPageLoaded" />
-
     <!-- Main View with Page Content -->
     <main class="portfolio-main" role="main">
       <RouterView v-slot="{ Component, route }">
@@ -32,7 +29,6 @@ import { useSmoothScroll } from '@/composables/useSmoothScroll';
 
 import PageLoader from '@/components/common/PageLoader.vue';
 import CurtainsWipe from '@/components/common/CurtainsWipe.vue';
-import SiteHeader from '@/components/common/SiteHeader.vue';
 import SiteFooter from '@/components/common/SiteFooter.vue';
 
 const currentRoute = useRoute();

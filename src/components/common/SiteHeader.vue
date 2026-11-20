@@ -65,93 +65,71 @@
 
       <!-- Right: Work and Profile switch toggle button + 3-Slash Menu Toggle -->
       <div class="header__end">
-        <!-- Work & Profile Switch Capsule with GlassSurface effect -->
-        <GlassSurface
-          class="header__switcher-surface"
-          width="auto"
-          :height="38"
-          :border-radius="9999"
-          :distortion-scale="-180"
-          :displace="0.4"
-          :background-opacity="0.08"
-          :saturation="1.2"
-        >
-          <div class="header__switcher" role="radiogroup" aria-label="Portal Selection">
-            <button
-              type="button"
-              role="radio"
-              :aria-checked="currentMode === 'personal'"
-              class="header__switcher-btn"
-              :class="{ 'is-active': currentMode === 'personal' }"
-              @click="switchMode('personal')"
-              aria-label="Switch to Profile"
-            >
-              <span class="switcher-text">Profile</span>
-            </button>
-            <button
-              type="button"
-              role="radio"
-              :aria-checked="currentMode === 'works'"
-              class="header__switcher-btn"
-              :class="{ 'is-active': currentMode === 'works' }"
-              @click="switchMode('works')"
-              aria-label="Switch to Works"
-            >
-              <span class="switcher-text">Works</span>
-            </button>
-          </div>
-        </GlassSurface>
+        <!-- Work & Profile Switch Capsule with Crisp Frosted Glass -->
+        <div class="header__switcher" role="radiogroup" aria-label="Portal Selection">
+          <button
+            type="button"
+            role="radio"
+            :aria-checked="currentMode === 'personal'"
+            class="header__switcher-btn"
+            :class="{ 'is-active': currentMode === 'personal' }"
+            @click="switchMode('personal')"
+            aria-label="Switch to Profile"
+          >
+            <span class="switcher-text">Profile</span>
+          </button>
+          <button
+            type="button"
+            role="radio"
+            :aria-checked="currentMode === 'works'"
+            class="header__switcher-btn"
+            :class="{ 'is-active': currentMode === 'works' }"
+            @click="switchMode('works')"
+            aria-label="Switch to Works"
+          >
+            <span class="switcher-text">Works</span>
+          </button>
+        </div>
 
         <!-- 3-Slash Menu Component -->
         <div class="header__menu" ref="menuContainerRef">
           <!-- Morphing Toggle Trigger Button that transforms into the close button in place -->
-          <GlassSurface
-            class="header__toggle-surface"
-            :width="38"
-            :height="38"
-            :border-radius="9999"
-            :distortion-scale="-180"
-            :displace="0.4"
-            :background-opacity="0.08"
-            :saturation="1.2"
+          <button
+            type="button"
+            class="header__toggle"
+            :class="{ 'header__toggle--open': isMenuOpen }"
+            @click.stop.prevent="toggleMenu"
+            :aria-expanded="isMenuOpen"
+            :aria-label="isMenuOpen ? 'Close navigation menu' : 'Toggle navigation menu'"
           >
-            <button
-              type="button"
-              class="header__toggle"
-              :class="{ 'header__toggle--open': isMenuOpen }"
-              @click.stop.prevent="toggleMenu"
-              :aria-expanded="isMenuOpen"
-              :aria-label="isMenuOpen ? 'Close navigation menu' : 'Toggle navigation menu'"
-            >
-              <span class="toggle-icon-wrap" aria-hidden="true">
-                <svg
-                  class="slash-icon icon-slashes"
-                  width="19"
-                  height="19"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <line class="slash-line line-1" x1="4" y1="11" x2="11" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-                  <line class="slash-line line-2" x1="5" y1="19" x2="19" y2="5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-                  <line class="slash-line line-3" x1="13" y1="20" x2="20" y2="13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-                </svg>
-                <svg
-                  class="slash-icon icon-close"
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.2"
-                  stroke-linecap="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </span>
-            </button>
-          </GlassSurface>
+            <span class="toggle-icon-wrap" aria-hidden="true">
+              <svg
+                class="slash-icon icon-slashes"
+                width="19"
+                height="19"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line class="slash-line line-1" x1="4" y1="11" x2="11" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                <line class="slash-line line-2" x1="5" y1="19" x2="19" y2="5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                <line class="slash-line line-3" x1="13" y1="20" x2="20" y2="13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+              </svg>
+              <svg
+                class="slash-icon icon-close"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </span>
+          </button>
 
           <!-- Fluid Glass Menu Panel (Expanding from Top-Right) -->
           <Transition name="fluid-menu">
@@ -305,7 +283,6 @@
 import { ref, watch, onMounted, onUnmounted, nextTick, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { PortfolioMode } from '@/types/portfolio';
-import GlassSurface from '@/components/common/GlassSurface.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -332,11 +309,14 @@ const currentMode = computed<PortfolioMode>(() => {
 });
 
 const switchMode = (target: PortfolioMode) => {
-  if (currentMode.value === target) return;
   if (target === 'works') {
-    router.push('/work');
+    if (route.path !== '/work') {
+      router.push('/work');
+    }
   } else {
-    router.push('/');
+    if (route.path !== '/') {
+      router.push('/');
+    }
   }
 };
 
@@ -646,35 +626,60 @@ onUnmounted(() => {
     }
 
     .header__logo {
-      color: #FFFFFF !important;
+      color: rgba(255, 255, 255, 0.72) !important;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.92) !important;
+      }
     }
   }
 
   // Dynamic light mode adaptation on light canvas (both embedded & floating stuck)
   &:not(.header--over-dark) {
+    .header__logo {
+      color: rgba(20, 18, 16, 0.7) !important;
+
+      &:hover {
+        color: var(--color-ink) !important;
+      }
+    }
     .header__switcher {
+      background: rgba(20, 18, 16, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(20, 18, 16, 0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
       .header__switcher-btn {
         color: var(--color-muted);
+        border: 1px solid transparent;
 
         &:hover:not(.is-active) {
           color: var(--color-ink);
-          background: rgba(20, 18, 16, 0.06);
+          background: rgba(20, 18, 16, 0.05);
         }
 
         &.is-active {
-          background: rgba(255, 255, 255, 0.85);
+          background: #FFFFFF;
           color: var(--color-ink);
-          border-color: rgba(20, 18, 16, 0.08);
-          box-shadow: none;
+          font-weight: 600;
+          border: 1px solid rgba(20, 18, 16, 0.08);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
       }
     }
 
     .header__toggle:not(.header__toggle--open) {
+      background: rgba(20, 18, 16, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(20, 18, 16, 0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
       color: var(--color-ink);
 
       &:hover {
-        transform: translateY(-1px);
+        background: rgba(20, 18, 16, 0.09);
+        transform: scale(1.05);
       }
     }
   }
@@ -706,84 +711,36 @@ onUnmounted(() => {
     margin: -0.25rem -0.35rem;
     border-radius: 8px;
     outline: none;
-    transition: color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: color 0.22s ease;
 
     // Full Wordmark Logo (from Logo.svg) for normal state
     .header__logo-full {
-      height: 22px;
+      height: 19px;
       width: auto;
-      max-width: 145px;
+      max-width: 125px;
       display: block;
       overflow: visible;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
       .logo-dot {
-        transform-origin: 1885px 287px;
-        transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    fill 0.25s ease,
-                    filter 0.35s ease;
+        fill: #B84A27;
       }
     }
 
     // Monogram icon (from icon.svg) for compact / sticky header
     .header__logo-icon {
-      height: 24px;
+      height: 20px;
       width: auto;
       display: none;
       overflow: visible;
 
-      .logo-mark {
-        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    opacity 0.25s ease;
-      }
-
-      .logo-mark--left {
-        transform-origin: 260px 140px;
-      }
-
-      .logo-mark--right {
-        transform-origin: 580px 210px;
-      }
-
       .logo-dot {
-        transform-origin: 724px 247px;
-        transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    fill 0.25s ease,
-                    filter 0.35s ease;
+        fill: #B84A27;
       }
     }
 
-    // Interactive Hover: Playful kinetic lift on marks & elastic spring bounce on terracotta dot
+    // Subtle calm hover without bouncing, jumping, rotation or glowing drop-shadows
     &:hover {
-      .header__logo-full .logo-dot {
-        transform: translateY(-6px) scale(1.25);
-        fill: #E14B27;
-        filter: drop-shadow(0 2px 6px rgba(225, 75, 39, 0.5));
-      }
-
-      .header__logo-icon {
-        .logo-mark--left {
-          transform: translateY(-1.5px) rotate(-1.5deg);
-        }
-
-        .logo-mark--right {
-          transform: translateY(-1px) rotate(1.5deg);
-        }
-
-        .logo-dot {
-          transform: translateY(-7px) scale(1.22);
-          fill: #E14B27;
-          filter: drop-shadow(0 2px 6px rgba(225, 75, 39, 0.5));
-        }
-      }
-    }
-
-    &:active {
-      transform: scale(0.96);
-
-      .logo-dot {
-        transform: translateY(1px) scale(0.9);
-      }
+      opacity: 1;
     }
 
     // Entrance animation when page loads
@@ -839,28 +796,21 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
 
-  .header__switcher-surface {
-    flex-shrink: 0;
-
-    :deep(.glass-surface__content) {
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-  }
-
   // Work & Profile Switch Capsule matching the frosted glass reference
   .header__switcher {
     display: inline-flex;
     align-items: center;
-    height: 100%;
+    height: 38px;
     padding: 3px;
-    gap: 2px;
+    gap: 3px;
     border-radius: 9999px;
-    background: transparent;
-    border: none;
-    box-shadow: none;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     user-select: none;
+    box-sizing: border-box;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
     .header__switcher-btn {
@@ -869,9 +819,9 @@ onUnmounted(() => {
       align-items: center;
       justify-content: center;
       height: 100%;
-      padding: 0 clamp(0.75rem, 1.2vw, 1.05rem);
+      padding: 0 clamp(0.85rem, 1.25vw, 1.15rem);
       border-radius: 9999px;
-      border: 0.5px solid transparent;
+      border: 1px solid transparent;
       background: transparent;
       color: rgba(255, 255, 255, 0.72);
       font-family: var(--font-family-sans);
@@ -880,7 +830,8 @@ onUnmounted(() => {
       letter-spacing: 0.02em;
       cursor: pointer;
       outline: none;
-      transition: color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      box-sizing: border-box;
+      transition: color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, transform 0.15s ease;
 
       .switcher-text {
         line-height: 1;
@@ -889,17 +840,15 @@ onUnmounted(() => {
 
       &:hover:not(.is-active) {
         color: #FFFFFF;
-        background: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.08);
       }
 
       &.is-active {
         color: #FFFFFF;
         font-weight: 600;
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 100%),
-          rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.18);
-        box-shadow: none;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.12) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.35);
       }
 
       &:active {
@@ -914,40 +863,30 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
 
-    .header__toggle-surface {
-      position: relative;
-      z-index: 105;
-      flex-shrink: 0;
-
-      :deep(.glass-surface__content) {
-        padding: 0;
-        width: 100%;
-        height: 100%;
-      }
-    }
-
     .header__toggle {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      place-items: center;
-      border-radius: 9999px;
-      background: transparent;
-      border: none;
-      box-shadow: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12);
       color: #FFFFFF;
       cursor: pointer;
       position: relative;
       z-index: 106;
       outline: none;
       padding: 0;
-      transition: background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                  border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                  color 0.25s ease;
+      box-sizing: border-box;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, color 0.2s ease;
 
       &:hover:not(.header__toggle--open) {
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.3);
         transform: scale(1.05);
       }
 
@@ -1338,33 +1277,25 @@ onUnmounted(() => {
     gap: 0.5rem;
   }
 
-  .header .header__switcher-surface {
-    height: 2.15rem !important;
+  .header .header__switcher {
+    height: 34px;
+    padding: 2px;
+    gap: 2px;
 
-    .header__switcher {
-      height: 100%;
-      padding: 2px;
-
-      .header__switcher-btn {
-        padding: 0 0.7rem;
-        font-size: 0.75rem;
-      }
+    .header__switcher-btn {
+      padding: 0 0.75rem;
+      font-size: 0.75rem;
     }
   }
 
-  .header .header__menu .header__toggle-surface {
-    width: 2.15rem !important;
-    height: 2.15rem !important;
-  }
-
   .header .header__menu .header__toggle {
-    width: 100%;
-    height: 100%;
+    width: 34px;
+    height: 34px;
   }
 
   .header .header__menu .header__panel .panel__header-spacer {
-    width: 2.15rem;
-    height: 2.15rem;
+    width: 34px;
+    height: 34px;
   }
 }
 

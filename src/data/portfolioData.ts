@@ -33,7 +33,7 @@ export const PERSONAL_CONTENT = {
     portraitTag: 'Senior UI/UX & Product Designer'
   },
   statement: {
-    text: 'We believe the strongest digital brands are built through strategy, not just aesthetics. Every interface is designed to capture attention, inspire action, and create lasting business growth.',
+    text: 'We believe the strongest digital brands are built through *strategy,* not just aesthetics. Every interface is designed to capture attention, inspire action, and create lasting business *growth.*',
     tagline: 'Performance-driven design & strategy, from vision to execution. Built for ambitious digital brands.'
   },
   philosophy: {

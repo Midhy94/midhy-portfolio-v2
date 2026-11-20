@@ -1,89 +1,91 @@
 <template>
-  <main class="not-found-container">
-    <section class="not-found-card" aria-labelledby="not-found-title">
-      <header class="card-header">
-        <span class="status-badge" role="status">404</span>
-        <h1 id="not-found-title">Page Not Found</h1>
-      </header>
-
-      <p class="status-description">
-        The requested URL was not found on this server. This route confirms that router fallback handling is configured properly.
-      </p>
-
-      <nav class="return-nav" aria-label="Fallback navigation">
-        <RouterLink to="/" class="home-link">&larr; Return to Foundation Home</RouterLink>
-      </nav>
-    </section>
-  </main>
+  <div class="not-found-page">
+    <InnerHeroStage mode="personal" :compact="true">
+      <div class="not-found-card container-editorial">
+        <span class="status-badge font-mono" role="status">404 / ERROR</span>
+        <h1 id="not-found-title" class="not-found-title font-serif">Page Not Found</h1>
+        <p class="status-description font-sans">
+          The requested URL was not found on this server. This route confirms that router fallback handling is configured properly.
+        </p>
+        <div class="return-nav">
+          <RouterLink to="/" class="home-link font-sans">
+            &larr; Return to Foundation Home
+          </RouterLink>
+        </div>
+      </div>
+    </InnerHeroStage>
+  </div>
 </template>
 
 <script setup lang="ts">
-// Minimal 404 placeholder view verifying router catch-all functionality
+import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 </script>
 
 <style scoped lang="scss">
 @use '@/styles/variables' as *;
 
-.not-found-container {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: $spacing-6;
+.not-found-page {
+  width: 100%;
 }
 
 .not-found-card {
-  width: 100%;
-  max-width: 520px;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: $spacing-10;
-  text-align: center;
+  max-width: 600px;
+  text-align: left;
 
-  .card-header {
-    margin-bottom: $spacing-4;
+  .status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-laterite);
+    background-color: rgba(225, 75, 39, 0.12);
+    border: 1px solid rgba(225, 75, 39, 0.3);
+    border-radius: var(--radius-full);
+    margin-bottom: 1.25rem;
+  }
 
-    .status-badge {
-      display: inline-block;
-      padding: $spacing-1 $spacing-3;
-      font-size: $font-size-xs;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--color-primary);
-      background-color: var(--color-badge-bg);
-      border-radius: var(--radius-full);
-      margin-bottom: $spacing-3;
-    }
-
-    h1 {
-      font-size: $font-size-2xl;
-      font-weight: 700;
-      color: var(--color-text);
-      line-height: 1.25;
-    }
+  .not-found-title {
+    font-size: clamp(2.5rem, 4.5vw, 3.75rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #FFFFFF;
+    margin: 0 0 1rem;
   }
 
   .status-description {
-    font-size: $font-size-base;
+    font-size: clamp(1rem, 1.4vw, 1.125rem);
     line-height: 1.6;
-    color: var(--color-text-muted);
-    margin-bottom: $spacing-8;
+    color: rgba(255, 255, 255, 0.76);
+    margin-bottom: 2rem;
+    max-width: 520px;
   }
 
   .return-nav {
     display: flex;
-    justify-content: center;
 
     .home-link {
-      font-size: $font-size-sm;
-      font-weight: 500;
-      color: var(--color-primary);
-      transition: color var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--color-laterite);
+      color: #FFFFFF;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      padding: 0.85rem 1.85rem;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      transition: background-color $transition-fast, transform $transition-fast, box-shadow $transition-fast;
 
       &:hover {
-        color: var(--color-primary-hover);
-        text-decoration: underline;
+        background-color: #C83B18;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(225, 75, 39, 0.4);
+      }
+
+      &:focus-visible {
+        outline: 2px solid #FFFFFF;
+        outline-offset: 3px;
       }
     }
   }

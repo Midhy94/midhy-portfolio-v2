@@ -192,9 +192,10 @@ const { scrollToNext } = useOneScrollTransition({
     z-index: 2;
     display: grid;
     grid-template-columns: 1.05fr 1.45fr 1fr;
+    grid-template-rows: minmax(0, 1fr);
     align-items: center;
     gap: clamp(1rem, 2vw, 2.5rem);
-    margin-bottom: clamp(0.75rem, 1.5vw, 1.5rem);
+    margin-bottom: 0;
     flex: 1;
     min-height: 0;
   }
@@ -232,13 +233,15 @@ const { scrollToNext } = useOneScrollTransition({
     }
   }
 
-  // Center Column: Subject Portrait & Cool Ambient Light (No orange glow, enlarged)
+  // Center Column: Subject Portrait & Cool Ambient Light (Grounded flush on Pillars Platform)
   .hero-portrait-column {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     align-self: stretch;
+    height: 100%;
+    min-height: 0;
     z-index: 3;
 
     .portrait-stage {
@@ -248,6 +251,7 @@ const { scrollToNext } = useOneScrollTransition({
       justify-content: center;
       width: 100%;
       height: 100%;
+      min-height: 0;
       max-width: clamp(440px, 46vw, 660px);
     }
 
@@ -269,11 +273,14 @@ const { scrollToNext } = useOneScrollTransition({
     .portrait-img {
       position: relative;
       z-index: 2;
-      width: 100%;
+      width: auto;
+      max-width: 100%;
       height: auto;
-      max-height: clamp(460px, 100vh, 800px);
+      max-height: 100%;
       object-fit: contain;
       object-position: bottom center;
+      transform: none; // Grounded flush on the platform line without crossing below it
+      margin-bottom: 0;
       filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.55));
       user-select: none;
       pointer-events: none;

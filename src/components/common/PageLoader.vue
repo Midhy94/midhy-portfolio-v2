@@ -38,13 +38,8 @@
         </svg>
       </div>
 
-      <!-- Minimal Editorial Status & Progress Counter -->
+      <!-- Progress Counter & Hairline Progress Bar -->
       <div class="loader__meta">
-        <div class="loader__info">
-          <span class="loader__name">MIDHUN M.</span>
-          <span class="loader__descriptor">PORTFOLIO</span>
-        </div>
-
         <!-- Hairline Progress Bar -->
         <div class="loader__track" role="progressbar" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">
           <div class="loader__bar" :style="{ width: `${progress}%` }"></div>
@@ -237,36 +232,13 @@ onUnmounted(() => {
     }
   }
 
-  // Metadata: Name, progress track, numbers
+  // Metadata: progress track & counter
   .loader__meta {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.85rem;
     width: clamp(160px, 30vw, 220px);
-  }
-
-  .loader__info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    font-size: 0.6875rem;
-    letter-spacing: 0.22em;
-    font-family: var(--font-family-sans);
-    color: rgba(248, 247, 244, 0.55);
-    user-select: none;
-
-    .loader__name {
-      font-weight: 600;
-      color: rgba(248, 247, 244, 0.85);
-    }
-
-    .loader__descriptor {
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      opacity: 0.5;
-    }
   }
 
   // Hairline Progress Track
