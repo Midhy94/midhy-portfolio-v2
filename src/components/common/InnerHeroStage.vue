@@ -71,7 +71,7 @@ const computedMode = computed(() => props.mode || activeMode.value);
     overflow: hidden;
     will-change: transform;
     box-shadow: none;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: none;
 
     // Deep base fallback color behind the WebGL shader canvas
     background-color: #010814;

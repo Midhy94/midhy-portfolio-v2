@@ -60,10 +60,7 @@
       <div
         ref="wordmarkStageRef"
         class="footer-wordmark-stage"
-        @click="handleReplayLogo"
-        role="button"
-        tabindex="0"
-        aria-label="Midhun signature wordmark (click to replay animation)"
+        aria-hidden="true"
       >
         <svg
           class="footer-wordmark-svg"
@@ -511,28 +508,20 @@ onUnmounted(() => {
     margin: clamp(2rem, 4vw, 3.5rem) 0 clamp(2.5rem, 5vw, 4rem);
     display: flex;
     justify-content: center;
-    color: rgba(247, 244, 238, 0.22);
+    color: rgba(247, 244, 238, 0.12);
     user-select: none;
-    pointer-events: auto;
-    cursor: pointer;
+    pointer-events: none;
     overflow: visible;
-    transition: color $transition-base;
 
-    &:hover {
-      color: rgba(247, 244, 238, 0.45);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--color-laterite);
-      outline-offset: 8px;
-      border-radius: var(--radius-md);
+    .glyph--dot circle {
+      opacity: 0.65;
     }
 
     .footer-wordmark-svg {
       width: 100%;
-      max-width: 1140px;
+      max-width: 1100px;
       height: auto;
-      max-height: 220px;
+      max-height: 200px;
       display: block;
       overflow: visible;
     }

@@ -55,15 +55,15 @@
 
         <!-- Right Column: Statement, Narrative & Action Levers -->
         <div class="hero-right-column">
-          <h2 class="hero-statement-title font-serif">
-            {{ heroData.statementTitle }}
-          </h2>
-          <p class="hero-statement-desc font-sans">
-            {{ heroData.statementDesc }}
-          </p>
+          <div class="hero-statement-wrap">
+            <h2 class="hero-statement-title font-serif">
+              {{ heroData.statementTitle }}
+            </h2>
+            <p class="hero-statement-desc font-sans">
+              {{ heroData.statementDesc }}
+            </p>
 
-          <div class="hero-actions">
-            <div class="hero-cta-group">
+            <div class="hero-actions">
               <button
                 type="button"
                 class="cta-primary-btn font-sans"
@@ -81,21 +81,21 @@
                 {{ heroData.secondaryCta }}
               </a>
             </div>
-
-            <!-- Smooth One-Scroll Down Trigger -->
-            <button
-              type="button"
-              class="cta-scroll-cue-btn font-sans"
-              aria-label="Scroll down to next section"
-              @click="scrollToNext"
-            >
-              <span class="mouse-track" aria-hidden="true">
-                <span class="mouse-dot"></span>
-              </span>
-              <span class="cue-label">Scroll to explore</span>
-              <span class="cue-arrow" aria-hidden="true">↓</span>
-            </button>
           </div>
+
+          <!-- Smooth One-Scroll Down Trigger Grounded Above Pillars -->
+          <button
+            type="button"
+            class="cta-scroll-cue-btn font-sans"
+            aria-label="Scroll down to next section"
+            @click="scrollToNext"
+          >
+            <span class="mouse-track" aria-hidden="true">
+              <span class="mouse-dot"></span>
+            </span>
+            <span class="cue-label">Scroll to explore</span>
+            <span class="cue-arrow" aria-hidden="true">↓</span>
+          </button>
         </div>
       </div>
 
@@ -159,7 +159,7 @@ const { scrollToNext } = useOneScrollTransition({
 
     // Completely removed box shadow from below hero section (flush, razor-clean framing)
     box-shadow: none;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: none;
 
     // Deep base fallback color behind the WebGL shader canvas
     background-color: #010814;
@@ -191,7 +191,7 @@ const { scrollToNext } = useOneScrollTransition({
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.05fr 1.45fr 1fr;
+    grid-template-columns: 1.12fr 1.38fr 1fr;
     grid-template-rows: minmax(0, 1fr);
     align-items: center;
     gap: clamp(1rem, 2vw, 2.5rem);
@@ -208,18 +208,18 @@ const { scrollToNext } = useOneScrollTransition({
     z-index: 2;
 
     .hero-greeting {
-      font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+      font-size: clamp(1.2rem, 1.9vw, 1.65rem);
       font-weight: 500;
       color: rgba(255, 255, 255, 0.92);
       letter-spacing: -0.015em;
-      margin-bottom: clamp(0.4rem, 0.8vw, 0.75rem);
+      margin-bottom: clamp(0.5rem, 0.9vw, 0.85rem);
     }
 
     .hero-role-title {
       font-family: var(--font-family-serif);
-      font-size: clamp(3.2rem, 6.8vw, 6.2rem);
+      font-size: clamp(3.6rem, 7.6vw, 7.2rem);
       font-weight: 400;
-      line-height: 0.98;
+      line-height: 0.96;
       letter-spacing: -0.03em;
       color: #FFFFFF;
       margin: 0;
@@ -289,11 +289,21 @@ const { scrollToNext } = useOneScrollTransition({
 
   // Right Column: Statement, Narrative & Action Levers
   .hero-right-column {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-self: stretch;
+    height: 100%;
     z-index: 2;
     padding-left: clamp(0.5rem, 1.5vw, 1.5rem);
+
+    .hero-statement-wrap {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: auto 0;
+    }
 
     .hero-statement-title {
       font-family: var(--font-family-serif);
@@ -319,14 +329,7 @@ const { scrollToNext } = useOneScrollTransition({
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 1.15rem;
-
-      .hero-cta-group {
-        display: flex;
-        align-items: center;
-        gap: 0.85rem;
-        flex-wrap: wrap;
-      }
+      gap: 0.85rem;
 
       .cta-primary-btn {
         display: inline-flex;
@@ -380,69 +383,73 @@ const { scrollToNext } = useOneScrollTransition({
           outline-offset: 3px;
         }
       }
+    }
 
-      .cta-scroll-cue-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.65rem;
-        background: transparent;
-        border: none;
-        padding: 0.35rem 0 0;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.875rem;
-        font-weight: 500;
-        letter-spacing: 0.01em;
-        cursor: pointer;
-        transition: color $transition-fast, transform $transition-fast;
+    .cta-scroll-cue-btn {
+      position: absolute;
+      bottom: clamp(0.25rem, 0.8vw, 0.65rem);
+      left: clamp(0.5rem, 1.5vw, 1.5rem);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      margin: 0;
+      transition: color $transition-fast, transform $transition-fast;
 
-        &:hover {
-          color: #FFFFFF;
-          transform: translateY(2px);
-
-          .mouse-track {
-            border-color: rgba(255, 255, 255, 0.85);
-          }
-          .cue-arrow {
-            transform: translateY(2px);
-            color: var(--color-laterite);
-          }
-        }
-
-        &:focus-visible {
-          outline: 2px solid #FFFFFF;
-          outline-offset: 3px;
-        }
+      &:hover {
+        color: #FFFFFF;
+        transform: translateY(2px);
 
         .mouse-track {
-          width: 14px;
-          height: 22px;
-          border: 1.5px solid rgba(255, 255, 255, 0.45);
-          border-radius: 9px;
-          display: flex;
-          justify-content: center;
-          padding-top: 3px;
-          position: relative;
-          transition: border-color $transition-fast;
-
-          .mouse-dot {
-            width: 3px;
-            height: 4px;
-            background-color: var(--color-laterite);
-            border-radius: 2px;
-            animation: mouseWheelScroll 1.6s infinite ease-in-out;
-          }
+          border-color: rgba(255, 255, 255, 0.85);
         }
-
-        .cue-label {
-          font-family: var(--font-family-sans);
-        }
-
         .cue-arrow {
-          display: inline-block;
-          font-size: 0.95rem;
-          color: rgba(255, 255, 255, 0.55);
-          transition: transform $transition-fast, color $transition-fast;
+          transform: translateY(2px);
+          color: var(--color-laterite);
         }
+      }
+
+      &:focus-visible {
+        outline: 2px solid #FFFFFF;
+        outline-offset: 3px;
+      }
+
+      .mouse-track {
+        width: 14px;
+        height: 22px;
+        border: 1.5px solid rgba(255, 255, 255, 0.45);
+        border-radius: 9px;
+        display: flex;
+        justify-content: center;
+        padding-top: 3px;
+        position: relative;
+        transition: border-color $transition-fast;
+
+        .mouse-dot {
+          width: 3px;
+          height: 4px;
+          background-color: var(--color-laterite);
+          border-radius: 2px;
+          animation: mouseWheelScroll 1.6s infinite ease-in-out;
+        }
+      }
+
+      .cue-label {
+        font-family: var(--font-family-sans);
+      }
+
+      .cue-arrow {
+        display: inline-block;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.55);
+        transition: transform $transition-fast, color $transition-fast;
       }
     }
   }
@@ -512,8 +519,11 @@ const { scrollToNext } = useOneScrollTransition({
 
     .hero-left-column {
       grid-area: title;
+      .hero-greeting {
+        font-size: 1.15rem;
+      }
       .hero-role-title {
-        font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+        font-size: clamp(3.2rem, 6.2vw, 4.8rem);
       }
     }
 
@@ -531,6 +541,16 @@ const { scrollToNext } = useOneScrollTransition({
       grid-area: statement;
       padding-left: 0;
       max-width: 600px;
+      height: auto;
+
+      .hero-statement-wrap {
+        margin: 0;
+      }
+
+      .cta-scroll-cue-btn {
+        position: static;
+        margin-top: 1.5rem;
+      }
     }
 
     .hero-pillars-row {
@@ -565,11 +585,11 @@ const { scrollToNext } = useOneScrollTransition({
       width: 100%;
 
       .hero-greeting {
-        font-size: 1rem;
+        font-size: 1.05rem;
       }
 
       .hero-role-title {
-        font-size: clamp(2.35rem, 9.2vw, 3.25rem);
+        font-size: clamp(2.65rem, 9.8vw, 3.6rem);
         .role-line {
           white-space: normal;
         }
@@ -591,6 +611,11 @@ const { scrollToNext } = useOneScrollTransition({
 
     .hero-right-column {
       width: 100%;
+      height: auto;
+
+      .hero-statement-wrap {
+        margin: 0;
+      }
 
       .hero-statement-title {
         font-size: 1.35rem;
@@ -607,11 +632,16 @@ const { scrollToNext } = useOneScrollTransition({
         margin-bottom: 0.5rem;
 
         .cta-primary-btn,
-        .cta-secondary-link,
-        .cta-scroll-cue-btn {
+        .cta-secondary-link {
           width: 100%;
           justify-content: center;
         }
+      }
+
+      .cta-scroll-cue-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
       }
     }
 

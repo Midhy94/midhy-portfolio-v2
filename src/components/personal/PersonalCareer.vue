@@ -6,7 +6,7 @@
         <div class="sidebar-sticky">
           <h2 id="career-heading" class="career-pixel-title font-pixel">
             <span>Fourteen</span>
-            <span>years, Four</span>
+            <span>years, Five</span>
             <span class="accent-word">teams.</span>
           </h2>
         </div>

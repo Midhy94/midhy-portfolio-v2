@@ -626,29 +626,21 @@ onUnmounted(() => {
     }
 
     .header__logo {
-      color: rgba(255, 255, 255, 0.72) !important;
-
-      &:hover {
-        color: rgba(255, 255, 255, 0.92) !important;
-      }
+      color: #FFFFFF !important;
     }
   }
 
   // Dynamic light mode adaptation on light canvas (both embedded & floating stuck)
   &:not(.header--over-dark) {
     .header__logo {
-      color: rgba(20, 18, 16, 0.7) !important;
-
-      &:hover {
-        color: var(--color-ink) !important;
-      }
+      color: var(--color-ink) !important;
     }
     .header__switcher {
       background: rgba(20, 18, 16, 0.05);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(20, 18, 16, 0.1);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      box-shadow: none;
 
       .header__switcher-btn {
         color: var(--color-muted);
@@ -664,7 +656,7 @@ onUnmounted(() => {
           color: var(--color-ink);
           font-weight: 600;
           border: 1px solid rgba(20, 18, 16, 0.08);
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+          box-shadow: none;
         }
       }
     }
@@ -674,7 +666,7 @@ onUnmounted(() => {
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(20, 18, 16, 0.1);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      box-shadow: none;
       color: var(--color-ink);
 
       &:hover {
@@ -711,13 +703,12 @@ onUnmounted(() => {
     margin: -0.25rem -0.35rem;
     border-radius: 8px;
     outline: none;
-    transition: color 0.22s ease;
 
     // Full Wordmark Logo (from Logo.svg) for normal state
     .header__logo-full {
-      height: 19px;
+      height: 23px;
       width: auto;
-      max-width: 125px;
+      max-width: 150px;
       display: block;
       overflow: visible;
 
@@ -728,7 +719,7 @@ onUnmounted(() => {
 
     // Monogram icon (from icon.svg) for compact / sticky header
     .header__logo-icon {
-      height: 20px;
+      height: 22px;
       width: auto;
       display: none;
       overflow: visible;
@@ -738,10 +729,6 @@ onUnmounted(() => {
       }
     }
 
-    // Subtle calm hover without bouncing, jumping, rotation or glowing drop-shadows
-    &:hover {
-      opacity: 1;
-    }
 
     // Entrance animation when page loads
     &--enter {
@@ -808,7 +795,7 @@ onUnmounted(() => {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    box-shadow: none;
     user-select: none;
     box-sizing: border-box;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -831,7 +818,7 @@ onUnmounted(() => {
       cursor: pointer;
       outline: none;
       box-sizing: border-box;
-      transition: color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, transform 0.15s ease;
+      transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease, transform 0.15s ease;
 
       .switcher-text {
         line-height: 1;
@@ -848,7 +835,7 @@ onUnmounted(() => {
         font-weight: 600;
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.12) 100%);
         border: 1px solid rgba(255, 255, 255, 0.28);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        box-shadow: none;
       }
 
       &:active {
@@ -874,7 +861,7 @@ onUnmounted(() => {
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: none;
       color: #FFFFFF;
       cursor: pointer;
       position: relative;
@@ -882,7 +869,7 @@ onUnmounted(() => {
       outline: none;
       padding: 0;
       box-sizing: border-box;
-      transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, color 0.2s ease;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
 
       &:hover:not(.header__toggle--open) {
         background: rgba(255, 255, 255, 0.14);
@@ -930,9 +917,7 @@ onUnmounted(() => {
         color: #FFFFFF !important;
         background: rgba(255, 255, 255, 0.22);
         border-color: rgba(255, 255, 255, 0.42);
-        box-shadow:
-          inset 0 1px 1px 0 rgba(255, 255, 255, 0.5),
-          0 4px 16px rgba(0, 0, 0, 0.3);
+        box-shadow: none;
 
         &:hover {
           background: rgba(255, 255, 255, 0.3);
@@ -1269,8 +1254,8 @@ onUnmounted(() => {
 
 @media (max-width: 640px) {
   .header .header__logo .header__logo-full {
-    height: 18px;
-    max-width: 112px;
+    height: 20px;
+    max-width: 130px;
   }
 
   .header .header__end {

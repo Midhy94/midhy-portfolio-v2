@@ -68,14 +68,22 @@ export const PERSONAL_CONTENT = {
   },
   career: {
     sectionTag: '02 / CAREER',
-    pixelTitle: 'Fourteen years, Four teams.',
+    pixelTitle: 'Fourteen years, Five teams.',
     milestones: [
+      {
+        id: 'malabar',
+        company: 'Malabar Gold & Diamonds',
+        period: 'Nov 2024 – Present',
+        role: 'Senior UI/UX & Product Designer',
+        description: 'Leading digital product design and luxury retail e-commerce experiences across global omnichannel touchpoints. Crafting scalable UI architectures, design systems, and modern customer journeys.',
+        highlights: ['Omnichannel luxury e-commerce', 'Design systems & component architecture', 'AI-accelerated prototyping']
+      },
       {
         id: 'techgentsia',
         company: 'Techgentsia',
-        period: '2020 – Present',
+        period: '2020 – Nov 2024',
         role: 'Senior UI/UX & Product Designer',
-        description: 'Leading end-to-end UX/UI for enterprise web & mobile platforms. Scaled design systems reducing frontend delivery time by 25%. Spearheaded AI-assisted design-to-code workflows.',
+        description: 'Led end-to-end UX/UI for enterprise web & mobile platforms. Scaled design systems reducing frontend delivery time by 25%. Spearheaded AI-assisted design-to-code workflows.',
         highlights: ['500K+ European payment platform', 'Multi-brand design system governance', 'Vibe coding & AI prototyping']
       },
       {
