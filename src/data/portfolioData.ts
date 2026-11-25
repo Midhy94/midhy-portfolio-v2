@@ -7,6 +7,26 @@ import type {
   MetricItem
 } from '@/types/portfolio';
 
+export const HERO_STAGE_PALETTES = {
+  // Home (Personal Portal): Iconic studio cyan & oceanic blue portrait backlight
+  home: ['#000000', '#000b21', '#1a3b5e', '#4c7fae', '#649ccd', '#34618b', '#081d38', '#000000'],
+
+  // About & Career: Deep Midnight Charcoal & Slate Steel Blue (Subtle atmospheric glow, maximum white text contrast)
+  about: ['#000000', '#0a0b0e', '#132030', '#273d54', '#304562', '#415a7d', '#627593', '#000000'],
+
+  // Selected Works: Obsidian Carbon Silk & Smoked Velvet (Pure monochrome elegance, 100% text contrast)
+  works: ['#000000', '#060607', '#0f0e10', '#1c1a1c', '#2c292b', '#383637', '#1a1819', '#000000'],
+
+  // Work Archive: Midnight Topo Ink & Muted Slate Mist (Deep liquid topography, optimal white text clarity)
+  archive: ['#000000', '#050409', '#0a111b', '#101c2a', '#1a2632', '#2a3b4e', '#495466', '#000000'],
+
+  // Case Studies: Deep Obsidian Sapphire Beam & Electric Azure (Precision engineering, analytical depth, high-fidelity case narrative)
+  caseStudy: ['#000000', '#01092a', '#001859', '#002f8a', '#005bb5', '#008ae0', '#3fa9d8', '#000000'],
+
+  // 404 / Fallback: Minimalist Obsidian Carbon
+  minimal: ['#000000', '#080808', '#121212', '#202020', '#363636', '#4f4f4f', '#181818', '#000000']
+} as const;
+
 export const PERSONAL_CONTENT = {
   hero: {
     greeting: "Hey, I'm a",

@@ -1,8 +1,8 @@
 <template>
   <div class="pinterest-archive-page" :class="{ 'modal-open': !!activePin }">
     <!-- Living Dynamic Mesh Hero Stage with Embedded Navbar -->
-    <InnerHeroStage mode="works">
-      <div class="archive-hero-inner container-editorial">
+    <InnerHeroStage mode="works" :colors="[...HERO_STAGE_PALETTES.archive]">
+      <div class="archive-hero-inner">
         <h1 class="archive-headline font-serif">
           All projects, systems &amp; experiments.
         </h1>
@@ -221,6 +221,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
+import { HERO_STAGE_PALETTES } from '@/data/portfolioData';
 import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 
 const router = useRouter();
@@ -709,8 +710,7 @@ onBeforeUnmount(() => {
   min-height: 100vh;
   background-color: var(--color-paper);
   color: var(--color-ink);
-  // Ample top padding so filters are completely visible below the fixed site header
-  padding-top: clamp(6.25rem, 9vw, 7.5rem);
+  padding-top: 0;
   padding-bottom: 7rem;
   font-family: $font-family-sans;
 
@@ -742,9 +742,12 @@ onBeforeUnmount(() => {
 }
 
 .archive-container {
-  max-width: 1720px;
-  margin: clamp(1.5rem, 3vw, 2.5rem) auto 0;
-  padding-inline: clamp(1rem, 3.5vw, 2.5rem);
+  width: 100%;
+  max-width: 100%;
+  margin: clamp(1.25rem, 2.5vw, 2rem) auto 0;
+  // Precise left and right alignment matching the hero card's content guideline
+  padding-inline: calc(clamp(0.75rem, 1.25vw, 1.25rem) + clamp(1.5rem, 3.5vw, 3.5rem));
+  box-sizing: border-box;
 }
 
 // ------------------------------------------
@@ -755,8 +758,8 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  margin-bottom: 2rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: clamp(1.25rem, 2vw, 1.75rem);
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid rgba(220, 218, 212, 0.6);
 
   .filter-tabs-scroll {

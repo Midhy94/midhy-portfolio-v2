@@ -1,7 +1,7 @@
 <template>
   <div class="not-found-page">
-    <InnerHeroStage mode="personal" :compact="true">
-      <div class="not-found-card container-editorial">
+    <InnerHeroStage mode="personal" :compact="true" :colors="[...HERO_STAGE_PALETTES.minimal]">
+      <div class="not-found-card">
         <span class="status-badge font-mono" role="status">404 / ERROR</span>
         <h1 id="not-found-title" class="not-found-title font-serif">Page Not Found</h1>
         <p class="status-description font-sans">
@@ -18,6 +18,7 @@
 </template>
 
 <script setup lang="ts">
+import { HERO_STAGE_PALETTES } from '@/data/portfolioData';
 import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 </script>
 

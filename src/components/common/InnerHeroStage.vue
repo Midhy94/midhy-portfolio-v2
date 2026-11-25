@@ -1,10 +1,10 @@
 <template>
   <section class="inner-hero-stage" aria-label="Page hero">
     <div class="hero-card-stage" :class="{ 'hero-card-stage--compact': compact }">
-      <!-- Living Dynamic Mesh Background (Grainient WebGL2 Shader matching Home) -->
+      <!-- Living Dynamic Mesh Background (Grainient WebGL2 Shader) -->
       <Grainient
         class="hero-card-canvas"
-        :colors="['#000000', '#000b21', '#1a3b5e', '#4c7fae', '#649ccd', '#34618b', '#081d38', '#000000']"
+        :colors="activeColors"
         :angle="221"
         :flow="0.55"
         :silk="0"
@@ -37,16 +37,31 @@ interface Props {
   mode?: 'personal' | 'works';
   contentClass?: string;
   compact?: boolean;
+  colors?: string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   mode: undefined,
   contentClass: '',
   compact: false,
+  colors: undefined,
 });
+
+// Warm Obsidian Terracotta signature palette (rich espresso, amber embers & laterite glow)
+const DEFAULT_INNER_COLORS = [
+  '#000000',
+  '#0d0705',
+  '#1f0d08',
+  '#421a0f',
+  '#732c18',
+  '#b54e27',
+  '#2e1208',
+  '#000000'
+];
 
 const { mode: activeMode } = usePortfolioMode();
 const computedMode = computed(() => props.mode || activeMode.value);
+const activeColors = computed(() => props.colors || DEFAULT_INNER_COLORS);
 </script>
 
 <style scoped lang="scss">
@@ -56,10 +71,11 @@ const computedMode = computed(() => props.mode || activeMode.value);
   --hero-frame-gap: clamp(0.75rem, 1.25vw, 1.25rem);
 
   position: relative;
+  z-index: 70;
   width: 100%;
   margin: 0;
   background-color: var(--color-paper);
-  // Identical 4-sided whitespace framing around the hero stage
+  // Identical 4-sided whitespace framing around the hero stage matching Home
   padding: var(--hero-frame-gap);
   box-sizing: border-box;
 
@@ -68,24 +84,25 @@ const computedMode = computed(() => props.mode || activeMode.value);
     width: 100%;
     margin: 0 auto;
     border-radius: clamp(22px, 2.5vw, 32px);
-    overflow: hidden;
+    overflow: visible;
     will-change: transform;
     box-shadow: none;
     border: none;
 
-    // Deep base fallback color behind the WebGL shader canvas
-    background-color: #010814;
+    // Deep obsidian espresso fallback behind the WebGL shader canvas
+    background-color: #090605;
 
-    padding: clamp(1rem, 1.6vw, 1.5rem) clamp(1.5rem, 3.5vw, 3.5rem) clamp(2.5rem, 4vw, 4rem);
+    // Left and right padding matches PersonalHero exactly: clamp(1.5rem, 3.5vw, 3.5rem)
+    padding: clamp(1rem, 1.6vw, 1.5rem) clamp(1.5rem, 3.5vw, 3.5rem) clamp(2.25rem, 3.6vw, 3.25rem);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     box-sizing: border-box;
-    min-height: clamp(340px, 44vh, 480px);
+    min-height: clamp(260px, 30vh, 340px);
 
     &--compact {
-      min-height: clamp(260px, 32vh, 360px);
-      padding-bottom: clamp(2rem, 3vw, 3rem);
+      min-height: clamp(200px, 22vh, 260px);
+      padding-bottom: clamp(1.75rem, 2.5vw, 2.25rem);
     }
 
     .hero-card-canvas {
@@ -104,7 +121,15 @@ const computedMode = computed(() => props.mode || activeMode.value);
     position: relative;
     z-index: 2;
     width: 100%;
-    margin-top: clamp(1.75rem, 3.5vw, 3rem);
+    margin-top: clamp(2rem, 3.8vw, 3.5rem);
+
+    // Defensively ensure slotted containers align flush to the card's edge without double gutters
+    :deep(.container-editorial) {
+      max-width: 100%;
+      margin: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 </style>

@@ -267,15 +267,6 @@
       </div>
     </div>
 
-    <!-- Soft Dark Background Dim Overlay -->
-    <Transition name="fade-backdrop">
-      <div
-        v-if="isMenuOpen"
-        class="header__backdrop"
-        @click="closeMenu"
-        aria-hidden="true"
-      />
-    </Transition>
   </header>
 </template>
 
@@ -1285,16 +1276,6 @@ onUnmounted(() => {
 }
 
 // Background Dim Overlay
-.header__backdrop {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(14, 12, 10, 0.35);
-  z-index: 5;
-  pointer-events: auto;
-}
-
 // Fluid Morph Transitions
 .fluid-menu-enter-active {
   transition:
@@ -1319,16 +1300,6 @@ onUnmounted(() => {
 }
 
 // Backdrop Fade Transition
-.fade-backdrop-enter-active,
-.fade-backdrop-leave-active {
-  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.fade-backdrop-enter-from,
-.fade-backdrop-leave-to {
-  opacity: 0;
-}
-
 // Keyframes for Staggered Content Reveal
 @keyframes fluidItemIn {
   from {

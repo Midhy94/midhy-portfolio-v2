@@ -1,6 +1,6 @@
 <template>
-  <InnerHeroStage mode="works">
-    <div class="hero-container container-editorial">
+  <InnerHeroStage mode="works" :colors="[...HERO_STAGE_PALETTES.works]">
+    <div class="hero-container">
       <div class="hero-header-row">
         <!-- Left: Headline -->
         <div class="hero-title-col">
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { WORKS_CONTENT } from '@/data/portfolioData';
+import { WORKS_CONTENT, HERO_STAGE_PALETTES } from '@/data/portfolioData';
 import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 
 const heroData = WORKS_CONTENT.hero;
@@ -34,8 +34,8 @@ const heroData = WORKS_CONTENT.hero;
 
 .hero-container {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
 
   .hero-header-row {
     display: grid;

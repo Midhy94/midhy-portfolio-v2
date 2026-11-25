@@ -1,8 +1,8 @@
 <template>
   <div class="about-career-page">
     <!-- Editorial Page Header inside Living Mesh Hero Stage -->
-    <InnerHeroStage mode="personal">
-      <div class="intro-container container-editorial">
+    <InnerHeroStage mode="personal" :colors="[...HERO_STAGE_PALETTES.about]">
+      <div class="intro-container">
         <h1 class="intro-title font-serif">
           Designing for screens since 2012.
         </h1>
@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { HERO_STAGE_PALETTES } from '@/data/portfolioData';
 import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 import PersonalAbout from '@/components/personal/PersonalAbout.vue';
 import PersonalCareer from '@/components/personal/PersonalCareer.vue';
@@ -52,7 +53,9 @@ import PersonalCapabilities from '@/components/personal/PersonalCapabilities.vue
 }
 
 .intro-container {
-  max-width: 880px;
+  width: 100%;
+  max-width: 920px;
+  margin: 0;
 
   .intro-title {
     font-size: clamp(2.5rem, 4.8vw, 3.85rem);

@@ -1,8 +1,8 @@
 <template>
   <div class="case-study-page" v-if="project">
     <!-- Living Dynamic Mesh Hero Stage with Embedded Navbar -->
-    <InnerHeroStage mode="works">
-      <div class="case-hero-inner container-editorial">
+    <InnerHeroStage mode="works" :colors="[...HERO_STAGE_PALETTES.caseStudy]">
+      <div class="case-hero-inner">
         <!-- Breadcrumb navigation -->
         <nav class="case-nav-breadcrumb" aria-label="Breadcrumb">
           <RouterLink to="/work" class="back-link">
@@ -163,6 +163,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { HERO_STAGE_PALETTES } from '@/data/portfolioData';
 import InnerHeroStage from '@/components/common/InnerHeroStage.vue';
 import { WORKS_CONTENT } from '@/data/portfolioData';
 import type { Project } from '@/types/portfolio';
